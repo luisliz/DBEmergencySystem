@@ -9,8 +9,13 @@ The Database project made by Luis Liz, Yeniel and Jorge
 
 `$flask run`
 
+<<<<<<< HEAD
 #### Variables in Windows 🤢
 `set FLASK_APP=flaskr`
+=======
+#### Windows 🤢
+`set FLASK_APP=app`
+>>>>>>> 32ced830881e0a43b36de8b39ae4607dadb896bd
 
 `set FLASK_ENV=development`
 
