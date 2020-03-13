@@ -39,21 +39,35 @@ CREATE TABLE user_category (
     category_name VARCHAR(50) UNIQUE NOT NULL
 );
 
-CREATE TABLE disasters (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    disaster_type ---Earthquake, hurricane twunami tornado
-    city VARCHAR(50)
-    country
-);
+CREATE TABLE payment (
+	user_id PRIMARY KEY AUTOINCREMENT --FK  
+	credit_card_number INTEGER(50) NOT NULL, 
+	card_provider NOT NULL
+	card_type NOT NULL
+	exp_date NOT NULL 
+); 
+
+CREATE TABLE transactions (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	payment_date 
+	payment_amount DECIMAL(18,2) 
+	resources_ids INTEGER[] --List of resource ids 
+); 
+-- CREATE TABLE disasters (
+--     id INTEGER PRIMARY KEY AUTOINCREMENT,
+--     disaster_type ---Earthquake, hurricane twunami tornado
+--     city VARCHAR(50)
+--     country
+-- );
 
 CREATE TABLE requests (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     requester_id --FK,
     supplier_id -- FK,
     resource_id -- FK,
-    quantity         ,
-    request_date     ,
-    dispatch_date    ,
-    location         ,
+    quantity INTEGER NOT NULL,
+    request_date     NOT NULL,
+    dispatch_date    DEFAULT NULL,
+    location         NOT NULL,
 );
 
