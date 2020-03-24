@@ -7,7 +7,7 @@ def index():
     return "Welcome to resources"
 
 @resources_bp.route('/resource/<resource_id>')
-def get_resource_by_id: 
+def get_resource_by_id():
     pass 
 
 @resources_bp.route('/search')
