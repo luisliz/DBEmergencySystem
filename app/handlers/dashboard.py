@@ -27,7 +27,7 @@ def get_stats_by_city():
     pass
 
 @dashboard_bp.route('/users')
-def get_users:
+def get_users():
     pass
 
 
