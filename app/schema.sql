@@ -29,7 +29,6 @@ CREATE TABLE users (
     user_category_id
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
-    dob TIMESTAMP NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     password 
 );

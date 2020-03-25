@@ -1,80 +1,153 @@
-from flask import Blueprint
-from werkzeug.security import generate_password_hash, check_password_hash
-
-user_bp = Blueprint('user', __name__)
-
-users = {
-    1: {
-        'user_category_id': 1,
-        'first_name': 'Luis',
-        'last_name': 'Liz',
-        'dob': 938509285,
-        'email': 'luis@gmail.com',
-    },
-    2: {
-        'user_category_id': 1,
-        'first_name': 'Yeniel',
-        'last_name': 'Diaz',
-        'dob': 95002395,
-        'email': 'yeniel@gmail.com',
-    }
-}
-user_ranks = {
-    1: 'admin',
-    2: 'provider',
-    3: 'supplier',
-    4: 'user'
-}
-
-@user_bp.route('/')
-def index():
-    return "Welcome to user"
-
-@user_bp.route('/<int:user_id>', methods=['GET'])
-def get_user(user_id):
-    if(user_id in users):
-        return users[user_id]
-    return {'error': "User not found"}
-
-@user_bp.route('/check_user_categories/<int:user_id>', methods=['GET'])
-def check_rank(user_id):
-    pass
-
-@user_bp.route('/register', methods=['POST'])
-def register():
-    password_hash = generate_password_hash(password)
-    pass
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('index'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('login'))
-        login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('index'))
-    # return render_template('login.html', title='Sign In', form=form)
-# @user_bp.route('/login', methods=['GET', 'POST'])
-# def login():
-#     if(check_password_hash(self.password_hash, password)):
-#         return True
-#     else:
-#         return False
-#     pass
-
-@user_bp.route('/logout', methods=['GET', 'POST'])
-def login():
-    pass
+from flask import jsonity
+from dao.user import UsersDAO
 
 
-@user_bp.route('/activate', methods=['POST'])
-def activate():
-    pass
+class UserHandler:
+    def build_user_dict(self, row):
+        result = {}
+        result['uid'] = row[0]
+        result['user_category_id'] = row[1]
+        result['first_name'] = row[2]
+        result['last_name'] = row[3]
+        result['email'] = row[4]
+        result['password'] = row[4]
+        return result
 
-@user_bp.route('/settings', methods=['GET', 'POST'])
-def settings():
-    pass
+    # def build_supplier_dict(self, row):
+    #     result = {}
+    #     result['sid'] = row[0]
+    #     result['sname'] = row[1]
+    #     result['scity'] = row[2]
+    #     result['sphone'] = row[3]
+    #     return result
+
+    def build_part_attributes(self, pid, pname, pcolor, pmaterial, pprice):
+        result = {}
+        result['pid'] = pid
+        result['pname'] = pname
+        result['pmaterial'] = pcolor
+        result['pcolor'] = pmaterial
+        result['pprice'] = pprice
+        return result
+
+    def getAllUsers(self):
+        dao = PartsDAO()
+        users_list = dao.getAllUsers()
+        result_list = []
+        for row in users_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Users=result_list)
+
+    # def getPartById(self, pid):
+    #     dao = PartsDAO()
+    #     row = dao.getPartById(pid)
+    #     if not row:
+    #         return jsonify(Error="Part Not Found"), 404
+    #     else:
+    #         part = self.build_part_dict(row)
+    #         return jsonify(Part=part)
+
+    # def searchParts(self, args):
+    #     color = args.get("color")
+    #     material = args.get("material")
+    #     dao = PartsDAO()
+    #     parts_list = []
+    #     if (len(args) == 2) and color and material:
+    #         parts_list = dao.getPartsByColorAndMaterial(color, material)
+    #     elif (len(args) == 1) and color:
+    #         parts_list = dao.getPartsByColor(color)
+    #     elif (len(args) == 1) and material:
+    #         parts_list = dao.getPartsByMaterial(material)
+    #     else:
+    #         return jsonify(Error="Malformed query string"), 400
+    #     result_list = []
+    #     for row in parts_list:
+    #         result = self.build_part_dict(row)
+    #         result_list.append(result)
+    #     return jsonify(Parts=result_list)
+
+    # def getSuppliersByPartId(self, pid):
+    #     dao = PartsDAO()
+    #     if not dao.getPartById(pid):
+    #         return jsonify(Error="Part Not Found"), 404
+    #     suppliers_list = dao.getSuppliersByPartId(pid)
+    #     result_list = []
+    #     for row in suppliers_list:
+    #         result = self.build_supplier_dict(row)
+    #         result_list.append(result)
+    #     return jsonify(Suppliers=result_list)
+
+    # def insertPart(self, form):
+    #     print("form: ", form)
+    #     if len(form) != 4:
+    #         return jsonify(Error="Malformed post request"), 400
+    #     else:
+    #         pname = form['pname']
+    #         pprice = form['pprice']
+    #         pmaterial = form['pmaterial']
+    #         pcolor = form['pcolor']
+    #         if pcolor and pprice and pmaterial and pname:
+    #             dao = PartsDAO()
+    #             pid = dao.insert(pname, pcolor, pmaterial, pprice)
+    #             result = self.build_part_attributes(pid, pname, pcolor, pmaterial, pprice)
+    #             return jsonify(Part=result), 201
+    #         else:
+    #             return jsonify(Error="Unexpected attributes in post request"), 400
+
+    # def insertPartJson(self, json):
+    #     pname = json['pname']
+    #     pprice = json['pprice']
+    #     pmaterial = json['pmaterial']
+    #     pcolor = json['pcolor']
+    #     if pcolor and pprice and pmaterial and pname:
+    #         dao = PartsDAO()
+    #         pid = dao.insert(pname, pcolor, pmaterial, pprice)
+    #         result = self.build_part_attributes(pid, pname, pcolor, pmaterial, pprice)
+    #         return jsonify(Part=result), 201
+    #     else:
+    #         return jsonify(Error="Unexpected attributes in post request"), 400
+
+    # def deletePart(self, pid):
+    #     dao = PartsDAO()
+    #     if not dao.getPartById(pid):
+    #         return jsonify(Error="Part not found."), 404
+    #     else:
+    #         dao.delete(pid)
+    #         return jsonify(DeleteStatus="OK"), 200
+
+    # def updatePart(self, pid, form):
+    #     dao = PartsDAO()
+    #     if not dao.getPartById(pid):
+    #         return jsonify(Error="Part not found."), 404
+    #     else:
+    #         if len(form) != 4:
+    #             return jsonify(Error="Malformed update request"), 400
+    #         else:
+    #             pname = form['pname']
+    #             pprice = form['pprice']
+    #             pmaterial = form['pmaterial']
+    #             pcolor = form['pcolor']
+    #             if pcolor and pprice and pmaterial and pname:
+    #                 dao.update(pid, pname, pcolor, pmaterial, pprice)
+    #                 result = self.build_part_attributes(pid, pname, pcolor, pmaterial, pprice)
+    #                 return jsonify(Part=result), 200
+    #             else:
+    #                 return jsonify(Error="Unexpected attributes in update request"), 400
+
+    # def build_part_counts(self, part_counts):
+    #     result = []
+    #     # print(part_counts)
+    #     for P in part_counts:
+    #         D = {}
+    #         D['id'] = P[0]
+    #         D['name'] = P[1]
+    #         D['count'] = P[2]
+    #         result.append(D)
+    #     return result
+
+    # def getCountByPartId(self):
+    #     dao = PartsDAO()
+    #     result = dao.getCountByPartId()
+    #     # print(self.build_part_counts(result))
+    #     return jsonify(PartCounts=self.build_part_counts(result)), 200

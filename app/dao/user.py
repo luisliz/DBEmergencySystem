@@ -8,76 +8,70 @@ class UsersDAO:
                                                             pg_config['passwd'])
         self.conn = psycopg2._connect(connection_url)
 
+        users = {
+            1: {
+                'user_category_id': 1,
+                'first_name': 'Luis',
+                'last_name': 'Liz',
+                'dob': 938509285,
+                'email': 'luis@gmail.com',
+            },
+            2: {
+                'user_category_id': 1,
+                'first_name': 'Yeniel',
+                'last_name': 'Diaz',
+                'dob': 95002395,
+                'email': 'yeniel@gmail.com',
+            }
+        }
+
         def getAllUsers(self):
-            cursor = self.conn.cursor()
-            query = "select pid, pname, pmaterial, pcolor, pprice from parts;"
-            cursor.execute(query)
-            result = []
-            for row in cursor:
-                result.append(row)
+            # cursor = self.conn.cursor()
+            # query = "select pid, pname, pmaterial, pcolor, pprice from parts;"
+            # cursor.execute(query)
+            # result = []
+            # for row in cursor:
+            #     result.append(row)
+            result = users
             return result
 
         def getUserById(self, uid):
-            cursor = self.conn.cursor()
-            query = "select pid, pname, pmaterial, pcolor, pprice from parts where pid = %s;"
-            cursor.execute(query, (pid,))
-            result = cursor.fetchone()
+            for id, user in users:
+                if id == uid:
+                    return user
+            return None
+
+        # def getUserByRank(self, rank):
+        #
+        #     return result
+
+        def getUserByFirst(self, first_name):
+            for i, user in users:
+                if user['first_name'] == first_name:
+                    return user
+            return None
+
+        def getUserByLast(self, last_name):
+            for i, user in users:
+                if user['last_name'] == last_name:
+                    return user
             return result
 
-        def getUserByRank(self, rank):
-            cursor = self.conn.cursor()
-            query = "select * from parts where pcolor = %s;"
-            cursor.execute(query, (color,))
-            result = []
-            for row in cursor:
-                result.append(row)
+        def getUserByFirstAndLastName(self, first_name, last_name):
+            for i, user in users:
+                if (user['first_name'] == first_name) and (user['last_name'] == last_name):
+                    return user
             return result
 
-        def getPartsByColorAndMaterial(self, color, material):
-            cursor = self.conn.cursor()
-            query = "select * from parts where pmaterial = %s and pcolor = %s;"
-            cursor.execute(query, (material, color))
-            result = []
-            for row in cursor:
-                result.append(row)
-            return result
-
-        def getSuppliersByPartId(self, pid):
-            cursor = self.conn.cursor()
-            query = "select sid, sname, scity, sphone from parts natural inner join supplier natural inner join supplies where pid = %s;"
-            cursor.execute(query, (pid,))
-            result = []
-            for row in cursor:
-                result.append(row)
-            return result
 
         def insert(self, pname, pcolor, pmaterial, pprice):
-            cursor = self.conn.cursor()
-            query = "insert into parts(pname, pcolor, pmaterial, pprice) values (%s, %s, %s, %s) returning pid;"
-            cursor.execute(query, (pname, pcolor, pmaterial, pprice,))
-            pid = cursor.fetchone()[0]
-            self.conn.commit()
+
             return pid
 
         def delete(self, pid):
-            cursor = self.conn.cursor()
-            query = "delete from parts where pid = %s;"
-            cursor.execute(query, (pid,))
-            self.conn.commit()
+
             return pid
 
         def update(self, pid, pname, pcolor, pmaterial, pprice):
-            cursor = self.conn.cursor()
-            query = "update parts set pname = %s, pcolor = %s, pmaterial = %s, pprice = %s where pid = %s;"
-            cursor.execute(query, (pname, pcolor, pmaterial, pprice, pid,))
-            self.conn.commit()
-            return pid
 
-        def getCountByPartId(self):
-            cursor = self.conn.cursor()
-            query = "select pid, pname, sum(stock) from parts natural inner join supplies group by pid, pname order by pname;"
-            cursor.execute(query)
-            result = []
-            for row in cursor:
-                result.append(row)
-            return result
+            return pid
