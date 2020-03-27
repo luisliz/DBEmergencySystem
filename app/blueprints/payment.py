@@ -2,7 +2,7 @@ from flask import Blueprint
 
 payment_bp = Blueprint('payment', __name__)
 
-@payment_bp.route('/')
+@payment_bp.route('')
 def index():
     return "Welcome to payment"
 
@@ -27,7 +27,7 @@ def exp_date():
     return f"ALL PAYMENTS WITH expiration date: <Card_exp_date>"
 
 @payment_bp.route('/add/', methods=['POST'])
-def exp_date():
+def add_payment():
     return "ADD Cards"
 
 
