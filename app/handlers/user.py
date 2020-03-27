@@ -39,7 +39,7 @@ class UserHandler:
     def get_user_byid(self, uid): #Done
         dao = UsersDAO()
         user = dao.getUserById(uid)
-        result =  self.build_user_dict(user)
+        result = self.build_user_dict(user)
         return jsonify(User=result)
 
     def add_user(self, form): #Done

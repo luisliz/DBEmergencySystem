@@ -4,14 +4,14 @@ from app.dao.payment import PaymentDAO
 
 class PaymentHandler:
     def build_payment_dict(self, row):
-        result = {}
-        result['cid'] = row[0]
-        result['cNumber'] = row[1]
-        result['cType'] = row[2]
-        result['cProvider'] = row[3]
-        result['cExpDate'] = row[4]
-        result['uID'] = row[5]
-        return result
+        # result = {}
+        # result['Card_id'] = row[0]
+        # result['Card_number'] = row[1]
+        # result['Card_type'] = row[2]
+        # result['Card_provider'] = row[3]
+        # result['Card_exp_date'] = row[4]
+        # result['Card_user'] = row[5]
+        return row
 
     def build_user_dict(self, row):
         result = {}
@@ -23,17 +23,17 @@ class PaymentHandler:
         result['upassword'] = row[5]
         return result
 
-    def build_payment_attributes(self, cid, cNumber, cType, cProvider, cExpDate, uID):
-        result = {}
-        result['cid'] = cid
-        result['cNumber'] = cNumber
-        result['cType'] = cType
-        result['cProvider'] = cProvider
-        result['cExpDate'] = cExpDate
-        result['uID'] = uID
-        return result
+    # def build_payment_attributes(self, cid, cNumber, cType, cProvider, cExpDate, uID):
+    #     result = {}
+    #     result['Card_id'] = cid
+    #     result['Card_number'] = cNumber
+    #     result['Card_type'] = cType
+    #     result['Card_provider'] = cProvider
+    #     result['Card_exp_date'] = cExpDate
+    #     result['Card_user'] = uID
+    #     return result
 
-    def getAllPayments(self):
+    def getAllCards(self):
         dao = PaymentDAO()
         payment_list = dao.getAllCards()
         result_list = []
@@ -42,7 +42,7 @@ class PaymentHandler:
             result_list.append(result)
         return jsonify(Cards=result_list)
 
-    def getPaymentById(self, cid):
+    def getCardById(self, cid):
         dao = PaymentDAO()
         row = dao.getCardById(cid)
         if not row:
@@ -51,9 +51,11 @@ class PaymentHandler:
             card = self.build_payment_dict(row)
             return jsonify(Card=card)
 
-    def searchParts(self, args):
-        type = args.get("cType")
-        provider = args.get("cProvider")
+    def searchCard(self, args):
+        type = args.get("Card_type")
+        provider = args.get("Card_provider")
+        expDate = args.get("Card_exp_date")
+        user = args.get("Card_user")
         dao = PaymentDAO()
         card_list = []
         if (len(args) == 2) and type and provider:
@@ -61,7 +63,11 @@ class PaymentHandler:
         elif (len(args) == 1) and type:
             card_list = dao.getCardByType(type)
         elif (len(args) == 1) and provider:
-            card_list = dao.getPartsByProvider(provider)
+            card_list = dao.getCardByProvider(provider)
+        elif (len(args) == 1) and expDate:
+            card_list = dao.getCardByExpDate(expDate)
+        elif (len(args) == 1) and user:
+            card_list = dao.getCardByUser(user)
         else:
             return jsonify(Error="Malformed query string"), 400
         result_list = []
@@ -83,7 +89,7 @@ class PaymentHandler:
 
     def insertCard(self, form):
         print("form: ", form)
-        if len(form) != 4:
+        if len(form) != 5:
             return jsonify(Error="Malformed post request"), 400
         else:
             cNumber = form['cNumber']
@@ -94,8 +100,8 @@ class PaymentHandler:
             if cNumber and cType and cProvider and cExpDate and cUser:
                 dao = PaymentDAO()
                 cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
-                result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
-                return jsonify(Card=result), 201
+                #result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
+                return jsonify(Card=cid)
             else:
                 return jsonify(Error="Unexpected attributes in post request"), 400
 
@@ -108,26 +114,32 @@ class PaymentHandler:
         if cNumber and cType and cProvider and cExpDate and cUser:
             dao = PaymentDAO()
             cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
-            result = result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
-            return jsonify(Card=result), 201
+            #result = result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
+            return jsonify(Card=cid), 201
         else:
             return jsonify(Error="Unexpected attributes in post request"), 400
 
-    def deletePart(self, cid):
+    def deleteCard(self, cid):
         dao = PaymentDAO()
         if not dao.getCardById(cid):
             return jsonify(Error="Card not found."), 404
         else:
             dao.delete(cid)
-            return jsonify(DeleteStatus="OK"), 200
+            #return jsonify(DeleteStatus="OK", deleted=cid), 200
+            return jsonify(deleted=cid)
 
-    def updatePart(self, cid, form):
+    def countCards(self):
+        dao = PaymentDAO()
+        cCount = dao.countCards()
+        return jsonify(CardCount=cCount)
+
+    def updateCard(self, cid, form):
         dao = PaymentDAO()
         if not dao.getCardById(cid):
             return jsonify(Error="Card not found."), 404
         else:
             print("form: ", form)
-            if len(form) != 4:
+            if len(form) != 5:
                 return jsonify(Error="Malformed post request"), 400
             else:
                 cNumber = form['cNumber']
@@ -138,8 +150,8 @@ class PaymentHandler:
                 if cNumber and cType and cProvider and cExpDate and cUser:
                     dao = PaymentDAO()
                     cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
-                    result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
-                    return jsonify(Card=result), 201
+                    #result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
+                    return jsonify(Card=cid), 201
                 else:
                     return jsonify(Error="Unexpected attributes in post request"), 400
 
