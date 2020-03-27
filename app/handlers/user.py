@@ -3,34 +3,16 @@ from app.dao.user import UsersDAO
 
 
 class UserHandler:
-    def build_user_dict(self, row):
-        result = {}
-        result['uid'] = row[0]
-        result['user_category_id'] = row[1]
-        result['first_name'] = row[2]
-        result['last_name'] = row[3]
-        result['email'] = row[4]
-        result['password'] = row[4]
-        return result
+    def build_user_dict(self, row): #DONE
+        # result = {}
+        # result['uid'] = row[0]
+        # result['user_rank'] = row[1]
+        # result['first_name'] = row[2]
+        # result['last_name'] = row[3]
+        # result['email'] = row[4]
+        return row
 
-    # def build_supplier_dict(self, row):
-    #     result = {}
-    #     result['sid'] = row[0]
-    #     result['sname'] = row[1]
-    #     result['scity'] = row[2]
-    #     result['sphone'] = row[3]
-    #     return result
-
-    def build_part_attributes(self, pid, pname, pcolor, pmaterial, pprice):
-        result = {}
-        result['pid'] = pid
-        result['pname'] = pname
-        result['pmaterial'] = pcolor
-        result['pcolor'] = pmaterial
-        result['pprice'] = pprice
-        return result
-
-    def getAllUsers(self):
+    def get_all_users(self):#DONE
         dao = UsersDAO()
         users_list = dao.getAllUsers()
         result_list = []
@@ -39,115 +21,72 @@ class UserHandler:
             result_list.append(result)
         return jsonify(Users=result_list)
 
-    # def getPartById(self, pid):
-    #     dao = PartsDAO()
-    #     row = dao.getPartById(pid)
-    #     if not row:
-    #         return jsonify(Error="Part Not Found"), 404
-    #     else:
-    #         part = self.build_part_dict(row)
-    #         return jsonify(Part=part)
+    def get_ranks(self): #DONE
+        dao = UsersDAO()
+        ranks = dao.getRanks()
+        return jsonify(Ranks=ranks)
 
-    # def searchParts(self, args):
-    #     color = args.get("color")
-    #     material = args.get("material")
-    #     dao = PartsDAO()
-    #     parts_list = []
-    #     if (len(args) == 2) and color and material:
-    #         parts_list = dao.getPartsByColorAndMaterial(color, material)
-    #     elif (len(args) == 1) and color:
-    #         parts_list = dao.getPartsByColor(color)
-    #     elif (len(args) == 1) and material:
-    #         parts_list = dao.getPartsByMaterial(material)
-    #     else:
-    #         return jsonify(Error="Malformed query string"), 400
-    #     result_list = []
-    #     for row in parts_list:
-    #         result = self.build_part_dict(row)
-    #         result_list.append(result)
-    #     return jsonify(Parts=result_list)
+    def get_user_rank(self, uid): #Done
+        dao = UsersDAO()
+        rank = dao.getUserRank(uid)
+        return jsonify(uid=uid, Rank=rank)
 
-    # def getSuppliersByPartId(self, pid):
-    #     dao = PartsDAO()
-    #     if not dao.getPartById(pid):
-    #         return jsonify(Error="Part Not Found"), 404
-    #     suppliers_list = dao.getSuppliersByPartId(pid)
-    #     result_list = []
-    #     for row in suppliers_list:
-    #         result = self.build_supplier_dict(row)
-    #         result_list.append(result)
-    #     return jsonify(Suppliers=result_list)
+    def get_users_byrank(self, rank): #Done
+        dao = UsersDAO()
+        users = dao.getUsersByRank(rank)
+        return jsonify(Users=users)
 
-    # def insertPart(self, form):
-    #     print("form: ", form)
-    #     if len(form) != 4:
-    #         return jsonify(Error="Malformed post request"), 400
-    #     else:
-    #         pname = form['pname']
-    #         pprice = form['pprice']
-    #         pmaterial = form['pmaterial']
-    #         pcolor = form['pcolor']
-    #         if pcolor and pprice and pmaterial and pname:
-    #             dao = PartsDAO()
-    #             pid = dao.insert(pname, pcolor, pmaterial, pprice)
-    #             result = self.build_part_attributes(pid, pname, pcolor, pmaterial, pprice)
-    #             return jsonify(Part=result), 201
-    #         else:
-    #             return jsonify(Error="Unexpected attributes in post request"), 400
+    def get_user_byid(self, uid): #Done
+        dao = UsersDAO()
+        user = dao.getUserById(uid)
+        result =  self.build_user_dict(user)
+        return jsonify(User=result)
 
-    # def insertPartJson(self, json):
-    #     pname = json['pname']
-    #     pprice = json['pprice']
-    #     pmaterial = json['pmaterial']
-    #     pcolor = json['pcolor']
-    #     if pcolor and pprice and pmaterial and pname:
-    #         dao = PartsDAO()
-    #         pid = dao.insert(pname, pcolor, pmaterial, pprice)
-    #         result = self.build_part_attributes(pid, pname, pcolor, pmaterial, pprice)
-    #         return jsonify(Part=result), 201
-    #     else:
-    #         return jsonify(Error="Unexpected attributes in post request"), 400
+    def add_user(self, form): #Done
+        first_name = form['firstname']
+        last_name = form['lastname']
+        dob = form['dob']
+        email = form['email']
+        password = form['password'] #Have to hash this
 
-    # def deletePart(self, pid):
-    #     dao = PartsDAO()
-    #     if not dao.getPartById(pid):
-    #         return jsonify(Error="Part not found."), 404
-    #     else:
-    #         dao.delete(pid)
-    #         return jsonify(DeleteStatus="OK"), 200
+        dao = UsersDAO()
+        uid = dao.insert(first_name, last_name, dob, email, password)
+        return jsonify(uid=uid)
 
-    # def updatePart(self, pid, form):
-    #     dao = PartsDAO()
-    #     if not dao.getPartById(pid):
-    #         return jsonify(Error="Part not found."), 404
-    #     else:
-    #         if len(form) != 4:
-    #             return jsonify(Error="Malformed update request"), 400
-    #         else:
-    #             pname = form['pname']
-    #             pprice = form['pprice']
-    #             pmaterial = form['pmaterial']
-    #             pcolor = form['pcolor']
-    #             if pcolor and pprice and pmaterial and pname:
-    #                 dao.update(pid, pname, pcolor, pmaterial, pprice)
-    #                 result = self.build_part_attributes(pid, pname, pcolor, pmaterial, pprice)
-    #                 return jsonify(Part=result), 200
-    #             else:
-    #                 return jsonify(Error="Unexpected attributes in update request"), 400
+    def delete_user(self, form):
+        dao = UsersDAO()
+        uid = form['uid']
+        user = dao.delete(uid)
+        return jsonify(deleted=user)
 
-    # def build_part_counts(self, part_counts):
-    #     result = []
-    #     # print(part_counts)
-    #     for P in part_counts:
-    #         D = {}
-    #         D['id'] = P[0]
-    #         D['name'] = P[1]
-    #         D['count'] = P[2]
-    #         result.append(D)
-    #     return result
+    def logout_user(self, uid):
+        #LogoutUser
+        print("Logout User")
+        return uid
+    # def delete_user_byid(self, uid):
+    #     dao = UsersDAO()
+    #     dao.delete(uid)
+    #
+    # def update_user(self, uid, form):
+    #     dao = UsersDAO()
+    #     dao.update
+    #
+    def count_users(self): #Done
+        dao = UsersDAO()
+        userCount = dao.count_users()
+        return jsonify(UserCount = userCount)
+    #
+    def count_ranks(self): #Done
+        dao = UsersDAO()
+        user_ranks = dao.count_ranks()
+        return jsonify(Ranks=user_ranks)
 
-    # def getCountByPartId(self):
-    #     dao = PartsDAO()
-    #     result = dao.getCountByPartId()
-    #     # print(self.build_part_counts(result))
-    #     return jsonify(PartCounts=self.build_part_counts(result)), 200
+    def count_rank_byid(self, rid): #Done
+        dao = UsersDAO()
+        total = dao.count_rank(rid)
+        return jsonify(Rank=total)
+    #
+    # def search_users(self, args):
+    #     dao = UsersDAO()
+    #     dao.
+
