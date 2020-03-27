@@ -1,5 +1,5 @@
-from flask import jsonity
-from dao.user import UsersDAO
+from flask import jsonify
+from app.dao.user import UsersDAO
 
 
 class UserHandler:
@@ -31,7 +31,7 @@ class UserHandler:
         return result
 
     def getAllUsers(self):
-        dao = PartsDAO()
+        dao = UsersDAO()
         users_list = dao.getAllUsers()
         result_list = []
         for row in users_list:
