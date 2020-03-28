@@ -13,16 +13,6 @@ class PaymentHandler:
         # result['Card_user'] = row[5]
         return row
 
-    def build_user_dict(self, row):
-        result = {}
-        result['uid'] = row[0]
-        result['ufname'] = row[1]
-        result['ulname'] = row[2]
-        result['udateOfBirth'] = row[3]
-        result['uemail'] = row[4]
-        result['upassword'] = row[5]
-        return result
-
     # def build_payment_attributes(self, cid, cNumber, cType, cProvider, cExpDate, uID):
     #     result = {}
     #     result['Card_id'] = cid
