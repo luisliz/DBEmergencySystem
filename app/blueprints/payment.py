@@ -16,24 +16,27 @@ def payment_info():
 @payment_bp.route('/<int:cID>', methods =['GET', 'DELETE'])
 def get_card_by_id(cID):
     if request.method == 'GET':
-        return PaymentHandler().getCardById(cID)  # Done
+        return PaymentHandler().getCardById(cID)
     elif request.method == 'DELETE':
         return PaymentHandler().deleteCard(cID)
 
 @payment_bp.route('/add', methods =['POST'])
 def add_card():
-    if request.method == 'POST':
-        return PaymentHandler().insertCard(request.form)
+    return "Added new Card"
+    # if request.method == 'POST':
+    #     return PaymentHandler().insertCard(request.form)
 
 @payment_bp.route('/<int:cID>', methods =['DELETE'])
 def delete_card(cID):
-    if request.method == 'PUT':
-        return PaymentHandler().deleteCard(cID)
+    return f"Deleted card with id: {cID}"
+    # if request.method == 'DELETE':
+    #     return PaymentHandler().deleteCard(cID)
 
-@payment_bp.route('/update/{cID}', methods=['PUT'])
+@payment_bp.route('/update/<int: cID>', methods=['PUT'])
 def settings(cID):
-    if request.method == 'PUT':
-        return PaymentHandler().updateCard(cID, request.form)
+    return f"Updated transaction with id: {cID}"
+    # if request.method == 'PUT':
+    #     return PaymentHandler().updateCard(cID, request.form)
 
 @payment_bp.route('/count', methods=['GET'])
 def count_payment():

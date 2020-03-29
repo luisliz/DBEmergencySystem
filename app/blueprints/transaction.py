@@ -22,18 +22,21 @@ def get_Transaction_by_id(tid):
 
 @transaction_bp.route('/add', methods =['POST'])
 def add_transaction():
-    if request.method == 'POST':
-        return TransactionHandler().insertTransaction(request.form)
+    return "Added new transaction"
+    # if request.method == 'POST':
+    #     return TransactionHandler().insertTransaction(request.form)
 
 @transaction_bp.route('/<int:tid>', methods =['DELETE'])
 def delete_transaction(tid):
-    if request.method == 'PUT':
-        return TransactionHandler().deleteTransaction(tid)
+    return f"Deleted transaction with id: {tid}"
+    # if request.method == 'PUT':
+    #     return TransactionHandler().deleteTransaction(tid)
 
-@transaction_bp.route('/update/{tid}', methods=['PUT'])
+@transaction_bp.route('/update/<int: tid>', methods=['PUT'])
 def settings(tid):
-    if request.method == 'PUT':
-        return TransactionHandler().updateTransaction(tid, request.form)
+    return f"Updated transaction with id: {tid}"
+    # if request.method == 'PUT':
+    #     return TransactionHandler().updateTransaction(tid, request.form)
 
 @transaction_bp.route('/count', methods=['GET'])
 def count_Transaction():
