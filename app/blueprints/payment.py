@@ -32,7 +32,7 @@ def delete_card(cID):
     # if request.method == 'DELETE':
     #     return PaymentHandler().deleteCard(cID)
 
-@payment_bp.route('/update/<int: cID>', methods=['PUT'])
+@payment_bp.route('/update/<int:cID>', methods=['PUT'])
 def settings(cID):
     return f"Updated transaction with id: {cID}"
     # if request.method == 'PUT':

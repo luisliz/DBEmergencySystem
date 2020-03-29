@@ -32,7 +32,7 @@ def delete_transaction(tid):
     # if request.method == 'PUT':
     #     return TransactionHandler().deleteTransaction(tid)
 
-@transaction_bp.route('/update/<int: tid>', methods=['PUT'])
+@transaction_bp.route('/update/<int:tid>', methods=['PUT'])
 def settings(tid):
     return f"Updated transaction with id: {tid}"
     # if request.method == 'PUT':
