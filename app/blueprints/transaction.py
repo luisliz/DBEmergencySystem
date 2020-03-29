@@ -26,7 +26,7 @@ def add_transaction():
     # if request.method == 'POST':
     #     return TransactionHandler().insertTransaction(request.form)
 
-@transaction_bp.route('/<int:tid>', methods =['DELETE'])
+@transaction_bp.route('/delete/<int:tid>', methods =['DELETE'])
 def delete_transaction(tid):
     return f"Deleted transaction with id: {tid}"
     # if request.method == 'PUT':

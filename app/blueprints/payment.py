@@ -26,7 +26,7 @@ def add_card():
     # if request.method == 'POST':
     #     return PaymentHandler().insertCard(request.form)
 
-@payment_bp.route('/<int:cID>', methods =['DELETE'])
+@payment_bp.route('/delete/<int:cID>', methods =['DELETE'])
 def delete_card(cID):
     return f"Deleted card with id: {cID}"
     # if request.method == 'DELETE':
@@ -34,7 +34,7 @@ def delete_card(cID):
 
 @payment_bp.route('/update/<int:cID>', methods=['PUT'])
 def settings(cID):
-    return f"Updated transaction with id: {cID}"
+    return f"Updated payment with id: {cID}"
     # if request.method == 'PUT':
     #     return PaymentHandler().updateCard(cID, request.form)
 
