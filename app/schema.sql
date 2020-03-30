@@ -8,7 +8,7 @@ CREATE TABLE resources (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     category_id
     quantity INTEGER DEFAULT 0,
-    availability ENUM('purchase', 'reserve') NOT NULL
+    availability ENUM('available', 'purchased', 'reserved') NOT NULL
 );
 
 CREATE TABLE resource_details (
