@@ -38,5 +38,6 @@ class ResourceCategoryHandler:
         # rcid = form['rcid']
         rcName = form['rcName']
         dao = ResourceCategoryDAO()
-        dao.updateCat(rcid, rcName)
+        result = dao.updateCat(rcid, rcName)
+        return jsonify(updated = result)
 
