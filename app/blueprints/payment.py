@@ -22,21 +22,18 @@ def get_card_by_id(cID):
 
 @payment_bp.route('/add', methods =['POST'])
 def add_card():
-    return "Added new Card"
-    # if request.method == 'POST':
-    #     return PaymentHandler().insertCard(request.form)
+    if request.method == 'POST':
+        return PaymentHandler().insertCard(request.form)
 
 @payment_bp.route('/delete/<int:cID>', methods =['DELETE'])
 def delete_card(cID):
-    return f"Deleted card with id: {cID}"
-    # if request.method == 'DELETE':
-    #     return PaymentHandler().deleteCard(cID)
+    if request.method == 'DELETE':
+        return PaymentHandler().deleteCard(cID)
 
 @payment_bp.route('/update/<int:cID>', methods=['PUT'])
 def settings(cID):
-    return f"Updated payment with id: {cID}"
-    # if request.method == 'PUT':
-    #     return PaymentHandler().updateCard(cID, request.form)
+    if request.method == 'PUT':
+        return PaymentHandler().updateCard(cID, request.form)
 
 @payment_bp.route('/count', methods=['GET'])
 def count_payment():

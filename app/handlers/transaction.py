@@ -66,32 +66,34 @@ class TransactionHandler:
             return jsonify(Users=result_list)
     """
     def insertTransaction(self, form):
-        print("form: ", form)
-        if len(form) != 6:
-            return jsonify(Error="Malformed post request"), 400
-        else:
-            tDate = form['tdate']
-            tQuantity = form['tquantity']
-            tPayer = form['tpayer']
-            tSupplier = form['tsupplier']
-            tResource = form['tresource']
-            tAmmount = form['tpayAmmount']
-            if tDate and tQuantity and tPayer and tSupplier and tResource and tAmmount:
-                dao = TransactionDAO()
-                tid = dao.insert( tDate, tQuantity, tPayer, tSupplier. tResourc, tAmmount)
-                #result = self.build_Transaction_attributes(tid, cNumber, cType, cProvider, cExpDate, cUser)
-                return jsonify(Transaction=tid)
-            else:
-                return jsonify(Error="Unexpected attributes in post request"), 400
+        return "Added new transaction"
+        # print("form: ", form)
+        # if len(form) != 6:
+        #     return jsonify(Error="Malformed post request"), 400
+        # else:
+        #     tDate = form['tdate']
+        #     tQuantity = form['tquantity']
+        #     tPayer = form['tpayer']
+        #     tSupplier = form['tsupplier']
+        #     tResource = form['tresource']
+        #     tAmmount = form['tpayAmmount']
+        #     if tDate and tQuantity and tPayer and tSupplier and tResource and tAmmount:
+        #         dao = TransactionDAO()
+        #         tid = dao.insert( tDate, tQuantity, tPayer, tSupplier. tResourc, tAmmount)
+        #         #result = self.build_Transaction_attributes(tid, cNumber, cType, cProvider, cExpDate, cUser)
+        #         return jsonify(Transaction=tid)
+        #     else:
+        #         return jsonify(Error="Unexpected attributes in post request"), 400
 
     def deleteTransaction(self, tid):
         dao = TransactionDAO()
-        if not dao.getTransactionById(tid):
-            return jsonify(Error="Card not found."), 404
-        else:
-            dao.delete(tid)
-            #return jsonify(DeleteStatus="OK", deleted=tid), 200
-            return jsonify(deleted=tid)
+        return f"Deleted transaction with id: {tid}"
+        # if not dao.getTransactionById(tid):
+        #     return jsonify(Error="Card not found."), 404
+        # else:
+        #     dao.delete(tid)
+        #     #return jsonify(DeleteStatus="OK", deleted=tid), 200
+        #     return jsonify(deleted=tid)
 
     def countTransactions(self):
         dao = TransactionDAO()
@@ -100,18 +102,19 @@ class TransactionHandler:
 
     def updateTransaction(self, tid, form):
         dao = TransactionDAO()
-        if not dao.getTransactionById(tid):
-            return jsonify(Error="Transaction not found."), 404
-        else:
-            tDate = form['tdate']
-            tQuantity = form['tquantity']
-            tPayer = form['tpayer']
-            tSupplier = form['tsupplier']
-            tResource = form['tresource']
-            tAmmount = form['tpayAmmount']
-            if tDate and tQuantity and tPayer and tSupplier and tResource and tAmmount:
-                dao = TransactionDAO()
-                tid = dao.insert(tDate, tQuantity, tPayer, tSupplier.tResourc, tAmmount)
-                return jsonify(Transaction=tid)
-            else:
-                return jsonify(Error="Unexpected attributes in post request"), 400
+        return f"Updated transaction with id: {tid}"
+        # if not dao.getTransactionById(tid):
+        #     return jsonify(Error="Transaction not found."), 404
+        # else:
+        #     tDate = form['tdate']
+        #     tQuantity = form['tquantity']
+        #     tPayer = form['tpayer']
+        #     tSupplier = form['tsupplier']
+        #     tResource = form['tresource']
+        #     tAmmount = form['tpayAmmount']
+        #     if tDate and tQuantity and tPayer and tSupplier and tResource and tAmmount:
+        #         dao = TransactionDAO()
+        #         tid = dao.insert(tDate, tQuantity, tPayer, tSupplier.tResourc, tAmmount)
+        #         return jsonify(Transaction=tid)
+        #     else:
+        #         return jsonify(Error="Unexpected attributes in post request"), 400

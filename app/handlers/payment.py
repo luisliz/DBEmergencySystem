@@ -78,22 +78,23 @@ class PaymentHandler:
         return jsonify(Users=result_list)
 
     def insertCard(self, form):
-        print("form: ", form)
-        if len(form) != 5:
-            return jsonify(Error="Malformed post request"), 400
-        else:
-            cNumber = form['cNumber']
-            cType = form['cType']
-            cProvider = form['cProvider']
-            cExpDate = form['cExpDate']
-            cUser = form['cUser']
-            if cNumber and cType and cProvider and cExpDate and cUser:
-                dao = PaymentDAO()
-                cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
-                #result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
-                return jsonify(Card=cid)
-            else:
-                return jsonify(Error="Unexpected attributes in post request"), 400
+        return "Added new Card"
+        # print("form: ", form)
+        # if len(form) != 5:
+        #     return jsonify(Error="Malformed post request"), 400
+        # else:
+        #     cNumber = form['cNumber']
+        #     cType = form['cType']
+        #     cProvider = form['cProvider']
+        #     cExpDate = form['cExpDate']
+        #     cUser = form['cUser']
+        #     if cNumber and cType and cProvider and cExpDate and cUser:
+        #         dao = PaymentDAO()
+        #         cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
+        #         #result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
+        #         return jsonify(Card=cid)
+        #     else:
+        #         return jsonify(Error="Unexpected attributes in post request"), 400
 
     def insertCardJson(self, json):
         cNumber = json['cNumber']
@@ -111,12 +112,13 @@ class PaymentHandler:
 
     def deleteCard(self, cid):
         dao = PaymentDAO()
-        if not dao.getCardById(cid):
-            return jsonify(Error="Card not found."), 404
-        else:
-            dao.delete(cid)
-            #return jsonify(DeleteStatus="OK", deleted=cid), 200
-            return jsonify(deleted=cid)
+        return f"Deleted card with id: {cid}"
+        # if not dao.getCardById(cid):
+        #     return jsonify(Error="Card not found."), 404
+        # else:
+        #     dao.delete(cid)
+        #     #return jsonify(DeleteStatus="OK", deleted=cid), 200
+        #     return jsonify(deleted=cid)
 
     def countCards(self):
         dao = PaymentDAO()
@@ -125,25 +127,26 @@ class PaymentHandler:
 
     def updateCard(self, cid, form):
         dao = PaymentDAO()
-        if not dao.getCardById(cid):
-            return jsonify(Error="Card not found."), 404
-        else:
-            print("form: ", form)
-            if len(form) != 5:
-                return jsonify(Error="Malformed post request"), 400
-            else:
-                cNumber = form['cNumber']
-                cType = form['cType']
-                cProvider = form['cProvider']
-                cExpDate = form['cExpDate']
-                cUser = form['cUser']
-                if cNumber and cType and cProvider and cExpDate and cUser:
-                    dao = PaymentDAO()
-                    cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
-                    #result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
-                    return jsonify(Card=cid), 201
-                else:
-                    return jsonify(Error="Unexpected attributes in post request"), 400
+        return f"Updated payment with id: {cid}"
+        # if not dao.getCardById(cid):
+        #     return jsonify(Error="Card not found."), 404
+        # else:
+        #     print("form: ", form)
+        #     if len(form) != 5:
+        #         return jsonify(Error="Malformed post request"), 400
+        #     else:
+        #         cNumber = form['cNumber']
+        #         cType = form['cType']
+        #         cProvider = form['cProvider']
+        #         cExpDate = form['cExpDate']
+        #         cUser = form['cUser']
+        #         if cNumber and cType and cProvider and cExpDate and cUser:
+        #             dao = PaymentDAO()
+        #             cid = dao.insert(cNumber, cType, cProvider, cExpDate, cUser)
+        #             #result = self.build_payment_attributes(cid, cNumber, cType, cProvider, cExpDate, cUser)
+        #             return jsonify(Card=cid), 201
+        #         else:
+        #             return jsonify(Error="Unexpected attributes in post request"), 400
 
     def build_payment_counts(self, payment_counts):
         result = []
