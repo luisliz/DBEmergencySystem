@@ -34,10 +34,10 @@ class ResourceCategoryHandler:
         rc = dao.delete(rcid)
         return jsonify(deleted=rc)
 
-    def update_category(self, rcid, form):
-        # rcid = form['rcid']
+    def update_category(self, form):
+        rcid = form['rcid']
         rcName = form['rcName']
         dao = ResourceCategoryDAO()
-        result = dao.updateCat(rcid, rcName)
+        result = dao.update(rcid, rcName)
         return jsonify(updated = result)
 

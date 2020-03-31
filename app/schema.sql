@@ -5,10 +5,9 @@ DROP TABLE IF EXISTS disasters
 DROP TABLE IF EXISTS requests
 
 CREATE TABLE resources (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    category_id
+    rid INTEGER PRIMARY KEY AUTOINCREMENT,
+    rcid INTEGER FOREIGN KEY,
     quantity INTEGER DEFAULT 0,
-    availability ENUM('available', 'purchased', 'reserved') NOT NULL
 );
 
 CREATE TABLE resource_details (
@@ -16,6 +15,7 @@ CREATE TABLE resource_details (
     resource_id  -- FK
     quantity INTEGER DEFAULT 0,
     location VARCHAR(100),
+    availability ENUM('available', 'purchased', 'reserved') NOT NULL
     supplier_id --FK
 );
 
