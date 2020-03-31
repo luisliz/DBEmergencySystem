@@ -1,4 +1,3 @@
-#unnecessary comment
 from flask import Blueprint, request
 from app.handlers.request import RequestHandler
 

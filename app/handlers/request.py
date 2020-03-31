@@ -1,4 +1,3 @@
-#unnecessary comment
 from flask import jsonify
 from app.dao.request import RequestDAO
 
