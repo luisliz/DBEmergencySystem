@@ -77,10 +77,8 @@ class RequestDAO:
         return None
 
     def addRequest(self, req_quantitiy, req_post_date, req_dispatch_date, req_location, requesterID, supplierID, rid):
-        for r in self.requests:
-            if r['reqid'] == reqid:
-                return r
-        return
+        newID = len(self.requests)+1
+        return newID
 
     def updateRequest(self):
         for r in self.requests:

@@ -67,10 +67,6 @@ def browse_requested_by_resource_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_requested_resource_by_id(rid)
 
-@resources_bp.route('/request/<string:category>/')
-def request_type(category):
-    pass
-
 @resources_bp.route('/reserve/<int:rid>/', methods=['PUT']) #Done
 def reserve_resource(rid):
     if request.method == 'PUT':

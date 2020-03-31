@@ -8,7 +8,7 @@ class RequestHandler:
     def getAllRequests(self):
         dao = RequestDAO()
         result = dao.getAllRequests()
-        return result
+        return jsonify(Requests=result)
 
     def getRequestById(self, reqid):
         dao = RequestDAO()

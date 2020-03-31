@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api
-from app.blueprints import dashboard, payment, user, resources, transaction, resource_category
+from app.blueprints import dashboard, payment, user, resources, transaction, resource_category, request
 
 app = Flask(__name__)
 api = Api(app)
@@ -11,6 +11,7 @@ app.register_blueprint(resource_category.resource_category_bp, url_prefix="/cate
 app.register_blueprint(dashboard.dashboard_bp, url_prefix="/dashboard")
 app.register_blueprint(payment.payment_bp, url_prefix="/payment")
 app.register_blueprint(transaction.transaction_bp, url_prefix="/transaction")
+app.register_blueprint(request.request_bp, url_prefix="/requests")
 
 @app.route('/')
 def hello_world():
