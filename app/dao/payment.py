@@ -14,8 +14,8 @@ class PaymentDAO:
                 'Card_number': '1111111111111111',
                 'Card_type': 'Visa',
                 'Card_provider': "The bank",
-                'Card_exp_date': '02/12',
-                'Card_user': 'Yeniel'
+                'Card_exp_date': "02/12",
+                'Card_user': "Yeniel"
             }
         ]
 
