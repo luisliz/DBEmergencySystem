@@ -1,4 +1,5 @@
 from app.config.database_config import pg_config
+#unnecessary comment
 class RequestDAO:
 
     def __init__(self):

@@ -1,3 +1,4 @@
+#unnecessary comment
 from flask import Blueprint, request
 from app.handlers.resources import ResourceHandler
 
