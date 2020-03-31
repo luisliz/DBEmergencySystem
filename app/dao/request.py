@@ -1,17 +1,6 @@
 from app.config.database_config import pg_config
 class RequestDAO:
-    self.requests = [
-        {
-            'reqid': 1,
-            'req_quantitiy': 4,
-            'req_post_date': 408109458,
-            'req_dispatch_date': 5908230598,
-            'req_location': 'Guayama',
-            'requesterID': 1,
-            'supplierID': 2,
-            'rid': 3,
-        }
-    ]
+
     def __init__(self):
         '''
            #connection_url = "dbname=%s t=%s password=%s" % (pg_config['dbname'],
@@ -19,6 +8,18 @@ class RequestDAO:
                                                                 pg_config['passwd'])
             #self.conn = psycopg2._connect(connection_url)
         '''
+        self.requests = [
+            {
+                'reqid': 1,
+                'req_quantitiy': 4,
+                'req_post_date': 408109458,
+                'req_dispatch_date': 5908230598,
+                'req_location': 'Guayama',
+                'requesterID': 1,
+                'supplierID': 2,
+                'rid': 3,
+            }
+        ]
 
     def getAllRequests(self): #Done
         result = self.requests

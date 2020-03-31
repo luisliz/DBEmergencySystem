@@ -43,6 +43,29 @@ class ResourcesDAO:
         result = self.resources
         return result
 
+    def getRequestedResources(self):
+        # cursor = self.conn.cursor()
+        # query = "<query that gets all resources that have a record in the request table and havent been dispatched yet>"
+        # cursor.execute(query)
+        # result = []
+        # for row in self.resources:#cursor:
+        #     result.append(row)
+        result = self.resources
+        return result
+
+    def getRequestedResourceById(self, rid):
+        # cursor = self.conn.cursor()
+        # query = "<query that gets all resources that have a record in the request table and havent been dispatched yet
+        # and filters it with the given id>"
+        # cursor.execute(query)
+        # result = []
+        # for row in self.resources:#cursor:
+        #     result.append(row)
+        for res in self.resources:
+            if res['rid'] == rid:
+                return res
+        return None
+
     def getResourceById(self, rid):
         for res in self.resources:
             if res['rid'] == rid:

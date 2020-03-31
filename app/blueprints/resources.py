@@ -57,16 +57,17 @@ def update_resource():
     if request.method == 'PUT':
         return ResourceHandler().update_resource(request.form)
 
-@resources_bp.route('/browse/requested/', methods=['GET']) #if requested?
+@resources_bp.route('/browse/requested/', methods=['GET']) #Done
 def browse_requested():
-    pass
+    if request.method == 'GET':
+        return ResourceHandler().get_requested_resources()
 
-@resources_bp.route('/browse/requested/<int:rid>/', methods=['GET']) #if requested?
+@resources_bp.route('/browse/requested/<int:rid>/', methods=['GET']) #Done
 def browse_requested_by_resource_id(rid):
-    pass
+    if request.method == 'GET':
+        return ResourceHandler().get_requested_resource_by_id(rid)
 
 @resources_bp.route('/request/<string:category>/')
-
 def request_type(category):
     pass
 

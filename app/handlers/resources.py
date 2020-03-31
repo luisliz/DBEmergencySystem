@@ -108,6 +108,21 @@ class ResourceHandler:
         daoRD.update(rid, rdQuantity, rdLocation, rdAvailability, supplierID, price_per_unit)
         return jsonify(rid=rid)
 
+    def get_requested_resources(self):
+        dao = ResourcesDAO()
+        resources_list = dao.getRequestedResources()
+        result_list = []
+        for row in resources_list:
+            result = self.build_resource_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def get_requested_resource_by_id(self, rid):
+        dao = ResourcesDAO()
+        resource = dao.getRequestedResourceById(rid)
+        result = self.build_resource_dict(resource)
+        return jsonify(Resource=result)
+
     def reserve_resource(self, rid, status):
         dao = ResourceDetailsDAO()
         result = dao.updateAvailability(rid, status)
