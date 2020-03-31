@@ -51,9 +51,18 @@ class RequestHandler:
         return jsonify(Location=result)
 
     def addRequest(self, form):
+        req_quantity = form['req_quantity']
+        req_post_date = form['req_post_date']
+        req_dispatch_date = form['req_dispatch_date']
+        req_location = form['req_location']
+        requesterID = form['requesterID']
+        supplierID = form['supplierID']
+        rid = form['rid']
+
         dao = RequestDAO()
-        result = dao.addRequest()
-        return jsonify(Added=result)
+        result = dao.addRequest(req_quantity, req_post_date, req_dispatch_date, req_location, requesterID,
+                                   supplierID, rid)
+        return jsonify(Reqid=result)
 
     def updateRequest(self, form):
         reqid = form['reqid']
