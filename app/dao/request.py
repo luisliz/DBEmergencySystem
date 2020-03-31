@@ -11,7 +11,7 @@ class RequestDAO:
         self.requests = [
             {
                 'reqid': 1,
-                'req_quantitiy': 4,
+                'req_quantity': 4,
                 'req_post_date': 408109458,
                 'req_dispatch_date': 5908230598,
                 'req_location': 'Guayama',
@@ -80,24 +80,39 @@ class RequestDAO:
         newID = len(self.requests)+1
         return newID
 
-    def updateRequest(self):
-        for r in self.requests:
-            if r['reqid'] == reqid:
-                return r
-        return
+    def updateRequest(self, reqid, req_quantity, req_post_date, req_dispatch_date, req_location, requesterID, supplierID, rid):
+        pos = 0
+        for req in self.requests:
+            if int(req['reqid']) == int(reqid):
+                newReq = self.requests[pos]
+                newReq['req_quantity'] = req_quantity
+                newReq['req_post_date'] = req_post_date
+                newReq['req_dispatch_date'] = req_dispatch_date
+                newReq['req_location'] = req_location
+                newReq['requesterID'] = requesterID
+                newReq['supplierID'] = supplierID
+                newReq['rid'] = rid
+                return True
+            pos += 1
+        return False
 
-    def removeRequest(self):
-        for r in self.requests:
-            if r['reqid'] == reqid:
-                return r
-        return
+    def removeRequest(self, reqid):
+        pos = 0
+        for req in self.requests:
+            if int(req['reqid']) == int(reqid):
+                del self.requests[pos]
+                return True
+            pos += 1
+
+        return False
 
     def countRequests(self): #done
         return len(self.requests)
 
-    def countRequestByResource(self):
+    def countRequestByResource(self, rid):
+        count = 0
         for r in self.requests:
-            if r['reqid'] == reqid:
-                return r
-        return
+            if r['rid'] == rid:
+                count = count + 1
+        return count
 

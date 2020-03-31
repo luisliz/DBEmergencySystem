@@ -13,64 +13,73 @@ class RequestHandler:
     def getRequestById(self, reqid):
         dao = RequestDAO()
         result = dao.getRequestById(reqid)
-        return result
+        return jsonify(Request=result)
 
     def getRequestsFromRequester(self, requesterID):
         dao = RequestDAO()
         result = dao.getRequestsFromRequester(requesterID)
-        return result
+        return jsonify(Requests=result)
 
     def getRequestsFromSupplier(self, supplierid):
         dao = RequestDAO()
         result = dao.getRequestsFromSupplier(supplierid)
-        return result
+        return jsonify(Requests=result)
 
     def getRequestByResourceId(self, resourceid):
         dao = RequestDAO()
         result = dao.getRequestByResourceId(resourceid)
-        return result
+        return jsonify(Request=result)
 
     def getRequestQuantity(self, reqid):
         dao = RequestDAO()
         result = dao.getRequestQuantity(reqid)
-        return result
+        return jsonify(Quantity=result)
 
     def getRequestDispatchDate(self, reqid):
         dao = RequestDAO()
         result = dao.getRequestDispatchDate(reqid)
-        return result
+        return jsonify(DispatchDate=result)
 
     def getRequestPostDate(self, reqid):
         dao = RequestDAO()
         result = dao.getRequestPostDate(reqid)
-        return result
+        return jsonify(PostDate=result)
 
     def getRequestLocation(self, reqid):
         dao = RequestDAO()
         result = dao.getRequestLocation(reqid)
-        return result
+        return jsonify(Location=result)
 
     def addRequest(self, form):
         dao = RequestDAO()
         result = dao.addRequest()
-        return result
+        return jsonify(Added=result)
 
     def updateRequest(self, form):
+        reqid = form['reqid']
+        req_quantity = form['req_quantity']
+        req_post_date = form['req_post_date']
+        req_dispatch_date = form['req_dispatch_date']
+        req_location = form['req_location']
+        requesterID = form['requesterID']
+        supplierID = form['supplierID']
+        rid = form['rid']
+
         dao = RequestDAO()
-        result = dao.updateRequest()
-        return result
+        result = dao.updateRequest(reqid, req_quantity, req_post_date, req_dispatch_date, req_location, requesterID, supplierID, rid)
+        return jsonify(Updated=result)
 
     def removeRequest(self, reqid):
         dao = RequestDAO()
         result = dao.removeRequest(reqid)
-        return result
+        return jsonify(Removed=result)
 
     def countRequests(self):
         dao = RequestDAO()
         result = dao.countRequests()
-        return result
+        return jsonify(Count=result)
 
-    def countRequestByResource(self):
+    def countRequestByResource(self, rid):
         dao = RequestDAO()
-        result = dao.countRequestByResource()
-        return result
+        result = dao.countRequestByResource(rid)
+        return jsonify(Count=result)
