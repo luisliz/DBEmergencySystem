@@ -54,12 +54,6 @@ class TransactionDAO:
                 return t
         return None
 
-    def getTransactionBySupplier(self, s):
-        for t in self.transactions:
-            if t['tsupplier'] == s:
-                return t
-        return None
-
     def getTransactionByResource(self, r):
         for t in self.transactions:
             if t['tresource'] == r:

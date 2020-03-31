@@ -41,6 +41,57 @@ class PaymentHandler:
             card = self.build_payment_dict(row)
             return jsonify(Card=card)
 
+    def getCardByType(self, ctype):
+        dao = PaymentDAO()
+        row = dao.getCardByType(ctype)
+        if not row:
+            return jsonify(Error="Card Not Found"), 404
+        else:
+            card = self.build_payment_dict(row)
+            return jsonify(Card=card)
+
+    def getCardByProvider(self, prov):
+        dao = PaymentDAO()
+        row = dao.getCardByProvider(prov)
+        if not row:
+            return jsonify(Error="Card Not Found"), 404
+        else:
+            card = self.build_payment_dict(row)
+            return jsonify(Card=card)
+
+    def getCardByExpDate(self, date):
+        dao = PaymentDAO()
+        row = dao.getCardByExpDate(date)
+        if not row:
+            return jsonify(Error="Card Not Found"), 404
+        else:
+            card = self.build_payment_dict(row)
+            return jsonify(Card=card)
+
+    def getCardByUser(self, uid):
+        dao = PaymentDAO()
+        row = dao.getCardByUser(uid)
+        if not row:
+            return jsonify(Error="Card Not Found"), 404
+        else:
+            card = self.build_payment_dict(row)
+            return jsonify(Card=card)
+
+    def getCardNumber(self, tid):
+        return "Number: 1111 1111 1111 1111"
+
+    def getCardType(self, tid):
+        return "Type: Visa"
+
+    def getCardProvider(self, tid):
+        return "Provider: The bank"
+
+    def getCardExpDate(self, tid):
+        return "ExpDate: 02/12"
+
+    def getCardUser(self, tid):
+        return "User: Yeniel"
+
     def searchCard(self, args):
         type = args.get("Card_type")
         provider = args.get("Card_provider")

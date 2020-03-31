@@ -20,6 +20,46 @@ def get_card_by_id(cID):
     elif request.method == 'DELETE':
         return PaymentHandler().deleteCard(cID)
 
+@payment_bp.route('/<string:ctype>', methods =['GET'])
+def get_card_by_type(ctype):
+    if request.method == 'GET':
+        return PaymentHandler().getCardByType(ctype)
+
+@payment_bp.route('/<string:provider>', methods =['GET'])
+def get_card_by_provider(provider):
+    if request.method == 'GET':
+        return PaymentHandler().getCardByProvider(provider)
+
+@payment_bp.route('/<string:expDate>', methods =['GET'])
+def get_card_by_expDate(expDate):
+    if request.method == 'GET':
+        return PaymentHandler().getCardByExpDate(expDate)
+
+@payment_bp.route('/<string:user>', methods =['GET'])
+def get_card_by_user(user):
+    if request.method == 'GET':
+        return PaymentHandler().getCardByUser(user)
+
+@payment_bp.route('/type/<int:tid>', methods =['GET'])
+def get_card_type(tid):
+    if request.method == 'GET':
+        return PaymentHandler().getCardType(tid)
+
+@payment_bp.route('/provider/<int:tid>', methods =['GET'])
+def get_card_provider(tid):
+    if request.method == 'GET':
+        return PaymentHandler().getCardProvider(tid)
+
+@payment_bp.route('/expdate/<int:tid>', methods =['GET'])
+def get_card_exp_date(tid):
+    if request.method == 'GET':
+        return PaymentHandler().getCardExpDate(tid)
+
+@payment_bp.route('/user/<int:tid>', methods =['GET'])
+def get_card_user(tid):
+    if request.method == 'GET':
+        return PaymentHandler().getCardUser(tid)
+
 @payment_bp.route('/add', methods =['POST'])
 def add_card():
     if request.method == 'POST':

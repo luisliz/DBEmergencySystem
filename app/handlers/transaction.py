@@ -24,6 +24,78 @@ class TransactionHandler:
             t = self.build_transaction_dict(row)
             return jsonify(Transaction=t)
 
+    def getTransactionByDate(self, date):
+        dao = TransactionDAO()
+        row = dao.getTransactionByDate(date)
+        if not row:
+            return jsonify(Error="Transaction Not Found"), 404
+        else:
+            t = self.build_transaction_dict(row)
+            return jsonify(Transaction=t)
+
+    def getTransactionByQuantity(self, q):
+        dao = TransactionDAO()
+        row = dao.getTransactionByQuantity(q)
+        if not row:
+            return jsonify(Error="Transaction Not Found"), 404
+        else:
+            t = self.build_transaction_dict(row)
+            return jsonify(Transaction=t)
+
+    def getTransactionByPayer(self, payer):
+        dao = TransactionDAO()
+        row = dao.getTransactionByPayer(payer)
+        if not row:
+            return jsonify(Error="Transaction Not Found"), 404
+        else:
+            t = self.build_transaction_dict(row)
+            return jsonify(Transaction=t)
+
+    def getTransactionBySupplier(self, s):
+        dao = TransactionDAO()
+        row = dao.getTransactionBySupplier(s)
+        if not row:
+            return jsonify(Error="Transaction Not Found"), 404
+        else:
+            t = self.build_transaction_dict(row)
+            return jsonify(Transaction=t)
+
+    def getTransactionByResource(self, resource):
+        dao = TransactionDAO()
+        row = dao.getTransactionByResource(resource)
+        if not row:
+            return jsonify(Error="Transaction Not Found"), 404
+        else:
+            t = self.build_transaction_dict(row)
+            return jsonify(Transaction=t)
+
+    def getTransactionByAmount(self, amount):
+        dao = TransactionDAO()
+        row = dao.getTransactionByAmmount(amount)
+        if not row:
+            return jsonify(Error="Transaction Not Found"), 404
+        else:
+            t = self.build_transaction_dict(row)
+            return jsonify(Transaction=t)
+
+    def getTransactionDate(self, tid):
+        return "Date: 02/02/2020"
+
+    def getTransactionQuantity(self, tid):
+        return "Quantity: 10"
+
+    def getTransactionPayer(self, tid):
+        return "Requester: Yeniel"
+
+    def getTransactionSupplier(self, tid):
+        return "Supplier: Jorge"
+
+    def getTransactionResource(self, tid):
+        return "Resource: Water"
+
+    def getTransactionAmount(self, tid):
+        return "Amount: 50.0"
+
     def searchTransaction(self, args):
         date = args.get("tdate")
         quantity = args.get("tquantity")
