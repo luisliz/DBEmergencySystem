@@ -1,5 +1,7 @@
 pg_config = {
     'user' : 'postgres',
-    'passwd' : 'postgres',
-    'dbname' : 'postgres'
+    'passwd': 'password',
+    'database': 'postgres',
+    'host': 'localhost',
+    'port': "5432"
 }
