@@ -14,28 +14,28 @@ class ResourcesDAO:
             {
                 'rid': 1,
                 'rName': 'Water',
-                'rcid': 1
+                'rcId': 1
             },
             {
                 'rid': 2,
                 'rName': 'Cannabis',
-                'rcid': 2
+                'rcId': 2
             },
             {
                 'rid': 3,
                 'rName': 'Chef Boyardee',
-                'rcid': 3
+                'rcId': 3
             },
             {
                 'rid': 4,
                 'rName': 'Tylenol',
-                'rcid': 2
+                'rcId': 2
             }
         ]
 
     def getAllResources(self):
         # cursor = self.conn.cursor()
-        # query = "select rid, rName, rcid from resources;"
+        # query = "select rid, rName, rcId from resources;"
         # cursor.execute(query)
         # result = []
         # for row in self.resources:#cursor:
@@ -80,7 +80,7 @@ class ResourcesDAO:
 
     def getResourcesByCategory(self, category):
         # cursor = self.conn.cursor()
-        # query = "select rid, rName from resources inner join resource_category on resources.rcid = resource_category.rcid
+        # query = "select rid, rName from resources inner join resource_category on resources.rcId = resource_category.rcId
         # where resource_category.rcName = category;"
         # cursor.execute(query)
         # result = []
@@ -98,7 +98,7 @@ class ResourcesDAO:
 
     def getResourcesByAvailability(self, avail):
         # cursor = self.conn.cursor()
-        # query = "select rid, rName from resources inner join resource_category on resources.rcid = resource_category.rcid
+        # query = "select rid, rName from resources inner join resource_category on resources.rcId = resource_category.rcId
         # where resource_category.rcAvailability = avail;"
         # cursor.execute(query)
         # result = []
@@ -123,12 +123,12 @@ class ResourcesDAO:
         #     result.append(row)
         return [1, 'John', 'Mendez']
 
-    def insert(self, rName, rcid):
+    def insert(self, rName, rcId):
         newRID = len(self.resources)+1
         new_resource = {
             'rid': newRID,
             'rName': rName,
-            'rcid': rcid
+            'rcId': rcId
         }
         self.resources.append(new_resource)
         #here would come a query to insert the new resource into the table
@@ -144,13 +144,13 @@ class ResourcesDAO:
 
         return False
 
-    def update(self, rid, rName, rcid):
+    def update(self, rid, rName, rcId):
         pos = 0
         for res in self.resources:
             if int(res['rid']) == int(rid):
                 newRes = self.resources[pos]
                 newRes['rName'] = rName
-                newRes['rcid'] = rcid
+                newRes['rcId'] = rcId
                 return True
             pos += 1
         return False

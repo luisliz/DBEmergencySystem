@@ -12,11 +12,11 @@ class TransactionDAO:
             {
                 'tid': 1,
                 'tdate': '02/02/2020',
-                'tQuantity': '10',
-                'tpayer': 'Yeniel',
-                'tsupplier': "Jorge",
-                'tresource': 'Water',
-                'tpayAmount': 50.0
+                'tquantity': '10',
+                'uid': 1,
+                'supplierUid': 2,
+                'rid': 1,
+                'tamount': 50.0
             }
         ]
 
@@ -44,19 +44,19 @@ class TransactionDAO:
 
     def getTransactionByPayer(self, p):
         for t in self.transactions:
-            if t['tpayer'] == p:
+            if t['uid'] == p:
                 return t
         return None
 
     def getTransactionBySupplier(self, s):
         for t in self.transactions:
-            if t['tsupplier'] == s:
+            if t['supplierUid'] == s:
                 return t
         return None
 
     def getTransactionByResource(self, r):
         for t in self.transactions:
-            if t['tresource'] == r:
+            if t['rid'] == r:
                 return t
         return None
 
@@ -66,36 +66,36 @@ class TransactionDAO:
                 return t
         return None
 
-    def getPayerBytId(self, tid):
+    def geuidBytId(self, tid):
         for t in self.transactions:
             if t["tid"] == tid:
-                return t['tpayer']
+                return t['uid']
         return None
 
-    def getSupplierBytId(self, tid):
+    def gesupplierUidBytId(self, tid):
         for t in self.transactions:
             if t["tid"] == tid:
-                return t['tsupplier']
+                return t['supplierUid']
         return None
 
-    def getResourceBytId(self, tid):
+    def geridBytId(self, tid):
         for t in self.transactions:
             if t["tid"] == tid:
-                return t['tresource']
+                return t['rid']
         return None
 
     def countTransactions(self):
         return len(self.transactions)
 
-    def insert(self, tDate, tQuantity, tPayer, tSupplier, tResource, tAmmount):
+    def insert(self, tDate, tquantity, uid, supplierUid, rid, tAmmount):
         newTId = len(self.transactions) + 1
         newTransaction = {
             'tid': len(self.transactions) + 1,
             'tdate': tDate,
-            'tquantity': tQuantity,
-            'tpayer': tPayer,
-            'tsupplier': tSupplier,
-            'tresource': tResource,
+            'tquantity': tquantity,
+            'uid': uid,
+            'supplierUid': supplierUid,
+            'rid': rid,
             'tpayAmmount': tAmmount
         }
         self.transactions.append(newTransaction)
@@ -111,16 +111,16 @@ class TransactionDAO:
 
         return False
 
-    def update(self, tid, tDate, tQuantity, tPayer, tSupplier, tResource, tAmmount):
+    def update(self, tid, tDate, tquantity, uid, supplierUid, rid, tAmmount):
         for t in self.transactions:
             if t['tid'] == tid:
                 t = {
                     'tid': tid,
                     'tdate': tDate,
-                    'tquantity': tQuantity,
-                    'tpayer': tPayer,
-                    'tsupplier': tSupplier,
-                    'tresource': tResource,
+                    'tquantity': tquantity,
+                    'uid': uid,
+                    'supplierUid': supplierUid,
+                    'rid': rid,
                     'tpayAmmount': tAmmount
                 }
                 return True

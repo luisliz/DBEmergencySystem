@@ -6,25 +6,25 @@ class UsersDAO:
     users = [
         {
             'uid': 1,
-            'user_rank': 1,
-            'first_name': 'Luis',
-            'last_name': 'Liz',
-            'dob': 938509285,
-            'email': 'luis@gmail.com',
-            'password': 'passsword'
+            'ucid': 1,
+            'ufirstName': 'Luis',
+            'ulastName': 'Liz',
+            'udob': 938509285,
+            'uemail': 'luis@gmail.com',
+            'upassword': 'passsword'
         },
         {
             'uid': 2,
-            'user_rank': 2,
-            'first_name': 'Yeniel',
-            'last_name': 'Diaz',
-            'dob': 95002395,
-            'email': 'yeniel@gmail.com',
-            'password': 'passswoiaodsih34'
+            'ucid': 2,
+            'ufirstName': 'Yeniel',
+            'ulastName': 'Diaz',
+            'udob': 95002395,
+            'uemail': 'yeniel@gmail.com',
+            'upassword': 'passswoiaodsih34'
         }
     ]
 
-    user_ranks = [
+    ucids = [
         {'rid': 1, 'rank_name': 'admin'},
         {'rid': 2, 'rank_name': 'provider'},
         {'rid': 3, 'rank_name': 'supplier'},
@@ -55,13 +55,13 @@ class UsersDAO:
         return None
 
     def getRanks(self): #Done
-        return self.user_ranks
+        return self.ucids
 
     def getUserRank(self, uid): #Done
         user = self.getUserById(uid)
 
-        for r in self.user_ranks:
-            if r['rid'] == user['user_rank']:
+        for r in self.ucids:
+            if r['rid'] == user['ucid']:
                 return r['rank_name']
 
         return None
@@ -69,44 +69,44 @@ class UsersDAO:
     def getUsersByRank(self, rank):
         result = []
         rid = None
-        for r in self.user_ranks:
+        for r in self.ucids:
             if r['rank_name'] == rank:
                 rid = r['rid']
 
         if rid is not None:
             for user in self.users:
-                if user['user_rank'] == rid:
+                if user['ucid'] == rid:
                     result.append(user)
 
         return result
 
         # rank_id = None
-        # for rid, r in self.user_ranks:
+        # for rid, r in self.ucids:
         #     if r == rank:
         #         rank_id = rid
         #
         # if rank_id is not None:
         #     for user in self.users:
-        #         if user['user_rank'] == rank_id:
+        #         if user['ucid'] == rank_id:
         #             result.append(user)
         #
         #return result
 
-    def getUserByFirst(self, first_name):
+    def getUserByFirst(self, ufirstName):
         for i, user in self.users:
-            if user['first_name'] == first_name:
+            if user['ufirstName'] == ufirstName:
                 return user
         return None
 
-    def getUserByLast(self, last_name):
+    def getUserByLast(self, ulastName):
         for i, user in users:
-            if user['last_name'] == last_name:
+            if user['ulastName'] == ulastName:
                 return user
         return result
 
-    def getUserByFirstAndLastName(self, first_name, last_name):
+    def getUserByFirstAndLastName(self, ufirstName, ulastName):
         for i, user in users:
-            if (user['first_name'] == first_name) and (user['last_name'] == last_name):
+            if (user['ufirstName'] == ufirstName) and (user['ulastName'] == ulastName):
                 return user
         return result
 
@@ -115,10 +115,10 @@ class UsersDAO:
 
     def count_ranks(self): #Done
         ranks = {}
-        for rank in self.user_ranks:
+        for rank in self.ucids:
             ranks[rank['rid']] = 0
             for user in self.users:
-                if user['user_rank'] == rank['rid']:
+                if user['ucid'] == rank['rid']:
                     ranks[rank['rid']] += 1
 
         return ranks
@@ -126,20 +126,20 @@ class UsersDAO:
     def count_rank(self, rid): #Done
         total = 0
         for user in self.users:
-            if user['user_rank'] == rid:
+            if user['ucid'] == rid:
                 total += 1
         return total
 
-    def insert(self, ufirstname, ulastname, udob, uemail, upassword): #Done
+    def insert(self, ufirstname, ulastname, uudob, uuemail, uupassword): #Done
         newUID = len(self.users)+1
         new_user = {
             'uid': len(self.users)+1,
-            'user_rank': 4,
-            'first_name': ufirstname,
-            'last_name': ulastname,
-            'dob': udob,
-            'email': uemail,
-            'password': upassword
+            'ucid': 4,
+            'ufirstName': ufirstname,
+            'ulastName': ulastname,
+            'udob': uudob,
+            'uemail': uuemail,
+            'upassword': uupassword
         }
         self.users.append(new_user)
 
@@ -155,6 +155,6 @@ class UsersDAO:
 
         return False
 
-    def update(self, uid, ufirstname, ulastname, udob, uemail, upassword, rid):
+    def update(self, uid, ufirstname, ulastname, uudob, uuemail, uupassword, rid):
 
         return uid

@@ -3,19 +3,19 @@ from app.config.database_config import pg_config
 class PaymentDAO:
     def __init__(self):
         '''
-           #connection_url = "dbname=%s card=%s password=%s" % (pg_config['dbname'],
-                                                                pg_config['card'],
+           #connection_url = "dbname=%s username=%s password=%s" % (pg_config['dbname'],
+                                                                pg_config['username'],
                                                                 pg_config['passwd'])
             #self.conn = psycopg2._connect(connection_url)
         '''
         self.cards = [
             {
-                'Card_id': 1,
-                'Card_number': '1111111111111111',
-                'Card_type': 'Visa',
-                'Card_provider': "The bank",
-                'Card_exp_date': "02/12",
-                'Card_user': "Yeniel"
+                'pid': 1,
+                'uid': 1,
+                'pNumber': '1111111111111111',
+                'pType': 'Visa',
+                'pProvider': "The bank",
+                'pExpDate': "02/12",
             }
         ]
 
@@ -25,77 +25,77 @@ class PaymentDAO:
 
     def getCardById(self, cid):
         for card in self.cards:
-            if card['Card_id'] == cid:
+            if card['pid'] == cid:
                 return card
         return None
 
     def getCardByType(self, ctype):
         for card in self.cards:
-            if card['Card_type'] == ctype:
+            if card['pType'] == ctype:
                 return card
         return None
 
     def getCardByProvider(self, provider):
         for card in self.cards:
-            if card['Card_provider'] == provider:
+            if card['pProvider'] == provider:
                 return card
         return None
 
     def getCardByExpDate(self, expDate):
         for card in self.cards:
-            if card['Card_exp_date'] == expDate:
+            if card['pExpDate'] == expDate:
                 return card
         return None
 
     def getCardByUser(self, user):
         for card in self.cards:
-            if card['Card_user'] == user:
+            if card['uid'] == user:
                 return card
         return None
 
     def getCardByTypeAndProvider(self, ctype, provider):
         for card in self.cards:
-            if card['Card_type'] == ctype and card['Card_provider'] == provider:
+            if card['pType'] == ctype and card['pProvider'] == provider:
                 return card
         return None
 
     def getCardByTypeAndExpDate(self, ctype, expDate):
         for card in self.cards:
-            if card['Card_type'] == ctype and card['Card_exp_date'] == expDate:
+            if card['pType'] == ctype and card['pExpDate'] == expDate:
                 return card
         return None
 
     def getCardByTypeAndExpDate(self, ctype, user):
         for card in self.cards:
-            if card['Card_type'] == ctype and card['Card_user'] == user:
+            if card['pType'] == ctype and card['uid'] == user:
                 return card
         return None
 
     def getCardByProviderAndExpDate(self, provider, expDate):
         for card in self.cards:
-            if card['Card_provider'] == provider and\
-                    card['Card_exp_date'] == expDate:
+            if card['pProvider'] == provider and\
+                    card['pExpDate'] == expDate:
                 return card
         return None
 
     def getCardByProviderAndUser(self, provider, user):
         for card in self.cards:
-            if card['Card_provider'] == provider and\
-                    card['Card_user'] == user:
+            if card['pProvider'] == provider and\
+                    card['uid'] == user:
                 return card
         return None
 
     def getCardByExpDateAndUser(self, expDate, user):
         for card in self.cards:
-            if card['Card_exp_date'] == expDate and\
-                    card['Card_user'] == user:
+            if card['pExpDate'] == expDate and\
+                    card['uid'] == user:
                 return card
         return None
 
     def getUserByCardId(self, cid):
         for card in self.cards:
-            if card["Card_id"] == cid:
-                return card['Card_user']
+            if card["pid"] == cid:
+                return card['uid']
         return None
 
     def countCards(self):
@@ -104,12 +104,12 @@ class PaymentDAO:
     def insert(self, cid, cNumber, cType, cProvider, cExpDate, cUser):
         newCID = len(self.cards) + 1
         newCard = {
-            'Card_id': len(self.cards) + 1,
+            'pid': len(self.cards) + 1,
             'Card_number': cNumber,
-            'Card_type': cType,
-            'Card_provider': cProvider,
-            'Card_exp_date': cExpDate,
-            'Card_user': cUser
+            'pType': cType,
+            'pProvider': cProvider,
+            'pExpDate': cExpDate,
+            'uid': cUser
         }
         self.cards.append(newCard)
         return newCID
@@ -117,7 +117,7 @@ class PaymentDAO:
     def delete(self, cid):
         pos = 0
         for card in self.cards:
-            if int(card['Card_id']) == int(cid):
+            if int(card['pid']) == int(cid):
                 del self.cards[pos]
                 return True
             pos += 1
@@ -126,14 +126,14 @@ class PaymentDAO:
 
     def update(self, cid, cNumber, cType, cProvider, cExpDate, cUser):
         for card in self.cards:
-            if card['Card_id'] == cid:
+            if card['pid'] == cid:
                 card = {
-                    'Card_id': cid,
+                    'pid': cid,
                     'Card_number': cNumber,
-                    'Card_type': cType,
-                    'Card_provider': cProvider,
-                    'Card_exp_date': cExpDate,
-                    'Card_user': cUser
+                    'pType': cType,
+                    'pProvider': cProvider,
+                    'pExpDate': cExpDate,
+                    'uid': cUser
                 }
                 return True
         return False

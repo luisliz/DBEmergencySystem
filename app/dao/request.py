@@ -10,13 +10,13 @@ class RequestDAO:
         '''
         self.requests = [
             {
-                'reqid': 1,
-                'req_quantity': 4,
-                'req_post_date': 408109458,
-                'req_dispatch_date': 5908230598,
-                'req_location': 'Guayama',
-                'requesterID': 1,
-                'supplierID': 2,
+                'reqId': 1,
+                'reqQuantity': 4,
+                'reqPostDate': 408109458,
+                'reqDispatchDate': 5908230598,
+                'reqLocation': 'Guayama',
+                'requestUid': 1,
+                'supplierUid': 2,
                 'rid': 3,
             }
         ]
@@ -25,23 +25,23 @@ class RequestDAO:
         result = self.requests
         return result
 
-    def getRequestById(self, reqid): #Done
+    def getRequestById(self, reqId): #Done
         for r in self.requests:
-            if r['reqid'] == reqid:
+            if r['reqId'] == reqId:
                 return r
         return None
 
-    def getRequestsFromRequester(self, requesterID): #Done
+    def getRequestsFromRequester(self, requestUid): #Done
         result = []
         for r in self.requests:
-            if r['requesterID'] == requesterID:
+            if r['requestUid'] == requestUid:
                 result.append(r)
         return result
 
-    def getRequestsFromSupplier(self, supplierid): #done
+    def getRequestsFromSupplier(self, supplierUid): #done
         result = []
         for r in self.requests:
-            if r['supplierID'] == supplierid:
+            if r['supplierUid'] == supplierUid:
                 result.append(r)
         return result
 
@@ -52,54 +52,54 @@ class RequestDAO:
                 result.append(r)
         return result
 
-    def getRequestQuantity(self, reqid): #Done
+    def getRequestQuantity(self, reqId): #Done
         for r in self.requests:
-            if r['reqid'] == reqid:
-                return r['req_quantity']
+            if r['reqId'] == reqId:
+                return r['reqQuantity']
         return None
 
-    def getRequestDispatchDate(self, reqid): #Done
+    def getRequestDispatchDate(self, reqId): #Done
         for r in self.requests:
-            if r['reqid'] == reqid:
-                return r['req_dispatch_date']
+            if r['reqId'] == reqId:
+                return r['reqDispatchDate']
         return None
 
-    def getRequestPostDate(self, reqid): #Done
+    def getRequestPostDate(self, reqId): #Done
         for r in self.requests:
-            if r['reqid'] == reqid:
-                return r['req_post_date']
+            if r['reqId'] == reqId:
+                return r['reqPostDate']
         return None
 
-    def getRequestLocation(self, reqid): #Done
+    def getRequestLocation(self, reqId): #Done
         for r in self.requests:
-            if r['reqid'] == reqid:
-                return r['req_location']
+            if r['reqId'] == reqId:
+                return r['reqLocation']
         return None
 
-    def addRequest(self, req_quantitiy, req_post_date, req_dispatch_date, req_location, requesterID, supplierID, rid):
+    def addRequest(self, req_quantitiy, reqPostDate, reqDispatchDate, reqLocation, requestUid, supplierUid, rid):
         newID = len(self.requests)+1
         return newID
 
-    def updateRequest(self, reqid, req_quantity, req_post_date, req_dispatch_date, req_location, requesterID, supplierID, rid):
+    def updateRequest(self, reqId, reqQuantity, reqPostDate, reqDispatchDate, reqLocation, requestUid, supplierUid, rid):
         pos = 0
         for req in self.requests:
-            if int(req['reqid']) == int(reqid):
+            if int(req['reqId']) == int(reqId):
                 newReq = self.requests[pos]
-                newReq['req_quantity'] = req_quantity
-                newReq['req_post_date'] = req_post_date
-                newReq['req_dispatch_date'] = req_dispatch_date
-                newReq['req_location'] = req_location
-                newReq['requesterID'] = requesterID
-                newReq['supplierID'] = supplierID
+                newReq['reqQuantity'] = reqQuantity
+                newReq['reqPostDate'] = reqPostDate
+                newReq['reqDispatchDate'] = reqDispatchDate
+                newReq['reqLocation'] = reqLocation
+                newReq['requestUid'] = requestUid
+                newReq['supplierUid'] = supplierUid
                 newReq['rid'] = rid
                 return True
             pos += 1
         return False
 
-    def removeRequest(self, reqid):
+    def removeRequest(self, reqId):
         pos = 0
         for req in self.requests:
-            if int(req['reqid']) == int(reqid):
+            if int(req['reqId']) == int(reqId):
                 del self.requests[pos]
                 return True
             pos += 1
