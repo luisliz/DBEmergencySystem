@@ -1,15 +1,18 @@
 from flask import jsonify
-from app.dao.user import UsersDAO
+from app.dao.users import UsersDAO
 
 
 class UserHandler:
     def build_user_dict(self, row): #DONE
-        # result = {}
-        # result['uid'] = row[0]
-        # result['user_rank'] = row[1]
-        # result['first_name'] = row[2]
-        # result['last_name'] = row[3]
-        # result['email'] = row[4]
+        result = {}
+        print(row)
+        result['uid'] = row[0]
+        result['ucid'] = row[1]
+        result['ufirstName'] = row[2]
+        result['ulastName'] = row[3]
+        result['udob'] = row[4]
+        result['uemail'] = row[5]
+        result['upassword'] = row[6]
         return row
 
     def get_all_users(self):#DONE

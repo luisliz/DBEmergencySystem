@@ -4,7 +4,7 @@ class TransactionDAO:
     def __init__(self):
         '''
            #connection_url = "dbname=%s t=%s password=%s" % (pg_config['dbname'],
-                                                                pg_config['t'],
+                                                                pg_config['username'],
                                                                 pg_config['passwd'])
             #self.conn = psycopg2._connect(connection_url)
         '''

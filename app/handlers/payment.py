@@ -4,24 +4,24 @@ from app.dao.payment import PaymentDAO
 
 class PaymentHandler:
     def build_payment_dict(self, row):
-        # result = {}
-        # result['Card_id'] = row[0]
-        # result['Card_number'] = row[1]
-        # result['Card_type'] = row[2]
-        # result['Card_provider'] = row[3]
-        # result['Card_exp_date'] = row[4]
-        # result['Card_user'] = row[5]
+        result = {}
+        result['pid'] = row[0]
+        result['uid'] = row[1]
+        result['pNumber'] = row[2]
+        result['pType'] = row[3]
+        result['pProvider'] = row[4]
+        result['pExpDate'] = row[5]
         return row
 
-    # def build_payment_attributes(self, cid, cNumber, cType, cProvider, cExpDate, uID):
-    #     result = {}
-    #     result['Card_id'] = cid
-    #     result['Card_number'] = cNumber
-    #     result['Card_type'] = cType
-    #     result['Card_provider'] = cProvider
-    #     result['Card_exp_date'] = cExpDate
-    #     result['Card_user'] = uID
-    #     return result
+    def build_payment_attributes(self, pid, uid, pNumber, pType, pProvider, pExpDate):
+        result = {}
+        result['pid'] = pid
+        result['uid'] = uid
+        result['pNumber'] = pNumber
+        result['pType'] = pType
+        result['pProvider'] = pProvider
+        result['pExpDate'] = pExpDate
+        return result
 
     def getAllCards(self):
         dao = PaymentDAO()

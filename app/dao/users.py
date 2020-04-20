@@ -1,29 +1,7 @@
 from app.config.database_config import pg_config
-#import psycopg2
+import psycopg2
 
 class UsersDAO:
-
-    users = [
-        {
-            'uid': 1,
-            'ucid': 1,
-            'ufirstName': 'Luis',
-            'ulastName': 'Liz',
-            'udob': 938509285,
-            'uemail': 'luis@gmail.com',
-            'upassword': 'passsword'
-        },
-        {
-            'uid': 2,
-            'ucid': 2,
-            'ufirstName': 'Yeniel',
-            'ulastName': 'Diaz',
-            'udob': 95002395,
-            'uemail': 'yeniel@gmail.com',
-            'upassword': 'passswoiaodsih34'
-        }
-    ]
-
     ucids = [
         {'rid': 1, 'rank_name': 'admin'},
         {'rid': 2, 'rank_name': 'provider'},
@@ -32,32 +10,33 @@ class UsersDAO:
     ]
 
     def __init__(self):
-
-        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-                                                            pg_config['passwd'])
-        # self.conn = psycopg2._connect(connection_url)
+        self.conn = psycopg2.connect(
+            user=pg_config["user"],
+            password=pg_config['passwd'],
+            host=pg_config['host'],
+            port=pg_config['port'],
+            database=pg_config['database']
+        )
 
     def getAllUsers(self): #Done
-        # cursor = self.conn.cursor()
-        # query = "select pid, pname, pmaterial, pcolor, pprice from parts;"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.users:#cursor:
-        #     result.append(row)
-        result = self.users
+        cursor = self.conn.cursor()
+        query = "select uid, ucid, ufirstName, ulastName, udob, uemail, upassword from users;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
-    def getUserById(self, uid): #Done
+    def getUserById(self, uid):
         for user in self.users:
             if user['uid'] == uid:
                 return user
         return None
 
-    def getRanks(self): #Done
+    def getRanks(self):
         return self.ucids
 
-    def getUserRank(self, uid): #Done
+    def getUserRank(self, uid):
         user = self.getUserById(uid)
 
         for r in self.ucids:
@@ -110,10 +89,10 @@ class UsersDAO:
                 return user
         return result
 
-    def count_users(self): #Done
+    def count_users(self):
         return len(self.users)
 
-    def count_ranks(self): #Done
+    def count_ranks(self):
         ranks = {}
         for rank in self.ucids:
             ranks[rank['rid']] = 0
@@ -123,14 +102,14 @@ class UsersDAO:
 
         return ranks
 
-    def count_rank(self, rid): #Done
+    def count_rank(self, rid):
         total = 0
         for user in self.users:
             if user['ucid'] == rid:
                 total += 1
         return total
 
-    def insert(self, ufirstname, ulastname, uudob, uuemail, uupassword): #Done
+    def insert(self, ufirstname, ulastname, uudob, uuemail, uupassword):
         newUID = len(self.users)+1
         new_user = {
             'uid': len(self.users)+1,

@@ -1,5 +1,5 @@
 from flask import Blueprint, url_for, flash, request
-from app.handlers.user import UserHandler
+from app.handlers.users import UserHandler
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
