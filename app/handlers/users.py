@@ -1,7 +1,6 @@
 from flask import jsonify
 from app.dao.users import UsersDAO
 
-
 class UserHandler:
     def build_user_dict(self, row): #DONE
         result = {}

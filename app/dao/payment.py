@@ -1,10 +1,15 @@
-import psycopg2
-
 from app.config.database_config import pg_config
+import psycopg2
 
 class PaymentDAO:
     def __init__(self):
-        self.conn = psycopg2.connect(host="localhost",database="disasterAid", user="appusr", password="class")
+        self.conn = psycopg2.connect(
+            user=pg_config["user"],
+            password=pg_config['passwd'],
+            host=pg_config['host'],
+            port=pg_config['port'],
+            database=pg_config['database']
+        )
 
         self.cards = [
             {
