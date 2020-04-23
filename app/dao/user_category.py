@@ -28,13 +28,12 @@ class UserCategoryDAO:
         ]
 
     def getAllUserCategories(self):
-        # cursor = self.conn.cursor()
-        # query = "select ucid, ucName from resource_category;"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.users:#cursor:
-        #     result.append(row)
-        result = self.resource_cat
+        cursor = self.conn.cursor()
+        query = "select ucid, ucname from resource_category;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def getCategoryById(self, ucid):
@@ -42,6 +41,58 @@ class UserCategoryDAO:
             if cat['ucid'] == ucid:
                 return cat
         return None
+
+    def getUserRank(self, uid):
+        user = self.getUserById(uid)
+
+        for r in self.ucids:
+            if r['rid'] == user['ucid']:
+                return r['rank_name']
+
+        return None
+
+    def getUsersByRank(self, rank):
+        result = []
+        rid = None
+        for r in self.ucids:
+            if r['rank_name'] == rank:
+                rid = r['rid']
+
+        if rid is not None:
+            for user in self.users:
+                if user['ucid'] == rid:
+                    result.append(user)
+
+        return result
+
+        # rank_id = None
+        # for rid, r in self.ucids:
+        #     if r == rank:
+        #         rank_id = rid
+        #
+        # if rank_id is not None:
+        #     for user in self.users:
+        #         if user['ucid'] == rank_id:
+        #             result.append(user)
+        #
+        #return result
+
+    def count_ranks(self):
+        ranks = {}
+        for rank in self.ucids:
+            ranks[rank['rid']] = 0
+            for user in self.users:
+                if user['ucid'] == rank['rid']:
+                    ranks[rank['rid']] += 1
+
+        return ranks
+
+    def count_rank(self, rid):
+        total = 0
+        for user in self.users:
+            if user['ucid'] == rid:
+                total += 1
+        return total
 
     def insert(self, ucName):
         newucid = len(self.resource_cat)+1
