@@ -5,15 +5,13 @@ from app.dao.users import UsersDAO
 class UserHandler:
     def build_user_dict(self, row): #DONE
         result = {}
-        print(row)
         result['uid'] = row[0]
         result['ucid'] = row[1]
         result['ufirstName'] = row[2]
         result['ulastName'] = row[3]
         result['udob'] = row[4]
         result['uemail'] = row[5]
-        result['upassword'] = row[6]
-        return row
+        return result
 
     def get_all_users(self):#DONE
         dao = UsersDAO()
