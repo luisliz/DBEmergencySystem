@@ -13,7 +13,8 @@ class UserHandler:
         result['udob'] = row[4]
         result['uemail'] = row[5]
         result['upassword'] = row[6]
-        return row
+        # return row
+        return result
 
     def get_all_users(self):#DONE
         dao = UsersDAO()

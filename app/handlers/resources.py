@@ -5,11 +5,11 @@ from app.dao.resource_details import ResourceDetailsDAO
 
 class ResourceHandler:
     def build_resource_dict(self, row):
-        # result = {}
-        # result['rid'] = row[0]
-        # result['rName'] = row[1]
-        # result['rcid'] = row[2]
-        return row
+        result = {}
+        result['rid'] = row[0]
+        result['rName'] = row[1]
+        result['rcid'] = row[2]
+        return result
 
     def build_supplier_dict(self, row):
         result = {}
@@ -20,7 +20,7 @@ class ResourceHandler:
 
     def get_all_resources(self):
         dao = ResourcesDAO()
-        resources_list = dao.getAllResources()
+        resources_list = dao.getAllResources() #this too, is a 'table', list of lists (rows)
         result_list = []
         for row in resources_list:
             result = self.build_resource_dict(row)

@@ -1,46 +1,47 @@
 from app.config.database_config import pg_config
-#import psycopg2
+import psycopg2
 
 class ResourcesDAO:
 
     def __init__(self):
+        self.conn = psycopg2.connect(
+            user=pg_config["user"],
+            password=pg_config['passwd'],
+            host=pg_config['host'],
+            port=pg_config['port'],
+            database=pg_config['database']
+        )
 
-        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-                                                            pg_config['passwd'])
-        # self.conn = psycopg2._connect(connection_url)
-
-        self.resources = [
-            {
-                'rid': 1,
-                'rName': 'Water',
-                'rcId': 1
-            },
-            {
-                'rid': 2,
-                'rName': 'Cannabis',
-                'rcId': 2
-            },
-            {
-                'rid': 3,
-                'rName': 'Chef Boyardee',
-                'rcId': 3
-            },
-            {
-                'rid': 4,
-                'rName': 'Tylenol',
-                'rcId': 2
-            }
-        ]
+        # self.resources = [
+        #     {
+        #         'rid': 1,
+        #         'rName': 'Water',
+        #         'rcId': 1
+        #     },
+        #     {
+        #         'rid': 2,
+        #         'rName': 'Cannabis',
+        #         'rcId': 2
+        #     },
+        #     {
+        #         'rid': 3,
+        #         'rName': 'Chef Boyardee',
+        #         'rcId': 3
+        #     },
+        #     {
+        #         'rid': 4,
+        #         'rName': 'Tylenol',
+        #         'rcId': 2
+        #     }
+        # ]
 
     def getAllResources(self):
-        # cursor = self.conn.cursor()
-        # query = "select rid, rName, rcId from resources;"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.resources:#cursor:
-        #     result.append(row)
-        result = self.resources
+        cursor = self.conn.cursor()
+        query = "select * from resources;"
+        cursor.execute(query)
+        result = []                 #this is a 'table', a list of lists: result[0][0] --> first row, value in first col
+        for row in cursor:
+            result.append(row)
         return result
 
     def getRequestedResources(self):
