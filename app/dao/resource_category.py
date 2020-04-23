@@ -1,14 +1,17 @@
 from app.config.database_config import pg_config
-#import psycopg2
+import psycopg2
 
 class ResourceCategoryDAO:
 
     def __init__(self):
+        self.conn = psycopg2.connect(
+            user=pg_config["user"],
+            password=pg_config['passwd'],
+            host=pg_config['host'],
+            port=pg_config['port'],
+            database=pg_config['database']
+        )
 
-        connection_url = "dbname=%s user=%s password=%s" % (pg_config['dbname'],
-                                                            pg_config['user'],
-                                                            pg_config['passwd'])
-        # self.conn = psycopg2._connect(connection_url)
         self.resource_cat = [
             {
                 'rcid': 1,

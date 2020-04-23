@@ -20,7 +20,7 @@ class UsersDAO:
 
     def getAllUsers(self): #Done
         cursor = self.conn.cursor()
-        query = "select uid, ucid, ufirstName, ulastName, udob, uemail, upassword from users;"
+        query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -28,86 +28,41 @@ class UsersDAO:
         return result
 
     def getUserById(self, uid):
-        for user in self.users:
-            if user['uid'] == uid:
-                return user
-        return None
-
-    def getRanks(self):
-        return self.ucids
-
-    def getUserRank(self, uid):
-        user = self.getUserById(uid)
-
-        for r in self.ucids:
-            if r['rid'] == user['ucid']:
-                return r['rank_name']
-
-        return None
-
-    def getUsersByRank(self, rank):
-        result = []
-        rid = None
-        for r in self.ucids:
-            if r['rank_name'] == rank:
-                rid = r['rid']
-
-        if rid is not None:
-            for user in self.users:
-                if user['ucid'] == rid:
-                    result.append(user)
-
-        return result
-
-        # rank_id = None
-        # for rid, r in self.ucids:
-        #     if r == rank:
-        #         rank_id = rid
-        #
-        # if rank_id is not None:
-        #     for user in self.users:
-        #         if user['ucid'] == rank_id:
-        #             result.append(user)
-        #
-        #return result
+        cursor = self.conn.cursor()
+        query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where uid = %s;"
+        cursor.execute(query, (uid,))
+        return cursor.fetchone()
 
     def getUserByFirst(self, ufirstName):
-        for i, user in self.users:
-            if user['ufirstName'] == ufirstName:
-                return user
-        return None
+       cursor = self.conn.cursor()
+       query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where ufirstName = %s;"
+       cursor.execute(query, ufirstName)
+       result = []
+       for row in cursor:
+           result.append(row)
+       return result
 
     def getUserByLast(self, ulastName):
-        for i, user in users:
-            if user['ulastName'] == ulastName:
-                return user
-        return result
+       cursor = self.conn.cursor()
+       query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where ulastName = %s;"
+       cursor.execute(query, ulastName)
+       result = []
+       for row in cursor:
+           result.append(row)
+       return result
 
     def getUserByFirstAndLastName(self, ufirstName, ulastName):
-        for i, user in users:
-            if (user['ufirstName'] == ufirstName) and (user['ulastName'] == ulastName):
-                return user
+        cursor = self.conn.cursor()
+        query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where ufirstName = %s AND ulastName = %s;"
+        cursor.execute(query, (ufirstName, ulastName))
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def count_users(self):
         return len(self.users)
 
-    def count_ranks(self):
-        ranks = {}
-        for rank in self.ucids:
-            ranks[rank['rid']] = 0
-            for user in self.users:
-                if user['ucid'] == rank['rid']:
-                    ranks[rank['rid']] += 1
-
-        return ranks
-
-    def count_rank(self, rid):
-        total = 0
-        for user in self.users:
-            if user['ucid'] == rid:
-                total += 1
-        return total
 
     def insert(self, ufirstname, ulastname, uudob, uuemail, uupassword):
         newUID = len(self.users)+1

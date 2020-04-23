@@ -1,7 +1,7 @@
 pg_config = {
     'user' : 'postgres',
-    'passwd': 'password',
+    'passwd': 'pbPkem9pph8B9p3L',
     'database': 'postgres',
-    'host': 'localhost',
+    'host': '34.74.147.127',
     'port': "5432"
 }

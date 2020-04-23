@@ -1,13 +1,17 @@
 from app.config.database_config import pg_config
+import psycopg2
+
 class RequestDAO:
 
     def __init__(self):
-        '''
-           #connection_url = "dbname=%s t=%s password=%s" % (pg_config['dbname'],
-                                                                pg_config['t'],
-                                                                pg_config['passwd'])
-            #self.conn = psycopg2._connect(connection_url)
-        '''
+        self.conn = psycopg2.connect(
+            user=pg_config["user"],
+            password=pg_config['passwd'],
+            host=pg_config['host'],
+            port=pg_config['port'],
+            database=pg_config['database']
+        )
+
         self.requests = [
             {
                 'reqId': 1,
