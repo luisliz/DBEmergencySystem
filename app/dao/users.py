@@ -10,13 +10,16 @@ class UsersDAO:
     ]
 
     def __init__(self):
+        #YEAH I GOTTA MAKE A DATABASE AND USER WITH THESE CONFIGURATIONS BUT FOR NOW WHILEI IM FIGURING STUFF OUT
+        '''
         self.conn = psycopg2.connect(
             user=pg_config["user"],
             password=pg_config['passwd'],
             host=pg_config['host'],
             port=pg_config['port'],
             database=pg_config['database']
-        )
+        '''
+        self.conn = psycopg2.connect(host="localhost",database="disasterAid", user="appusr", password="class")
 
     def getAllUsers(self): #Done
         cursor = self.conn.cursor()
