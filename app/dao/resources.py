@@ -68,10 +68,13 @@ class ResourcesDAO:
         return None
 
     def getResourceById(self, rid):
-        for res in self.resources:
-            if res['rid'] == rid:
-                return res
-        return None
+        cursor = self.conn.cursor()
+        query = "select * from resources where rid = " + str(rid) + ";"
+        cursor.execute(query)
+        result = []  # this is a 'table', a list of lists: result[0][0] --> first row, value in first col
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getResourceByName(self, rName):
         for res in self.resources:

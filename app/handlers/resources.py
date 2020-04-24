@@ -35,9 +35,12 @@ class ResourceHandler:
 
     def get_resource_by_id(self, rid):
         dao = ResourcesDAO()
-        resource = dao.getResourceById(rid)
-        result = self.build_resource_dict(resource)
-        return jsonify(Resource=result)
+        resources_list = dao.getResourceById(rid)  # this too, is a 'table', list of lists (rows)
+        result_list = []
+        for row in resources_list:
+            result = self.build_resource_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
 
     def get_resource_by_name(self, rName):
         dao = ResourcesDAO()
