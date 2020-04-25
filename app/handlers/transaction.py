@@ -125,6 +125,12 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Transactions=result_list)
 
+
+    def countTransactions(self):
+        dao = TransactionDAO()
+        tCount = dao.countTransactions()
+        return jsonify(TransactionCount=tCount)
+
     """
         def getPayerByTransactionId(self, tid):
             dao = TransactionDAO()
@@ -166,11 +172,6 @@ class TransactionHandler:
         #     dao.delete(tid)
         #     #return jsonify(DeleteStatus="OK", deleted=tid), 200
         #     return jsonify(deleted=tid)
-
-    def countTransactions(self):
-        dao = TransactionDAO()
-        tCount = dao.countTransactions()
-        return jsonify(TransactionCount=tCount)
 
     def updateTransaction(self, tid, form):
         dao = TransactionDAO()
