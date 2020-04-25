@@ -40,11 +40,17 @@ def get_card_by_user(user):
     if request.method == 'GET':
         return PaymentHandler().getCardByUser(user)
 
-@payment_bp.route('/userByID/<int:cid>', methods =['GET'])
+@payment_bp.route('/count', methods=['GET'])
+def count_payment():
+    if request.method == 'GET':
+        return PaymentHandler().countCards()
+
+@payment_bp.route('/userByCardId/<int:cid>', methods =['GET'])
 def get_user_by_card(cid):
     if request.method == 'GET':
         return PaymentHandler().getUserByCardId(cid)
 
+"""////////////////////////////////DONT KNOW IF THESE METHODS ARE NECESSARY /////////////////////////////////////////"""
 @payment_bp.route('/type/<int:tid>', methods =['GET'])
 def get_card_type(tid):
     if request.method == 'GET':
@@ -64,6 +70,9 @@ def get_card_exp_date(tid):
 def get_card_user(tid):
     if request.method == 'GET':
         return PaymentHandler().getCardUser(tid)
+"""////////////////////////////////DONT KNOW IF THESE METHODS ARE NECESSARY /END/////////////////////////////////////"""
+
+"""///////////////////////////////////////////////PAST PHASE 2///////////////////////////////////////////////////////"""
 
 @payment_bp.route('/add', methods =['POST'])
 def add_card():
@@ -79,8 +88,3 @@ def delete_card(cID):
 def settings(cID):
     if request.method == 'PUT':
         return PaymentHandler().updateCard(cID, request.form)
-
-@payment_bp.route('/count', methods=['GET'])
-def count_payment():
-    if request.method == 'GET':
-        return PaymentHandler().countCards()

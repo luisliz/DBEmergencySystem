@@ -5,23 +5,29 @@ from app.dao.payment import PaymentDAO
 class PaymentHandler:
     def build_payment_dict(self, row):
         result = {}
-        result['pid'] = row[0]
-        result['uid'] = row[1]
-        result['pNumber'] = row[2]
-        result['pType'] = row[3]
-        result['pProvider'] = row[4]
-        result['pExpDate'] = row[5]
-        return row
+        if row == None:
+            return {'error': 'User Not found'}
+        else:
+            result['pid'] = row[0]
+            result['uid'] = row[1]
+            result['pNumber'] = row[2]
+            result['pType'] = row[3]
+            result['pProvider'] = row[4]
+            result['pExpDate'] = row[5]
+            return row
 
-    def build_payment_attributes(self, pid, uid, pNumber, pType, pProvider, pExpDate):
+    def build_user_dict(self, row):
         result = {}
-        result['pid'] = pid
-        result['uid'] = uid
-        result['pNumber'] = pNumber
-        result['pType'] = pType
-        result['pProvider'] = pProvider
-        result['pExpDate'] = pExpDate
-        return result
+        if row == None:
+            return {'error': 'User Not found'}
+        else:
+            result['uid'] = row[0]
+            result['ucid'] = row[1]
+            result['ufirstName'] = row[2]
+            result['ulastName'] = row[3]
+            result['udob'] = row[4]
+            result['uemail'] = row[5]
+            return result
 
     def getAllCards(self):
         dao = PaymentDAO()
@@ -43,40 +49,66 @@ class PaymentHandler:
 
     def getCardByType(self, ctype):
         dao = PaymentDAO()
-        row = dao.getCardByType(ctype)
-        if not row:
+        payment_list = dao.getCardByType(ctype)
+        result_list = []
+        if not payment_list:
             return jsonify(Error="Card Not Found"), 404
-        else:
-            card = self.build_payment_dict(row)
-            return jsonify(Card=card)
+        for row in payment_list:
+            result = self.build_payment_dict(row)
+            result_list.append(result)
+        return jsonify(Cards=result_list)
+
 
     def getCardByProvider(self, prov):
         dao = PaymentDAO()
-        row = dao.getCardByProvider(prov)
-        if not row:
+        payment_list = dao.getCardByProvider(prov)
+        result_list = []
+        if not payment_list:
             return jsonify(Error="Card Not Found"), 404
-        else:
-            card = self.build_payment_dict(row)
-            return jsonify(Card=card)
+        for row in payment_list:
+            result = self.build_payment_dict(row)
+            result_list.append(result)
+        return jsonify(Cards=result_list)
 
     def getCardByExpDate(self, date):
         dao = PaymentDAO()
-        row = dao.getCardByExpDate(date)
-        if not row:
+        payment_list = dao.getCardByExpDate(date)
+        result_list = []
+        if not payment_list:
             return jsonify(Error="Card Not Found"), 404
-        else:
-            card = self.build_payment_dict(row)
-            return jsonify(Card=card)
+        for row in payment_list:
+            result = self.build_payment_dict(row)
+            result_list.append(result)
+        return jsonify(Cards=result_list)
 
     def getCardByUser(self, uid):
         dao = PaymentDAO()
-        row = dao.getCardByUser(uid)
-        if not row:
+        payment_list = dao.getCardByUser(uid)
+        result_list = []
+        if not payment_list:
             return jsonify(Error="Card Not Found"), 404
-        else:
-            card = self.build_payment_dict(row)
-            return jsonify(Card=card)
+        for row in payment_list:
+            result = self.build_payment_dict(row)
+            result_list.append(result)
+        return jsonify(Cards=result_list)
 
+    def countCards(self):
+        dao = PaymentDAO()
+        cCount = dao.countCards()
+        return jsonify(CardCount=cCount)
+
+    def getUserByCardId(self, cid):
+        dao = PaymentDAO()
+        if not dao.getCardById(cid):
+            return jsonify(Error="Part Not Found"), 404
+        users_list = dao.getUserByCardId(cid)
+        result_list = []
+        for row in users_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Users=result_list)
+
+    """/////////////////////////////DONT KNOW IF THESE METHODS ARE NECESSARY ////////////////////////////////////////"""
     def getCardNumber(self, tid):
         return "Number: 1111 1111 1111 1111"
 
@@ -99,9 +131,7 @@ class PaymentHandler:
         user = args.get("Card_user")
         dao = PaymentDAO()
         card_list = []
-        if (len(args) == 2) and type and provider:
-            card_list = dao.getCardByTypeAndProvider(type, provider)
-        elif (len(args) == 1) and type:
+        if (len(args) == 1) and type:
             card_list = dao.getCardByType(type)
         elif (len(args) == 1) and provider:
             card_list = dao.getCardByProvider(provider)
@@ -116,18 +146,9 @@ class PaymentHandler:
             result = self.build_payment_dict(row)
             result_list.append(result)
         return jsonify(Cards=result_list)
+    """/////////////////////////////DONT KNOW IF THESE METHODS ARE NECESSARY /END////////////////////////////////////"""
 
-    def getUserByCardId(self, cid):
-        dao = PaymentDAO()
-        if not dao.getCardById(cid):
-            return jsonify(Error="Part Not Found"), 404
-        users_list = dao.getUserByCardId(cid)
-        result_list = []
-        for row in users_list:
-            result = self.build_user_dict(row)
-            result_list.append(result)
-        return jsonify(Users=result_list)
-
+    """/////////////////////////////////PAST PHASE 2/////////////////////////////////////////////////////////////////"""
     def insertCard(self, form):
         return "Added new Card"
         # print("form: ", form)
@@ -171,11 +192,6 @@ class PaymentHandler:
         #     #return jsonify(DeleteStatus="OK", deleted=cid), 200
         #     return jsonify(deleted=cid)
 
-    def countCards(self):
-        dao = PaymentDAO()
-        cCount = dao.countCards()
-        return jsonify(CardCount=cCount)
-
     def updateCard(self, cid, form):
         dao = PaymentDAO()
         return f"Updated payment with id: {cid}"
@@ -198,14 +214,3 @@ class PaymentHandler:
         #             return jsonify(Card=cid), 201
         #         else:
         #             return jsonify(Error="Unexpected attributes in post request"), 400
-
-    def build_payment_counts(self, payment_counts):
-        result = []
-        # print(payment_counts)
-        for P in payment_counts:
-            D = {}
-            D['type'] = P[0]
-            D['provider'] = P[1]
-            D['count'] = P[2]
-            result.append(D)
-        return result
