@@ -48,12 +48,12 @@ class TransactionHandler:
 
     def getTransactionById(self, tid):
         dao = TransactionDAO()
-        row = dao.getTransactionById(tid)
-        if not row:
-            return jsonify(Error="Transaction Not Found"), 404
-        else:
-            t = self.build_transaction_dict(row)
-            return jsonify(Transaction=t)
+        transaction_list = dao.getTransactionById(tid)
+        result_list = []
+        for row in transaction_list:
+            result = self.build_transaction_dict(row)
+            result_list.append(result)
+        return jsonify(Transactions=result_list)
 
     def getTransactionByDate(self, date):
         dao = TransactionDAO()

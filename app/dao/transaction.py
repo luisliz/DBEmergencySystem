@@ -70,7 +70,7 @@ class TransactionDAO:
 
     def getTransactionBySupplier(self, uids):
         cursor = self.conn.cursor()
-        query = f"select * from transactions where supplierid = {uids};"
+        query = f"select * from transactions where supplieruid = {uids};"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -88,7 +88,7 @@ class TransactionDAO:
 
     def getTransactionByAmmount(self, amnt):
         cursor = self.conn.cursor()
-        query = f"select * from transactions where tammount = {amnt};"
+        query = f"select * from transactions where tamount = {amnt};"
         cursor.execute(query)
         result = []
         for row in cursor:
