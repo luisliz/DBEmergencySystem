@@ -33,67 +33,103 @@ class TransactionDAO:
         return result
 
     def getTransactionById(self, tid):
-        for t in self.transactions:
-            if t['tid'] == tid:
-                return t
-        return None
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tid = {tid};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getTransactionByDate(self, tdate):
-        for t in self.transactions:
-            if t['tdate'] == tdate:
-                return t
-        return None
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tdate = '{tdate}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getTransactionByQuantity(self, quan):
-        for t in self.transactions:
-            if t['tquantity'] == quan:
-                return t
-        return None
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tquantity = {quan};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def getTransactionByPayer(self, p):
-        for t in self.transactions:
-            if t['uid'] == p:
-                return t
-        return None
+    def getTransactionByPayer(self, uidp):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where uid = {uidp};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def getTransactionBySupplier(self, s):
-        for t in self.transactions:
-            if t['supplierUid'] == s:
-                return t
-        return None
+    def getTransactionBySupplier(self, uids):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where supplierid = {uids};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def getTransactionByResource(self, r):
-        for t in self.transactions:
-            if t['rid'] == r:
-                return t
-        return None
+    def getTransactionByResource(self, rid):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where  rid = {rid};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def getTransactionByAmmount(self, a):
-        for t in self.transactions:
-            if t['tpayAmmount'] == a:
-                return t
-        return None
+    def getTransactionByAmmount(self, amnt):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tammount = {amnt};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def geuidBytId(self, tid):
-        for t in self.transactions:
-            if t["tid"] == tid:
-                return t['uid']
-        return None
+    def getPayerByTransaction(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select uid, ucid, ufirstname, ulastname, udob, uemail from transactions natural inner join users where tid = '{tid}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def gesupplierUidBytId(self, tid):
-        for t in self.transactions:
-            if t["tid"] == tid:
-                return t['supplierUid']
-        return None
+    def getSupplierByTransaction(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select uid, ucid, ufirstname, ulastname, udob, uemail from transactions natural inner join users where tid = '{tid}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
-    def geridBytId(self, tid):
-        for t in self.transactions:
-            if t["tid"] == tid:
-                return t['rid']
-        return None
+    def gerResourceByTransaction(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select rid, rName, rcid from transactions natural inner join resources where tid = '{tid}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def countTransactions(self):
-        return len(self.transactions)
+        cursor = self.conn.cursor()
+        query = f"select count(*) from transactions;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def insert(self, tDate, tquantity, uid, supplierUid, rid, tAmmount):
         newTId = len(self.transactions) + 1

@@ -109,7 +109,7 @@ class PaymentDAO:
         return None
         """
         cursor = self.conn.cursor()
-        query = f"select uid, ucid, ufirstname, ulastname, udob, uemail, upassword from payments natural inner join users where pid = '{cid}';"
+        query = f"select uid, ucid, ufirstname, ulastname, udob, uemail from payments natural inner join users where pid = '{cid}';"
         cursor.execute(query)
         result = []
         for row in cursor:
