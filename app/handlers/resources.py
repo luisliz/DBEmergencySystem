@@ -35,25 +35,22 @@ class ResourceHandler:
 
     def get_resource_by_id(self, rid):
         dao = ResourcesDAO()
-        resources_list = dao.getResourceById(rid)  # this too, is a 'table', list of lists (rows)
-        result_list = []
-        for row in resources_list:
-            result = self.build_resource_dict(row)
-            result_list.append(result)
-        return jsonify(Resources=result_list)
+        row = dao.getResourceById(rid)  # in this case, this is just a tuple
+        result = self.build_resource_dict(row)
+        return jsonify(Resources=result)
 
     def get_resource_by_name(self, rName):
         dao = ResourcesDAO()
-        resource = dao.getResourceByName(rName)
-        result = self.build_resource_dict(resource)
-        return jsonify(Resource=result)
+        row = dao.getResourceByName(rName)  # in this case, this is just a tuple
+        result = self.build_resource_dict(row)
+        return jsonify(Resources=result)
 
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
-        resources_list = dao.getResourcesByCategory(category)
+        resources_list = dao.getResourcesByCategory(category) #list of tuples, a 'table'
         result_list = []
         for row in resources_list:
-            result = self.build_resource_dict(row)
+            result = self.build_resource_dict(row) #el dict asocia cada valor del tuplo con su column name
             result_list.append(result)
         return jsonify(Resources=result_list)
 

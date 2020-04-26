@@ -69,53 +69,36 @@ class ResourcesDAO:
 
     def getResourceById(self, rid):
         cursor = self.conn.cursor()
-        query = "select * from resources where rid = " + str(rid) + ";"
+        query = "select * from resources where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getResourceByName(self, rName):
+        cursor = self.conn.cursor()
+        query = "select * from resources where rName ilike '" + rName + "%';"
+        # query = "select * from resources where rName ilike %s%%;"
+        # cursor.execute(query, (rName,))
         cursor.execute(query)
-        result = []  # this is a 'table', a list of lists: result[0][0] --> first row, value in first col
+        result = cursor.fetchone()
+        return result
+
+    def getResourcesByCategory(self, category):
+        cursor = self.conn.cursor()
+        query = "select * from resources natural inner join resource_category where rcName = %s;"
+        cursor.execute(query, (category,))
+        result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def getResourceByName(self, rName):
-        for res in self.resources:
-            if res['rName'] == rName:
-                return res
-        return None
-
-    def getResourcesByCategory(self, category):
-        # cursor = self.conn.cursor()
-        # query = "select rid, rName from resources inner join resource_category on resources.rcId = resource_category.rcId
-        # where resource_category.rcName = category;"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.resources:#cursor:
-        #     result.append(row)
-        if (category == 'Water'):
-            result = [self.resources[0]]
-        elif (category == 'Medication'):
-            result = [self.resources[1], self.resources[3]]
-        elif (category == 'Canned Food'):
-            result = [self.resources[2]]
-        else:
-            result = []
-        return result
-
-    def getResourcesByAvailability(self, avail):
-        # cursor = self.conn.cursor()
-        # query = "select rid, rName from resources inner join resource_category on resources.rcId = resource_category.rcId
-        # where resource_category.rcAvailability = avail;"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.resources:#cursor:
-        #     result.append(row)
-        if (avail == 'purchased'):
-            result = [self.resources[1], self.resources[3]]
-        elif (avail == 'reserved'):
-            result = [self.resources[0]]
-        elif (avail == 'available'):
-            result = [self.resources[2]]
-        else:
-            result = []
+    def getResourcesByAvailability(self, avail): #hay que hacer error handling pa cuando tiran un availability que no existe en el enum
+        cursor = self.conn.cursor()
+        query = "select * from resources natural inner join resource_details where ravailability = %s;"
+        cursor.execute(query, (avail,))
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def getSupplierByResourceId(self, rid):
