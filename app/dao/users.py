@@ -26,10 +26,11 @@ class UsersDAO:
         cursor.execute(query, (uid,))
         return cursor.fetchone()
 
-    def getUsersByCategory(self, ucid):
+    def getUsersByCategory(self, category):
         cursor = self.conn.cursor()
-        query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where ucid = %s;"
-        cursor.execute(query, (ucid,))
+        query = "select u.uid, u.ucid, u.ufirstName, u.ulastName, u.udob, u.uemail, u.upassword from users " \
+                "AS u INNER JOIN user_category uc on u.ucid = uc.ucid AND uc.ucname = %s;"
+        cursor.execute(query, (category,))
         result = []
         for row in cursor:
             result.append(row)

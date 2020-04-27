@@ -24,22 +24,12 @@ class UserHandler:
             result_list.append(result)
         return jsonify(Users=result_list)
 
-    def get_ranks(self): #DONE
+    def getUsersByCategory(self, category): #Done
         dao = UsersDAO()
-        ranks = dao.getRanks()
-        return jsonify(Ranks=ranks)
-
-    def get_user_rank(self, uid): #Done
-        dao = UsersDAO()
-        rank = dao.getUserRank(uid)
-        return jsonify(uid=uid, Rank=rank)
-
-    def get_users_byrank(self, rank): #Done
-        dao = UsersDAO()
-        users = dao.getUsersByRank(rank)
+        users = dao.getUsersByCategory(category)
         return jsonify(Users=users)
 
-    def get_user_byid(self, uid): #Done
+    def getUserById(self, uid): #Done
         dao = UsersDAO()
         user = dao.getUserById(uid)
         result = self.build_user_dict(user)
@@ -66,29 +56,16 @@ class UserHandler:
         #LogoutUser
         print("Logout User")
         return uid
-    # def delete_user_byid(self, uid):
-    #     dao = UsersDAO()
-    #     dao.delete(uid)
-    #
-    # def update_user(self, uid, form):
-    #     dao = UsersDAO()
-    #     dao.update
-    #
+
+    def update_user(self, uid, form):
+        dao = UsersDAO()
+        dao.update
+
     def count_users(self): #Done
         dao = UsersDAO()
         userCount = dao.count_users()
         return jsonify(UserCount = userCount)
-    #
-    def count_ranks(self): #Done
-        dao = UsersDAO()
-        user_ranks = dao.count_ranks()
-        return jsonify(Ranks=user_ranks)
 
-    def count_rank_byid(self, rid): #Done
-        dao = UsersDAO()
-        total = dao.count_rank(rid)
-        return jsonify(Rank=total)
-    #
     # def search_users(self, args):
     #     dao = UsersDAO()
     #     dao.

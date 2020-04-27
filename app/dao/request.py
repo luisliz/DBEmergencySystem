@@ -67,7 +67,7 @@ class RequestDAO:
             result.append(row)
         return result
 
-    def getRequestQuantity(self, reqId): #Done
+    def getRequestQuantity(self, reqId): #Done #HANDLER
         cursor = self.conn.cursor()
         query = "select reqquantity from requests where reqid = {reqId};"
         cursor.execute(query)

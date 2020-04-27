@@ -14,7 +14,7 @@ class UserCategoryDAO:
 
     def getAllUserCategories(self):
         cursor = self.conn.cursor()
-        query = "select ucid, ucname from resource_category;"
+        query = "select ucid, ucname from user_category;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -23,7 +23,7 @@ class UserCategoryDAO:
 
     def getCategoryById(self, ucid):
         cursor = self.conn.cursor()
-        query = "select ucid, ucname from resource_category where ucid = %s;"
+        query = "select ucid, ucname from user_category where ucid = %s;"
         cursor.execute(query, (ucid,))
         result = []
         for row in cursor:
@@ -32,7 +32,7 @@ class UserCategoryDAO:
 
     def countCategories(self):
         cursor = self.conn.cursor()
-        query = "select COUNT(*) from resource_category"
+        query = "select COUNT(*) from user_category"
         cursor.execute(query)
         return cursor.fetchone()
 

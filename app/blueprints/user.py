@@ -1,5 +1,6 @@
 from flask import Blueprint, url_for, flash, request
 from app.handlers.users import UserHandler
+from app.handlers.user_category import UserCategoryHandler
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import redirect
 
@@ -18,35 +19,25 @@ def user():
 @user_bp.route('/<int:user_id>', methods=['GET', 'DELETE'])
 def get_user(user_id):
     if request.method == 'GET':
-        return UserHandler().get_user_byid(user_id) #Done
+        return UserHandler().getUserById(user_id) #Done
     elif request.method == 'DELETE':
         return UserHandler().delete_user_byid(user_id)
 
 
-@user_bp.route('/rank', methods=['GET']) #Done
+@user_bp.route('/categories', methods=['GET']) #Done
 def get_ranks():
     if request.method == 'GET':
-        return UserHandler().get_ranks() #DONE
+        return UserCategoryHandler().get_all_categories() #DONE
 
-@user_bp.route('/rank/<string:rank>', methods=['GET']) #Done
-def get_users_from_ranks(rank):
+@user_bp.route('/categories/<string:category>', methods=['GET']) #Done
+def get_users_from_ranks(category):
     if request.method == 'GET':
-        return UserHandler().get_users_byrank(rank) #Done
+        return UserHandler().getUsersByCategory(category) #Done
 
-@user_bp.route('/rank/<int:user_id>', methods=['GET']) #Done
-def check_rank(user_id):
-    if request.method == 'GET':
-        return UserHandler().get_user_rank(user_id) #Done
-
-@user_bp.route('/rank/count', methods=['GET']) #Done
+@user_bp.route('/categories/count', methods=['GET']) #Done
 def count_ranks():
     if request.method == 'GET':
-        return UserHandler().count_ranks() #Done
-
-@user_bp.route('/rank/count/<int:rid>', methods=['GET']) #Done
-def count_rank_byid(rid):
-    if request.method == 'GET':
-        return UserHandler().count_rank_byid(rid) #Done
+        return UserCategoryHandler().countCategories() #Done
 
 # @app.route('/login', methods=['POST'])
 # def login():
