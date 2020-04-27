@@ -37,7 +37,7 @@ def browse_by_availability(avail):
     if request.method == 'GET':
         return ResourceHandler().get_resources_by_availability(avail)
 
-@resources_bp.route('/supplier/<int:rid>/', methods=['GET']) #Done
+@resources_bp.route('/supplier/r/<int:rid>/', methods=['GET']) #Done
 def get_supplier_by_resource_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_supplier_by_resource_id(rid)

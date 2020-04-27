@@ -55,6 +55,8 @@ class ResourceHandler:
         return jsonify(Resources=result_list)
 
     def get_resources_by_availability(self, avail):
+        if not (self.findEnumMatch(avail)):
+            return jsonify(Error = "Incorrect availability."), 400
         dao = ResourcesDAO()
         resources_list = dao.getResourcesByAvailability(avail)
         result_list = []
@@ -63,9 +65,21 @@ class ResourceHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
+    def findEnumMatch(self, enum):
+        daoRD = ResourceDetailsDAO()
+        values = daoRD.getAvailabilityValues() #this is a list of tuples with the enum values
+        for val in values:
+            if (val[0] == enum):
+                return True
+        return False
+
     def get_supplier_by_resource_id(self, rid):
         dao = ResourcesDAO()
-        row = dao.getSupplierByResourceId(rid) #this should return a record with supplierID and the name corresponding to that id
+        if not (dao.getResourceById(rid)):
+            return jsonify(Error = "Resource not found"), 404
+        row = dao.getSupplierByResourceId(rid)
+        if not (row):
+            return jsonify(Error = "No supplier found."), 404
         result = self.build_supplier_dict(row)
         return jsonify(Supplier=result)
 

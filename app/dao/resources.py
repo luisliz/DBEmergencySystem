@@ -1,6 +1,11 @@
 from app.config.database_config import pg_config
 import psycopg2
 
+#TODO: falta anadir errores and calls to queries to check more errors
+#TODO: bregar con resource details (refactor resource dict to include rdetails too, along with changing queries so that they join in)
+#TODO: see what routes can get grouped together, group them
+#TODO: see what parameters can be body args, change 
+
 class ResourcesDAO:
 
     def __init__(self):
@@ -83,7 +88,7 @@ class ResourcesDAO:
         result = cursor.fetchone()
         return result
 
-    def getResourcesByCategory(self, category):
+    def getResourcesByCategory(self, category): #falta hacer check con query a category
         cursor = self.conn.cursor()
         query = "select * from resources natural inner join resource_category where rcName = %s;"
         cursor.execute(query, (category,))
@@ -92,7 +97,7 @@ class ResourcesDAO:
             result.append(row)
         return result
 
-    def getResourcesByAvailability(self, avail): #hay que hacer error handling pa cuando tiran un availability que no existe en el enum
+    def getResourcesByAvailability(self, avail): #Done
         cursor = self.conn.cursor()
         query = "select * from resources natural inner join resource_details where ravailability = %s;"
         cursor.execute(query, (avail,))
@@ -101,14 +106,12 @@ class ResourcesDAO:
             result.append(row)
         return result
 
-    def getSupplierByResourceId(self, rid):
-        # cursor = self.conn.cursor()
-        # query = "" #query that gets supplierID from resource details and joins it with the user table to get firstname and lastname too
-        # cursor.execute(query)
-        # result = []
-        # for row in self.resources:#cursor:
-        #     result.append(row)
-        return [1, 'John', 'Mendez']
+    def getSupplierByResourceId(self, rid): #Done
+        cursor = self.conn.cursor()
+        query = "select * from users inner join resource_details on supplieruid = uid where rid = %s"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
 
     def insert(self, rName, rcId):
         newRID = len(self.resources)+1

@@ -12,46 +12,56 @@ class ResourceDetailsDAO:
             database=pg_config['database']
         )
 
-        self.rdetails = [
-            {
-                'rid': 1,
-                'rquantity': 2,
-                'rlocation': 'Mayaguez',
-                'ravailability': 'reserved',
-                'supplierUid': 1,
-                'rPrice': 1.00
-            },
-            {
-                'rid': 2,
-                'rquantity': 4,
-                'rlocation': 'Cabo Rojo',
-                'ravailability': 'purchased',
-                'supplierUid': 3,
-                'rPrice': 10.00
-            },
-            {
-                'rid': 3,
-                'rquantity': 3,
-                'rlocation': 'Sabana Grande',
-                'ravailability': 'available',
-                'supplierUid': 1,
-                'rPrice': 2.00
-            },
-            {
-                'rid': 4,
-                'rquantity': 15,
-                'rlocation': 'Mayaguez',
-                'ravailability': 'purchased',
-                'supplierUid': 1,
-                'rPrice': 1.00
-            }
-        ]
+        # self.rdetails = [
+        #     {
+        #         'rid': 1,
+        #         'rquantity': 2,
+        #         'rlocation': 'Mayaguez',
+        #         'ravailability': 'reserved',
+        #         'supplierUid': 1,
+        #         'rPrice': 1.00
+        #     },
+        #     {
+        #         'rid': 2,
+        #         'rquantity': 4,
+        #         'rlocation': 'Cabo Rojo',
+        #         'ravailability': 'purchased',
+        #         'supplierUid': 3,
+        #         'rPrice': 10.00
+        #     },
+        #     {
+        #         'rid': 3,
+        #         'rquantity': 3,
+        #         'rlocation': 'Sabana Grande',
+        #         'ravailability': 'available',
+        #         'supplierUid': 1,
+        #         'rPrice': 2.00
+        #     },
+        #     {
+        #         'rid': 4,
+        #         'rquantity': 15,
+        #         'rlocation': 'Mayaguez',
+        #         'ravailability': 'purchased',
+        #         'supplierUid': 1,
+        #         'rPrice': 1.00
+        #     }
+        # ]
 
-    def getDetailsByResourceId(self, rid):
-        for rd in self.rdetails:
-            if rd['rid'] == rid:
-                return rd
-        return None
+    def getDetailsByResourceId(self, rid): #this hasnt been tested, pero debe funcionar
+        cursor = self.conn.cursor()
+        query = "select * from resource_details where rid = %s;"
+        cursor.execute(query,(rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getAvailabilityValues(self):
+        cursor = self.conn.cursor()
+        query = "SELECT unnest(enum_range(NULL::availability))::text;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def insert(self, rid, rquantity, rlocation, ravailability, supplierUid, rPrice):
         newID = len(self.rdetails) + 1
