@@ -26,59 +26,84 @@ class RequestDAO:
         ]
 
     def getAllRequests(self): #Done
-        result = self.requests
+        cursor = self.conn.cursor()
+        query = "select * from requests;"
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def getRequestById(self, reqId): #Done
-        for r in self.requests:
-            if r['reqId'] == reqId:
-                return r
-        return None
+        cursor = self.conn.cursor()
+        query = "select * from requests where reqid = {reqId};"
+        cursor.execute(query)
+        return cursor.fetchone()
 
     def getRequestsFromRequester(self, requestUid): #Done
+        cursor = self.conn.cursor()
+        query = "select * from requests where requestuid = {requestUid};"
+        cursor.execute(query)
         result = []
-        for r in self.requests:
-            if r['requestUid'] == requestUid:
-                result.append(r)
+        for row in cursor:
+            result.append(row)
         return result
 
     def getRequestsFromSupplier(self, supplierUid): #done
+        cursor = self.conn.cursor()
+        query = "select * from requests where supplieruid = {supplierUid};"
+        cursor.execute(query)
         result = []
-        for r in self.requests:
-            if r['supplierUid'] == supplierUid:
-                result.append(r)
+        for row in cursor:
+            result.append(row)
         return result
 
     def getRequestByResourceId(self, resourceid): #Done
+        cursor = self.conn.cursor()
+        query = "select * from requests where rid = {resourceid};"
+        cursor.execute(query)
         result = []
-        for r in self.requests:
-            if r['rid'] == resourceid:
-                result.append(r)
+        for row in cursor:
+            result.append(row)
         return result
 
     def getRequestQuantity(self, reqId): #Done
-        for r in self.requests:
-            if r['reqId'] == reqId:
-                return r['reqQuantity']
-        return None
+        cursor = self.conn.cursor()
+        query = "select reqquantity from requests where reqid = {reqId};"
+        cursor.execute(query)
+        return cursor.fetchone()
 
     def getRequestDispatchDate(self, reqId): #Done
-        for r in self.requests:
-            if r['reqId'] == reqId:
-                return r['reqDispatchDate']
-        return None
+        cursor = self.conn.cursor()
+        query = "select reqdispatchdate from requests where reqid = {reqId};"
+        cursor.execute(query)
+        return cursor.fetchone()
 
     def getRequestPostDate(self, reqId): #Done
-        for r in self.requests:
-            if r['reqId'] == reqId:
-                return r['reqPostDate']
-        return None
+        cursor = self.conn.cursor()
+        query = "select reqpostdate from request where reqid = {reqId};"
+        cursor.execute(query)
+        return cursor.fetchone()
 
     def getRequestLocation(self, reqId): #Done
-        for r in self.requests:
-            if r['reqId'] == reqId:
-                return r['reqLocation']
-        return None
+        cursor = self.conn.cursor()
+        query = "select reqlocation from requests where reqid = {reqId};"
+        cursor.execute(query)
+        return cursor.fetchone()
+
+    def countRequests(self): #done
+        cursor = self.conn.cursor()
+        query = "select  count(*) from requests;"
+        cursor.execute(query)
+        return cursor.fetchone()
+
+    def countRequestByResource(self, rid):
+        cursor = self.conn.cursor()
+        query = "select  count(*) from requests where rid = {rid};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def addRequest(self, req_quantitiy, reqPostDate, reqDispatchDate, reqLocation, requestUid, supplierUid, rid):
         newID = len(self.requests)+1
@@ -110,13 +135,5 @@ class RequestDAO:
 
         return False
 
-    def countRequests(self): #done
-        return len(self.requests)
 
-    def countRequestByResource(self, rid):
-        count = 0
-        for r in self.requests:
-            if r['rid'] == rid:
-                count = count + 1
-        return count
 

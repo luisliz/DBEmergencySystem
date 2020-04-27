@@ -2,13 +2,6 @@ from app.config.database_config import pg_config
 import psycopg2
 
 class UsersDAO:
-    ucids = [
-        {'rid': 1, 'rank_name': 'admin'},
-        {'rid': 2, 'rank_name': 'provider'},
-        {'rid': 3, 'rank_name': 'supplier'},
-        {'rid': 4, 'rank_name': 'user'},
-    ]
-
     def __init__(self):
         self.conn = psycopg2.connect(
             user=pg_config["user"],
@@ -32,6 +25,15 @@ class UsersDAO:
         query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where uid = %s;"
         cursor.execute(query, (uid,))
         return cursor.fetchone()
+
+    def getUsersByCategory(self, ucid):
+        cursor = self.conn.cursor()
+        query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where ucid = %s;"
+        cursor.execute(query, (ucid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getUserByFirst(self, ufirstName):
        cursor = self.conn.cursor()
@@ -61,6 +63,10 @@ class UsersDAO:
         return result
 
     def count_users(self):
+        cursor = self.conn.cursor()
+        query = "SELECT COUNT(*) FROM users;"
+        cursor.execute(query)
+        return cursor.fetchone()
         return len(self.users)
 
 
