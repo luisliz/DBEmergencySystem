@@ -28,6 +28,7 @@ class RequestDAO:
     def getAllRequests(self): #Done
         cursor = self.conn.cursor()
         query = "select * from requests;"
+        cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)

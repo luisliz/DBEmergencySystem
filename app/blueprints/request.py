@@ -5,12 +5,9 @@ request_bp = Blueprint('request', __name__)
 
 @request_bp.route('/')
 def index():
-    return "Welcome to the requests page??"
-
-@request_bp.route('/all/', methods=['GET']) #Done
-def get_all_requests():
     if request.method == 'GET':
         return RequestHandler().getAllRequests()
+
 
 @request_bp.route('/add/', methods=['POST']) #Done
 def add_request():
