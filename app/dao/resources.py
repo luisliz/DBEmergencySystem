@@ -1,10 +1,12 @@
 from app.config.database_config import pg_config
 import psycopg2
 
+#TODO: add handler and routes for requested dispatched and non dispatched
 #TODO: falta anadir errores and calls to queries to check more errors
 #TODO: bregar con resource details (refactor resource dict to include rdetails too, along with changing queries so that they join in)
+#TODO: add resource/rid/details route para pedir details solo y usar su dao
 #TODO: see what routes can get grouped together, group them
-#TODO: see what parameters can be body args, change 
+#TODO: see what parameters can be body args, change
 
 class ResourcesDAO:
 
@@ -50,27 +52,40 @@ class ResourcesDAO:
         return result
 
     def getRequestedResources(self):
-        # cursor = self.conn.cursor()
-        # query = "<query that gets all resources that have a record in the request table and havent been dispatched yet>"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.resources:#cursor:
-        #     result.append(row)
-        result = self.resources
+        cursor = self.conn.cursor()
+        query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getRequestedResourcesUndispatched(self):
+        cursor = self.conn.cursor()
+        query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid where req.reqdispatchdate is null;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getRequestedResourcesDispatched(self):
+        cursor = self.conn.cursor()
+        query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid where req.reqdispatchdate is not null;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def getRequestedResourceById(self, rid):
-        # cursor = self.conn.cursor()
-        # query = "<query that gets all resources that have a record in the request table and havent been dispatched yet
-        # and filters it with the given id>"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.resources:#cursor:
-        #     result.append(row)
-        for res in self.resources:
-            if res['rid'] == rid:
-                return res
-        return None
+        cursor = self.conn.cursor()
+        query = "select * from resources natural inner join requests where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
 
     def getResourceById(self, rid):
         cursor = self.conn.cursor()

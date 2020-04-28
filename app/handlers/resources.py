@@ -4,11 +4,25 @@ from app.dao.resource_details import ResourceDetailsDAO
 
 
 class ResourceHandler:
+    # def build_resource_dict(self, row):
+    #     result = {}
+    #     result['rid'] = row[0]
+    #     result['rName'] = row[1]
+    #     result['rcid'] = row[2]
+    #     return result
+
     def build_resource_dict(self, row):
         result = {}
         result['rid'] = row[0]
-        result['rName'] = row[1]
+        result['rname'] = row[1]
         result['rcid'] = row[2]
+        result['rdid'] = row[3]
+        result['rquantity'] = row[4]
+        result['rlocation'] = row[5]
+        result['ravailability'] = row[6]
+        result['supplieruid'] = row[7]
+        result['rprice'] = row[8]
+
         return result
 
     def build_supplier_dict(self, row):
