@@ -114,36 +114,38 @@ class TransactionHandler:
         tCount = dao.countTransactions()
         return jsonify(TransactionCount=tCount)
 
+    def getPayerByTransactionId(self, tid):
+        dao = TransactionDAO()
+        if not dao.getTransactionById(tid):
+            return jsonify(Error="Transaction Not Found"), 404
+        users_list = dao.getPayerByTransactionId(tid)
+        result_list = []
+        for row in users_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def getSupplierByTransactionId(self, tid):
+        dao = TransactionDAO()
+        if not dao.getTransactionById(tid):
+            return jsonify(Error="Transaction Not Found"), 404
+        users_list = dao.getSupplierByTransactionId(tid)
+        result_list = []
+        for row in users_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
     def getResourceByTransactionId(self, tid):
         dao = TransactionDAO()
         if not dao.getTransactionById(tid):
             return jsonify(Error="Transaction Not Found"), 404
-        users_list = dao.gerResourceByTransaction(tid)
+        users_list = dao.getResourceByTransactionId(tid)
         result_list = []
         for row in users_list:
             result = self.build_resource_dict(row)
             result_list.append(result)
         return jsonify(Resources=result_list)
-
-    """/////////////////////////////////////////////DONT KNOW IF I NEED//////////////////////////////////////////////"""
-
-    def getTransactionDate(self, tid):
-        return "Date: 02/02/2020"
-
-    def getTransactionQuantity(self, tid):
-        return "Quantity: 10"
-
-    def getTransactionPayer(self, tid):
-        return "Requester: Yeniel"
-
-    def getTransactionSupplier(self, tid):
-        return "Supplier: Jorge"
-
-    def getTransactionResource(self, tid):
-        return "Resource: Water"
-
-    def getTransactionAmount(self, tid):
-        return "Amount: 50.0"
 
     def searchTransaction(self, args):
         date = args.get("tdate")
@@ -173,8 +175,6 @@ class TransactionHandler:
             result = self.build_transaction_dict(row)
             result_list.append(result)
         return jsonify(Transactions=result_list)
-
-    """//////////////////////////////////////////DONT KNOW IF I NEED /END////////////////////////////////////////////"""
 
     """////////////////////////////////////////PAST PHASE 2//////////////////////////////////////////////////////////"""
     def insertTransaction(self, form):

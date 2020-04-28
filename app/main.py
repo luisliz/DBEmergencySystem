@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from app.blueprints import dashboard, payment, user, resources, transaction, resource_category, request
 
 app = Flask(__name__)
+
 api = Api(app)
 
 app.register_blueprint(user.user_bp,                           url_prefix="/users")  # Register supplier, admin, need
