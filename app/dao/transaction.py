@@ -23,6 +23,7 @@ class TransactionDAO:
             }
         ]
         """
+
     def getAllTransactions(self):
         cursor = self.conn.cursor()
         query = "select * from transactions;"
@@ -95,25 +96,25 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    def getPayerByTransaction(self, tid):
+    def getPayerByTransactionId(self, tid):
         cursor = self.conn.cursor()
-        query = f"select uid, ucid, ufirstname, ulastname, udob, uemail from transactions natural inner join users where tid = '{tid}';"
+        query = f"select transactions.uid, ucid, ufirstname, ulastname, udob, uemail from users inner join transactions on users.uid = transactions.uid where tid = '{tid}';"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def getSupplierByTransaction(self, tid):
+    def getSupplierByTransactionId(self, tid):
         cursor = self.conn.cursor()
-        query = f"select uid, ucid, ufirstname, ulastname, udob, uemail from transactions natural inner join users where tid = '{tid}';"
+        query = f"select transactions.uid, ucid, ufirstname, ulastname, udob, uemail from users inner join transactions on users.uid = transactions.supplieruid where tid = '{tid}';"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
-    def gerResourceByTransaction(self, tid):
+    def getResourceByTransactionId(self, tid):
         cursor = self.conn.cursor()
         query = f"select rid, rName, rcid from transactions natural inner join resources where tid = '{tid}';"
         cursor.execute(query)
@@ -130,6 +131,9 @@ class TransactionDAO:
         for row in cursor:
             result.append(row)
         return result
+
+
+    """///////////////////////////////////////PAST PHASE 2///////////////////////////////////////////////////////////"""
 
     def insert(self, tDate, tquantity, uid, supplierUid, rid, tAmmount):
         newTId = len(self.transactions) + 1

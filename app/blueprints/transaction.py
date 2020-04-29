@@ -56,45 +56,20 @@ def count_Transaction():
     if request.method == 'GET':
         return TransactionHandler().countTransactions()
 
+@transaction_bp.route('/payerByTransId/<int:tid>', methods =['GET'])
+def get_payer_by_transaction(tid):
+    if request.method == 'GET':
+        return TransactionHandler().getPayerByTransactionId(tid)
+
+@transaction_bp.route('/supplierByTransId/<int:tid>', methods =['GET'])
+def get_supplier_by_transaction(tid):
+    if request.method == 'GET':
+        return TransactionHandler().getSupplierByTransactionId(tid)
+
 @transaction_bp.route('/resByTransId/<int:tid>', methods =['GET'])
 def get_resource_by_transaction(tid):
     if request.method == 'GET':
         return TransactionHandler().getResourceByTransactionId(tid)
-
-"""/////////////////////////////////////////DONT KNOW IF I NEED//////////////////////////////////////////////////////"""
-
-@transaction_bp.route('/date/<int:tid>', methods =['GET'])
-def get_Transaction_date(tid):
-    if request.method == 'GET':
-        return TransactionHandler().getTransactionDate(tid)
-
-@transaction_bp.route('/quantity/<int:tid>', methods =['GET'])
-def get_Transaction_quantity(tid):
-    if request.method == 'GET':
-        return TransactionHandler().getTransactionQuantity(tid)
-
-@transaction_bp.route('/requester/<int:tid>', methods =['GET'])
-def get_Transaction_requester(tid):
-    if request.method == 'GET':
-        return TransactionHandler().getTransactionPayer(tid)
-
-@transaction_bp.route('/supplier/<int:tid>', methods =['GET'])
-def get_Transaction_supplier(tid):
-    if request.method == 'GET':
-        return TransactionHandler().getTransactionSupplier(tid)
-
-@transaction_bp.route('/resource/<int:tid>', methods =['GET'])
-def get_Transaction_resource(tid):
-    if request.method == 'GET':
-        return TransactionHandler().getTransactionResource(tid)
-
-@transaction_bp.route('/amount/<int:tid>', methods =['GET'])
-def get_Transaction_amount(tid):
-    if request.method == 'GET':
-        return TransactionHandler().getTransactionAmount(tid)
-
-
-"""///////////////////////////////////////////////DONT KNOW IF I NEED /END///////////////////////////////////////////"""
 
 """////////////////////////////////////////////////PAST PHASE 2//////////////////////////////////////////////////////"""
 

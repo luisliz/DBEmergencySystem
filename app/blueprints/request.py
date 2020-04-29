@@ -5,17 +5,14 @@ request_bp = Blueprint('request', __name__)
 
 @request_bp.route('/')
 def index():
-    return "Welcome to the requests page??"
-
-@request_bp.route('/all/', methods=['GET']) #Done
-def get_all_requests():
     if request.method == 'GET':
         return RequestHandler().getAllRequests()
 
-@request_bp.route('/add/', methods=['POST']) #Done
-def add_request():
-    if request.method == 'POST':
-        return RequestHandler().addRequest(request.form)
+
+# @request_bp.route('/add/', methods=['POST']) #Done
+# def add_request():
+#     if request.method == 'POST':
+#         return RequestHandler().addRequest(request.form)
 
 @request_bp.route('/<int:reqid>/', methods=['GET']) #Done
 def get_request_by_id(reqid):
@@ -70,7 +67,7 @@ def delete_request(reqid):
 @request_bp.route('/count/', methods=['GET']) #Done
 def count_requests():
     if request.method == 'GET':
-        return RequestHandler().countRequest()
+        return RequestHandler().countRequests()
 
 @request_bp.route('/count/<int:rid>/', methods=['GET']) #Done
 def count_requests_by_resource_id(rid):

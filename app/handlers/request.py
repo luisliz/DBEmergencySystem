@@ -3,17 +3,33 @@ from app.dao.request import RequestDAO
 
 class RequestHandler:
     def build_request_dict(self, row):
-        return row
+        result = {}
+        if row == None:
+            return {'error': 'Request Not found'}
+        else:
+            result['reqid'] = row[0]
+            result['reqquantity'] = row[1]
+            result['reqpostdate'] = row[2]
+            result['reqdispatchdate'] = row[3]
+            result['reqlocation'] = row[4]
+            result['requestuid'] = row[5]
+            result['supplieruid'] = row[6]
+            result['rid'] = row[7]
+            return result
 
     def getAllRequests(self):
         dao = RequestDAO()
         result = dao.getAllRequests()
-        return jsonify(Requests=result)
+        result_list = []
+        for row in result:
+            result = self.build_request_dict(row)
+            result_list.append(result)
+        return jsonify(Request=result_list)
 
     def getRequestById(self, reqid):
         dao = RequestDAO()
         result = dao.getRequestById(reqid)
-        return jsonify(Request=result)
+        return jsonify(Request=self.build_request_dict(result))
 
     def getRequestsFromRequester(self, requesterID):
         dao = RequestDAO()
