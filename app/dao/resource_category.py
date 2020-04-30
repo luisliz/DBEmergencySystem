@@ -12,36 +12,36 @@ class ResourceCategoryDAO:
             database=pg_config['database']
         )
 
-        self.resource_cat = [
-            {
-                'rcid': 1,
-                'rcName': 'Water'
-            },
-            {
-                'rcid': 2,
-                'rcName': 'Medication'
-            },
-            {
-                'rcid': 3,
-                'rcName': 'Canned Food'
-            }
-        ]
+        # self.resource_cat = [
+        #     {
+        #         'rcid': 1,
+        #         'rcName': 'Water'
+        #     },
+        #     {
+        #         'rcid': 2,
+        #         'rcName': 'Medication'
+        #     },
+        #     {
+        #         'rcid': 3,
+        #         'rcName': 'Canned Food'
+        #     }
+        # ]
 
     def getAllCategories(self):
-        # cursor = self.conn.cursor()
-        # query = "select rcid, rcName from resource_category;"
-        # cursor.execute(query)
-        # result = []
-        # for row in self.users:#cursor:
-        #     result.append(row)
-        result = self.resource_cat
+        cursor = self.conn.cursor()
+        query = "select rcid, rcname from resource_category;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
         return result
 
     def getCategoryById(self, rcid):
-        for cat in self.resource_cat:
-            if cat['rcid'] == rcid:
-                return cat
-        return None
+        cursor = self.conn.cursor()
+        query = "select rcid, rcname from resource_category where rcid = %s;"
+        cursor.execute(query, (rcid,))
+        result = cursor.fetchone()
+        return result
 
     def insert(self, rcName):
         newrcID = len(self.resource_cat)+1

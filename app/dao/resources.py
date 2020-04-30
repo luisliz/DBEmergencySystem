@@ -2,11 +2,13 @@ from app.config.database_config import pg_config
 import psycopg2
 
 #TODO: add handler and routes for requested dispatched and non dispatched
+#TODO: add resource/<rid>/details route para pedir details solo y usar su dao
 #TODO: falta anadir errores and calls to queries to check more errors
-#TODO: bregar con resource details (refactor resource dict to include rdetails too, along with changing queries so that they join in)
-#TODO: add resource/rid/details route para pedir details solo y usar su dao
 #TODO: see what routes can get grouped together, group them
 #TODO: see what parameters can be body args, change
+#TODO: check for error manegement con rd and rc
+#TODO: aggregate queries de P2
+#TODO: revisa that u meet all spec reqs
 
 class ResourcesDAO:
 
@@ -18,6 +20,8 @@ class ResourcesDAO:
             port=pg_config['port'],
             database=pg_config['database']
         )
+
+        self.allrplusrd = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid "
 
         # self.resources = [
         #     {
@@ -44,7 +48,7 @@ class ResourcesDAO:
 
     def getAllResources(self):
         cursor = self.conn.cursor()
-        query = "select * from resources;"
+        query = self.allrplusrd
         cursor.execute(query)
         result = []                 #this is a 'table', a list of lists: result[0][0] --> first row, value in first col
         for row in cursor:
@@ -53,7 +57,8 @@ class ResourcesDAO:
 
     def getRequestedResources(self):
         cursor = self.conn.cursor()
-        query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid;"
+        # query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid;"
+        query = self.allrplusrd + "inner join requests as req on r.rid = req.rid;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -62,7 +67,7 @@ class ResourcesDAO:
 
     def getRequestedResourcesUndispatched(self):
         cursor = self.conn.cursor()
-        query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid where req.reqdispatchdate is null;"
+        query = self.allrplusrd + "inner join requests as req on r.rid = req.rid where req.reqdispatchdate is null;"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -71,7 +76,7 @@ class ResourcesDAO:
 
     def getRequestedResourcesDispatched(self):
         cursor = self.conn.cursor()
-        query = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid inner join requests as req on r.rid = req.rid where req.reqdispatchdate is not null;"
+        query = self.allrplusrd + "inner join requests as req on r.rid = req.rid where req.reqdispatchdate is not null;" #might be problematix
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -80,32 +85,30 @@ class ResourcesDAO:
 
     def getRequestedResourceById(self, rid):
         cursor = self.conn.cursor()
-        query = "select * from resources natural inner join requests where rid = %s;"
-        cursor.execute(query, (rid,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
-
-    def getResourceById(self, rid):
-        cursor = self.conn.cursor()
-        query = "select * from resources where rid = %s;"
+        query = self.allrplusrd + "inner join requests as req on r.rid = req.rid where r.rid = %s;"
         cursor.execute(query, (rid,))
         result = cursor.fetchone()
         return result
 
-    def getResourceByName(self, rName):
+    def getResourceById(self, rid):
         cursor = self.conn.cursor()
-        query = "select * from resources where rName ilike '" + rName + "%';"
+        query = self.allrplusrd + "where r.rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getResourceByName(self, rName): #Done
+        cursor = self.conn.cursor()
+        query = self.allrplusrd + "where rName ilike '" + rName + "%';"
         # query = "select * from resources where rName ilike %s%%;"
         # cursor.execute(query, (rName,))
         cursor.execute(query)
         result = cursor.fetchone()
         return result
 
-    def getResourcesByCategory(self, category): #falta hacer check con query a category
+    def getResourcesByCategory(self, category): #Done
         cursor = self.conn.cursor()
-        query = "select * from resources natural inner join resource_category where rcName = %s;"
+        query = self.allrplusrd + "natural inner join resource_category where rcName = %s;"
         cursor.execute(query, (category,))
         result = []
         for row in cursor:
@@ -114,7 +117,7 @@ class ResourcesDAO:
 
     def getResourcesByAvailability(self, avail): #Done
         cursor = self.conn.cursor()
-        query = "select * from resources natural inner join resource_details where ravailability = %s;"
+        query = self.allrplusrd + "where rd.ravailability = %s;"
         cursor.execute(query, (avail,))
         result = []
         for row in cursor:

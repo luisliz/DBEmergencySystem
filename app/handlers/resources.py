@@ -56,12 +56,16 @@ class ResourceHandler:
     def get_resource_by_name(self, rName):
         dao = ResourcesDAO()
         row = dao.getResourceByName(rName)  # in this case, this is just a tuple
+        if not (row):
+            return jsonify(Error="No resources found with that name"), 404
         result = self.build_resource_dict(row)
         return jsonify(Resources=result)
 
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
         resources_list = dao.getResourcesByCategory(category) #list of tuples, a 'table'
+        if not (resources_list):
+            return jsonify(Error="No resources found for that category"), 404
         result_list = []
         for row in resources_list:
             result = self.build_resource_dict(row) #el dict asocia cada valor del tuplo con su column name
@@ -148,6 +152,8 @@ class ResourceHandler:
     def get_requested_resource_by_id(self, rid):
         dao = ResourcesDAO()
         resource = dao.getRequestedResourceById(rid)
+        if not (resource):
+            return jsonify(Error="Resource not found"), 404
         result = self.build_resource_dict(resource)
         return jsonify(Resource=result)
 
