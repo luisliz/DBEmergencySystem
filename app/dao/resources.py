@@ -1,12 +1,8 @@
 from app.config.database_config import pg_config
 import psycopg2
 
-#TODO: add handler and routes for requested dispatched and non dispatched
-#TODO: add resource/<rid>/details route para pedir details solo y usar su dao
-#TODO: falta anadir errores and calls to queries to check more errors
 #TODO: see what routes can get grouped together, group them
 #TODO: see what parameters can be body args, change
-#TODO: check for error manegement con rd and rc
 #TODO: aggregate queries de P2
 #TODO: revisa that u meet all spec reqs
 
@@ -21,6 +17,7 @@ class ResourcesDAO:
             database=pg_config['database']
         )
 
+        #variable to hold select * from resources + resource_details query
         self.allrplusrd = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid "
 
         # self.resources = [

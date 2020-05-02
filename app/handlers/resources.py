@@ -25,6 +25,17 @@ class ResourceHandler:
 
         return result
 
+    def build_details_dict(self, row):
+        result = {}
+        result['rdid'] = row[0]
+        result['rquantity'] = row[1]
+        result['rlocation'] = row[2]
+        result['ravailability'] = row[3]
+        result['supplieruid'] = row[4]
+        result['rprice'] = row[5]
+
+        return result
+
     def build_supplier_dict(self, row):
         result = {}
         result['supplierID'] = row[0]
@@ -35,21 +46,27 @@ class ResourceHandler:
     def get_all_resources(self):
         dao = ResourcesDAO()
         resources_list = dao.getAllResources() #this too, is a 'table', list of lists (rows)
+        if not (resources_list):
+            return jsonify(Error="No resources found :("), 404
         result_list = []
         for row in resources_list:
             result = self.build_resource_dict(row)
             result_list.append(result)
         return jsonify(Resources=result_list)
 
-    def get_resource_details(self, rid):
+    def get_resource_details_by_rid(self, rid):
         dao = ResourceDetailsDAO()
-        resource = dao.getDetailsByResourceId(rid)
-        result = self.build_resource_dict(resource)
-        return jsonify(Resource=result)
+        details = dao.getDetailsByResourceId(rid)
+        if not (details):
+            return jsonify(Error="No resource details for that resource id"), 404
+        result = self.build_details_dict(details)
+        return jsonify(Resource_Details=result)
 
     def get_resource_by_id(self, rid):
         dao = ResourcesDAO()
         row = dao.getResourceById(rid)  # in this case, this is just a tuple
+        if not (row):
+            return jsonify(Error="No resources found for that id"), 404
         result = self.build_resource_dict(row)
         return jsonify(Resources=result)
 
@@ -143,6 +160,30 @@ class ResourceHandler:
     def get_requested_resources(self):
         dao = ResourcesDAO()
         resources_list = dao.getRequestedResources()
+        if not (resources_list):
+            return jsonify(Error="No requested resources found"), 404
+        result_list = []
+        for row in resources_list:
+            result = self.build_resource_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def get_dispatched_requested_resources(self):
+        dao = ResourcesDAO()
+        resources_list = dao.getRequestedResourcesDispatched()
+        if not (resources_list):
+            return jsonify(Error="No dispatched requested resources found"), 404
+        result_list = []
+        for row in resources_list:
+            result = self.build_resource_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def get_undispatched_requested_resources(self):
+        dao = ResourcesDAO()
+        resources_list = dao.getRequestedResourcesUndispatched()
+        if not (resources_list):
+            return jsonify(Error="No undispatched requested resources found"), 404
         result_list = []
         for row in resources_list:
             result = self.build_resource_dict(row)

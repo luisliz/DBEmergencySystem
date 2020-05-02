@@ -11,6 +11,8 @@ class ResourceCategoryHandler:
     def get_all_categories(self):
         dao = ResourceCategoryDAO()
         resource_category_list = dao.getAllCategories()
+        if not (resource_category_list):
+            return jsonify(Error="No categories found!"), 404
         result_list = []
         for row in resource_category_list:
             result = self.build_resource_category_dict(row)
@@ -19,7 +21,10 @@ class ResourceCategoryHandler:
 
     def get_category_by_id(self, rcid):
         dao = ResourceCategoryDAO()
-        result = self.build_resource_category_dict(dao.getCategoryById(rcid))
+        row = dao.getCategoryById(rcid)
+        if not (row):
+            return jsonify(Error="No category with that id"), 404
+        result = self.build_resource_category_dict(row)
         return jsonify(Category = result)
 
     def add_category(self, form):
