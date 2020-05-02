@@ -3,7 +3,7 @@ from app.handlers.resource_category import ResourceCategoryHandler
 
 resource_category_bp = Blueprint('resource_category', __name__)
 
-@resource_category_bp.route('/', methods=['GET', 'POST'])
+@resource_category_bp.route('/all/', methods=['GET', 'POST'])
 def resource_category():
     if request.method == 'POST':
         return ResourceCategoryHandler().add_category(request.form)

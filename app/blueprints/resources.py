@@ -15,7 +15,7 @@ def get_all_resources():
 @resources_bp.route('/details/<int:rid>/', methods=['GET']) #Done
 def get_resource_details(rid):
     if request.method == 'GET':
-        return ResourceHandler().get_resource_details(rid)
+        return ResourceHandler().get_resource_details_by_rid(rid)
 
 @resources_bp.route('/<int:rid>/', methods=['GET']) #Done
 def get_resource_by_id(rid):
@@ -61,6 +61,16 @@ def update_resource():
 def browse_requested():
     if request.method == 'GET':
         return ResourceHandler().get_requested_resources()
+
+@resources_bp.route('/browse/requested/dispatched/', methods=['GET'])
+def browse_dispatched_requested():
+    if request.method == 'GET':
+        return ResourceHandler().get_dispatched_requested_resources()
+
+@resources_bp.route('/browse/requested/undispatched/', methods=['GET'])
+def browse_undispatched_requested():
+    if request.method == 'GET':
+        return ResourceHandler().get_undispatched_requested_resources()
 
 @resources_bp.route('/browse/requested/<int:rid>/', methods=['GET']) #Done
 def browse_requested_by_resource_id(rid):

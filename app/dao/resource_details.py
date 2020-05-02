@@ -47,14 +47,14 @@ class ResourceDetailsDAO:
         #     }
         # ]
 
-    def getDetailsByResourceId(self, rid): #this hasnt been tested, pero debe funcionar
+    def getDetailsByResourceId(self, rid): #Done
         cursor = self.conn.cursor()
         query = "select * from resource_details where rid = %s;"
         cursor.execute(query,(rid,))
         result = cursor.fetchone()
         return result
 
-    def getAvailabilityValues(self):
+    def getAvailabilityValues(self): #Done
         cursor = self.conn.cursor()
         query = "SELECT unnest(enum_range(NULL::availability))::text;"
         cursor.execute(query)
