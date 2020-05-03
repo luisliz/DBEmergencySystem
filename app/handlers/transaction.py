@@ -17,6 +17,17 @@ class TransactionHandler:
             result['tamount'] = row[6]
             return row
 
+    def build_payment_dict(self, row):
+        result = {}
+        if row == None:
+            return {'error': 'User Not found'}
+        else:
+            result['pid'] = row[0]
+            result['pType'] = row[3]
+            result['pProvider'] = row[4]
+            result['pExpDate'] = row[5]
+            return row
+
     def build_user_dict(self, row):
         result = {}
         if row == None:
@@ -73,17 +84,27 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Transactions=result_list)
 
-#Need Refactoring
-    def getTransactionByPayer(self, uidp):
+    #Need testing
+    def getTransactionByPayerPaymentInfo(self, ppid):
         dao = TransactionDAO()
-        transaction_list = dao.getTransactionByPayer(uidp)
+        transaction_list = dao.getTransactionByPayerPaymentInfo(ppid)
         result_list = []
         for row in transaction_list:
             result = self.build_transaction_dict(row)
             result_list.append(result)
         return jsonify(Transactions=result_list)
 
-#Need Refactoring
+    #Need testing
+    def getTransactionByPayer(self, spid):
+        dao = TransactionDAO()
+        transaction_list = dao.getTransactionBySupplierPaymentInfo(spid)
+        result_list = []
+        for row in transaction_list:
+            result = self.build_transaction_dict(row)
+            result_list.append(result)
+        return jsonify(Transactions=result_list)
+
+    #Need testing
     def getTransactionBySupplier(self, uids):
         dao = TransactionDAO()
         transaction_list = dao.getTransactionBySupplier(uids)
@@ -116,6 +137,7 @@ class TransactionHandler:
         tCount = dao.countTransactions()
         return jsonify(TransactionCount=tCount)
 
+    #Need testing
     def getPayerByTransactionId(self, tid):
         dao = TransactionDAO()
         if not dao.getTransactionById(tid):
@@ -127,29 +149,8 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
-    def getPayerPaymentInfoById(self, tid):
-        dao = TransactionDAO()
-        if not dao.getTransactionById(tid):
-            return jsonify(Error="Transaction Not Found"), 404
-        #users_list = dao.getPayerByTransactionId(tid)
-        result_list = []
-        for row in users_list:
-            result = self.build_user_dict(row)
-            result_list.append(result)
-        return jsonify(Resources=result_list)
-
-    def getSupplierrPaymentInfoById(self, tid):
-        dao = TransactionDAO()
-        if not dao.getTransactionById(tid):
-            return jsonify(Error="Transaction Not Found"), 404
-        #users_list = dao.getPayerByTransactionId(tid)
-        result_list = []
-        for row in users_list:
-            result = self.build_user_dict(row)
-            result_list.append(result)
-        return jsonify(Resources=result_list)
-#Need refactoring
-    def getSupplierByTransactionId(self, tid):
+    #Need testing
+    def getSupplierById(self, tid):
         dao = TransactionDAO()
         if not dao.getTransactionById(tid):
             return jsonify(Error="Transaction Not Found"), 404
@@ -160,14 +161,37 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
-#Needs refactoring
+    #Need testing
+    def getPayerPaymentInfoById(self, tid):
+        dao = TransactionDAO()
+        if not dao.getTransactionById(tid):
+            return jsonify(Error="Transaction Not Found"), 404
+        payments_list = dao.getPayerPaymentInfoByTransactionId(tid)
+        result_list = []
+        for row in payments_list:
+            result = self.build_payment_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    #Need testing
+    def getSupplierPaymentInfoByTransactionId(self, tid):
+        dao = TransactionDAO()
+        if not dao.getTransactionById(tid):
+            return jsonify(Error="Transaction Not Found"), 404
+        payments_list = dao.getSupplierPaymentInfoByTransactionId(tid)
+        result_list = []
+        for row in payments_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
     def getResourceByTransactionId(self, tid):
         dao = TransactionDAO()
         if not dao.getTransactionById(tid):
             return jsonify(Error="Transaction Not Found"), 404
-        users_list = dao.getResourceByTransactionId(tid)
+        resource_list = dao.getResourceByTransactionId(tid)
         result_list = []
-        for row in users_list:
+        for row in resource_list:
             result = self.build_resource_dict(row)
             result_list.append(result)
         return jsonify(Resources=result_list)
