@@ -10,19 +10,6 @@ class TransactionDAO:
             port=pg_config['port'],
             database=pg_config['database']
         )
-        """
-        self.transactions = [
-            {
-                'tid': 1,
-                'tdate': '02/02/2020',
-                'tquantity': '10',
-                'uid': 1,
-                'supplierUid': 2,
-                'rid': 1,
-                'tamount': 50.0
-            }
-        ]
-        """
 
     def getAllTransactions(self):
         cursor = self.conn.cursor()

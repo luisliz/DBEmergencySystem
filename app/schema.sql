@@ -76,7 +76,6 @@ CREATE TABLE resource_details (
 
 CREATE TABLE transactions (
 	tid SERIAL PRIMARY KEY,
-	pid SERIAL PRIMARY KEY,
 	tdate TIMESTAMP NOT NULL,
 	tquantity INTEGER NOT NULL,
 	tpayerpid INTEGER NOT NULL,

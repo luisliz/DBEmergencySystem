@@ -11,8 +11,8 @@ class TransactionHandler:
             result['tid'] = row[0]
             result['tdate'] = row[1]
             result['tquantity'] = row[2]
-            result['uid'] = row[3]
-            result['supplieruid'] = row[4]
+            result['tpayerpid'] = row[3]
+            result['tsupplierpid'] = row[4]
             result['rid'] = row[5]
             result['tamount'] = row[6]
             return row
@@ -73,6 +73,7 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Transactions=result_list)
 
+#Need Refactoring
     def getTransactionByPayer(self, uidp):
         dao = TransactionDAO()
         transaction_list = dao.getTransactionByPayer(uidp)
@@ -82,6 +83,7 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Transactions=result_list)
 
+#Need Refactoring
     def getTransactionBySupplier(self, uids):
         dao = TransactionDAO()
         transaction_list = dao.getTransactionBySupplier(uids)
@@ -125,6 +127,28 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
+    def getPayerPaymentInfoById(self, tid):
+        dao = TransactionDAO()
+        if not dao.getTransactionById(tid):
+            return jsonify(Error="Transaction Not Found"), 404
+        #users_list = dao.getPayerByTransactionId(tid)
+        result_list = []
+        for row in users_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def getSupplierrPaymentInfoById(self, tid):
+        dao = TransactionDAO()
+        if not dao.getTransactionById(tid):
+            return jsonify(Error="Transaction Not Found"), 404
+        #users_list = dao.getPayerByTransactionId(tid)
+        result_list = []
+        for row in users_list:
+            result = self.build_user_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+#Need refactoring
     def getSupplierByTransactionId(self, tid):
         dao = TransactionDAO()
         if not dao.getTransactionById(tid):
@@ -136,6 +160,7 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
+#Needs refactoring
     def getResourceByTransactionId(self, tid):
         dao = TransactionDAO()
         if not dao.getTransactionById(tid):
@@ -146,35 +171,6 @@ class TransactionHandler:
             result = self.build_resource_dict(row)
             result_list.append(result)
         return jsonify(Resources=result_list)
-
-    def searchTransaction(self, args):
-        date = args.get("tdate")
-        quantity = args.get("tquantity")
-        payer = args.get("tpayer")
-        supplier = args.get("tsupplier")
-        resource = args.get("tresource")
-        ammount = args.get("tpayAmmount")
-        dao = TransactionDAO()
-        transaction_list = []
-        if (len(args) == 1) and date:
-            transaction_list = dao.getTransactionByDate(date)
-        elif (len(args) == 1) and quantity:
-            transaction_list = dao.getTransactionByQuantity(quantity)
-        elif (len(args) == 1) and payer:
-            transaction_list = dao.getTransactionByPayer(payer)
-        elif (len(args) == 1) and supplier:
-            transaction_list = dao.getTransactionBySupplier(supplier)
-        elif (len(args) == 1) and resource:
-            transaction_list = dao.getTransactionByResource(resource)
-        elif (len(args) == 1) and ammount:
-            transaction_list = dao.getTransactionByAmmount(ammount)
-        else:
-            return jsonify(Error="Malformed query string"), 400
-        result_list = []
-        for row in transaction_list:
-            result = self.build_transaction_dict(row)
-            result_list.append(result)
-        return jsonify(Transactions=result_list)
 
     """////////////////////////////////////////PAST PHASE 2//////////////////////////////////////////////////////////"""
     def insertTransaction(self, form):
