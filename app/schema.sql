@@ -63,6 +63,14 @@ CREATE TABLE requests (
     FOREIGN KEY (requestUid) REFERENCES users(uid)
 );
 
+CREATE TABLE resources_by_request (
+    rrid SERIAL PRIMARY KEY,
+    reqid INTEGER,
+    rid INTEGER,
+    FOREIGN KEY (reqid) REFERENCES requests(reqId),
+    FOREIGN KEY (rid) REFERENCES resources(rid)
+);
+
 CREATE TABLE resource_details (
     rid INTEGER PRIMARY KEY,
     rquantity INTEGER DEFAULT 0,
@@ -88,6 +96,13 @@ CREATE TABLE transactions (
     FOREIGN KEY (rid) REFERENCES resources(rid)
 );
 
+CREATE TABLE resource_by_transaction (
+    rtid SERIAL PRIMARY KEY,
+    tid INTEGER,
+    rid INTEGER,
+    FOREIGN KEY (tid) REFERENCES transactions(tid),
+    FOREIGN KEY (rid) REFERENCES resources(rid)
+);
 -------------------------------------------------------------------------
 ----------------------------RESOURCES TABLES-----------------------------
 -------------------------------------------------------------------------
