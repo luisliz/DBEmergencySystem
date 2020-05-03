@@ -84,15 +84,14 @@ CREATE TABLE resource_details (
 
 CREATE TABLE transactions (
 	tid SERIAL PRIMARY KEY,
-	pid SERIAL PRIMARY KEY,
 	tdate TIMESTAMP NOT NULL,
 	tquantity INTEGER NOT NULL,
-	uid INTEGER NOT NULL,
-	supplierUid INTEGER NOT NULL,
+	tpayerpid INTEGER NOT NULL,
+	tsupplierpid INTEGER NOT NULL,
 	rid INTEGER NOT NULL,
 	tamount FLOAT(10) NOT NULL,
-    FOREIGN KEY (uid) REFERENCES users(uid),
-    FOREIGN KEY (supplierUid) REFERENCES users(uid),
+    FOREIGN KEY (tpayerpid) REFERENCES payments(pid),
+    FOREIGN KEY (tsupplierpid) REFERENCES payments(pid),
     FOREIGN KEY (rid) REFERENCES resources(rid)
 );
 

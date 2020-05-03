@@ -10,19 +10,6 @@ class TransactionDAO:
             port=pg_config['port'],
             database=pg_config['database']
         )
-        """
-        self.transactions = [
-            {
-                'tid': 1,
-                'tdate': '02/02/2020',
-                'tquantity': '10',
-                'uid': 1,
-                'supplierUid': 2,
-                'rid': 1,
-                'tamount': 50.0
-            }
-        ]
-        """
 
     def getAllTransactions(self):
         cursor = self.conn.cursor()
@@ -60,18 +47,40 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    def getTransactionByPayer(self, uidp):
+    #Needs testing
+    def getTransactionByPayerPaymentInfo(self, ppid):
         cursor = self.conn.cursor()
-        query = f"select * from transactions where uid = {uidp};"
+        query = f"select * from transactions where tpayerpid = {ppid};"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
+    #Needs testing
+    def getTransactionBySupplierPaymentInfo(self, spid):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tsupplierpid = {spid};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    #Need testing
+    def getTransactionByPayer(self, uidp):
+        cursor = self.conn.cursor()
+        query = f"select tid, tdate, tquantity, tpayerpid, tsupplierpid, trid, tamount from transactions as T inner join payments as P inner join users as U on T.tpayerpid = P.pid where U.uid = {uidp};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    #Need testing
     def getTransactionBySupplier(self, uids):
         cursor = self.conn.cursor()
-        query = f"select * from transactions where supplieruid = {uids};"
+        query = f"select tid, tdate, tquantity, tpayerpid, tsupplierpid, trid, tamount from transactions as T inner join payments as P inner join users as U on T.tsupplierpid = P.pid where U.uid = {uids};"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -96,18 +105,40 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    def getPayerByTransactionId(self, tid):
+    # Need testing
+    def getPayerPaymentInfoByTransactionId(self, tid):
         cursor = self.conn.cursor()
-        query = f"select transactions.uid, ucid, ufirstname, ulastname, udob, uemail from users inner join transactions on users.uid = transactions.uid where tid = '{tid}';"
+        query = f"select pid, pType, pProvider, pExpDate from transactions as T inner join payments as P on T.tpayerpid = P.pid where tid = '{tid}';"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
 
+    #Need testing
+    def getSupplierPaymentInfoByTransactionId(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select pid, pType, pProvider, pExpDate from transactions as T inner join payments as P on T.tsupplierpid = P.pid where tid = '{tid}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    #Need testing
+    def getPayerByTransactionId(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select U.uid, ucid, ufirstname, ulastname, udob, uemail from transactions as T inner join payments as P inner join users as U on T.tpayerpid = P.pid where tid = '{tid}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    #Need tsting
     def getSupplierByTransactionId(self, tid):
         cursor = self.conn.cursor()
-        query = f"select transactions.uid, ucid, ufirstname, ulastname, udob, uemail from users inner join transactions on users.uid = transactions.supplieruid where tid = '{tid}';"
+        query = f"select U.uid, ucid, ufirstname, ulastname, udob, uemail from transactions as T inner join payments as P inner join users as U on T.tsupplierpid = P.pid where tid = '{tid}';"
         cursor.execute(query)
         result = []
         for row in cursor:

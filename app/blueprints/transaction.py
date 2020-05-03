@@ -30,11 +30,25 @@ def get_Transaction_by_quantity(quantity):
     if request.method == 'GET':
         return TransactionHandler().getTransactionByQuantity(quantity)
 
+#Needs testing
+@transaction_bp.route('/getByPayerPaymentID/<int:payer_pid>', methods =['GET'])
+def get_Transaction_by_payer_payment(payer_pid):
+    if request.method == 'GET':
+        return TransactionHandler().getTransactionByPayerPaymentINfo(payer_pid)
+
+#Needs testing
+@transaction_bp.route('/getBySupPaymentID/<int:supplier_pid>', methods =['GET'])
+def get_Transaction_by_supplier_payment(supplier_pid):
+    if request.method == 'GET':
+        return TransactionHandler().getTransactionBySupplierPaymentInfo(supplier_pid)
+
+#Needs testing
 @transaction_bp.route('/getByReqID/<int:payer_id>', methods =['GET'])
 def get_Transaction_by_payer(payer_id):
     if request.method == 'GET':
         return TransactionHandler().getTransactionByPayer(payer_id)
 
+#Needs testing
 @transaction_bp.route('/getBySupID/<int:supplier_id>', methods =['GET'])
 def get_Transaction_by_supplier(supplier_id):
     if request.method == 'GET':
@@ -50,17 +64,30 @@ def get_Transaction_by_amount(amount):
     if request.method == 'GET':
         return TransactionHandler().getTransactionByAmount(amount)
 
-
 @transaction_bp.route('/count', methods=['GET'])
 def count_Transaction():
     if request.method == 'GET':
         return TransactionHandler().countTransactions()
 
+#Needs testing
+@transaction_bp.route('/payerPaymentByTransId/<int:tid>', methods =['GET'])
+def get_payer_payment_by_transaction(tid):
+    if request.method == 'GET':
+        return TransactionHandler().getPayerPaymentInfoByTransactionId(tid)
+
+#Needs testing
+@transaction_bp.route('/supplierPaymentByTransId/<int:tid>', methods =['GET'])
+def get_supplier_payment_by_transaction(tid):
+    if request.method == 'GET':
+        return TransactionHandler().getSupplierPaymentInfoByTransactionId(tid)
+
+#Needs testing
 @transaction_bp.route('/payerByTransId/<int:tid>', methods =['GET'])
 def get_payer_by_transaction(tid):
     if request.method == 'GET':
         return TransactionHandler().getPayerByTransactionId(tid)
 
+#Needs testing
 @transaction_bp.route('/supplierByTransId/<int:tid>', methods =['GET'])
 def get_supplier_by_transaction(tid):
     if request.method == 'GET':
