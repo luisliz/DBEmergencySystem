@@ -1,10 +1,11 @@
 from app.config.database_config import pg_config
 import psycopg2
 
-#TODO: see what routes can get grouped together, group them
-#TODO: see what parameters can be body args, change
-#TODO: aggregate queries de P2
-#TODO: revisa that u meet all spec reqs
+
+# TODO: see what routes can get grouped together, group them
+# TODO: see what parameters can be body args, change
+# TODO: aggregate queries de P2
+# TODO: revisa that u meet all spec reqs
 
 class ResourcesDAO:
 
@@ -17,8 +18,8 @@ class ResourcesDAO:
             database=pg_config['database']
         )
 
-        #variable to hold select * from resources + resource_details query
-        self.allrplusrd = "select distinct r.rid, r.rname, r.rcid, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid "
+        # variable to hold select * from resources + resource_details query
+        self.allrplusrd = "select * from resources;"#distinct r.rid, r.rname, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid "
 
         # self.resources = [
         #     {
@@ -43,11 +44,40 @@ class ResourcesDAO:
         #     }
         # ]
 
+    ####################### THE HOLLY GRAIL #########################################
+    def getAllBabyFoods(self):
+        cursor = self.conn.cursor()
+        query = "select bid, bflavor, bbrand,  rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+    ####################### END OF HOLLY GRAIL #########################################
+
     def getAllResources(self):
         cursor = self.conn.cursor()
         query = self.allrplusrd
         cursor.execute(query)
-        result = []                 #this is a 'table', a list of lists: result[0][0] --> first row, value in first col
+        result = []  # this is a 'table', a list of lists: result[0][0] --> first row, value in first col
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getResourceColumns(self, resource):
+        cursor = self.conn.cursor()
+        query = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = %s;"
+        cursor.execute(query, (resource,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getResourcesByResource(self, resource):
+        cursor = self.conn.cursor()
+        query = "SELECT * FROM resource;"
+        cursor.execute(query, (resource,))
+        result = []
         for row in cursor:
             result.append(row)
         return result
@@ -73,7 +103,7 @@ class ResourcesDAO:
 
     def getRequestedResourcesDispatched(self):
         cursor = self.conn.cursor()
-        query = self.allrplusrd + "inner join requests as req on r.rid = req.rid where req.reqdispatchdate is not null;" #might be problematix
+        query = self.allrplusrd + "inner join requests as req on r.rid = req.rid where req.reqdispatchdate is not null;"  # might be problematix
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -94,7 +124,7 @@ class ResourcesDAO:
         result = cursor.fetchone()
         return result
 
-    def getResourceByName(self, rName): #Done
+    def getResourceByName(self, rName):  # Done
         cursor = self.conn.cursor()
         query = self.allrplusrd + "where rName ilike '" + rName + "%';"
         # query = "select * from resources where rName ilike %s%%;"
@@ -103,7 +133,7 @@ class ResourcesDAO:
         result = cursor.fetchone()
         return result
 
-    def getResourcesByCategory(self, category): #Done
+    def getResourcesByCategory(self, category):  # Done
         cursor = self.conn.cursor()
         query = self.allrplusrd + "natural inner join resource_category where rcName = %s;"
         cursor.execute(query, (category,))
@@ -112,7 +142,7 @@ class ResourcesDAO:
             result.append(row)
         return result
 
-    def getResourcesByAvailability(self, avail): #Done
+    def getResourcesByAvailability(self, avail):  # Done
         cursor = self.conn.cursor()
         query = self.allrplusrd + "where rd.ravailability = %s;"
         cursor.execute(query, (avail,))
@@ -121,7 +151,7 @@ class ResourcesDAO:
             result.append(row)
         return result
 
-    def getSupplierByResourceId(self, rid): #Done
+    def getSupplierByResourceId(self, rid):  # Done
         cursor = self.conn.cursor()
         query = "select * from users inner join resource_details on supplieruid = uid where rid = %s"
         cursor.execute(query, (rid,))
@@ -129,14 +159,14 @@ class ResourcesDAO:
         return result
 
     def insert(self, rName, rcId):
-        newRID = len(self.resources)+1
+        newRID = len(self.resources) + 1
         new_resource = {
             'rid': newRID,
             'rName': rName,
             'rcId': rcId
         }
         self.resources.append(new_resource)
-        #here would come a query to insert the new resource into the table
+        # here would come a query to insert the new resource into the table
         return newRID
 
     def delete(self, rid):
@@ -159,7 +189,3 @@ class ResourcesDAO:
                 return True
             pos += 1
         return False
-
-
-
-

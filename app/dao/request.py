@@ -15,7 +15,7 @@ class RequestDAO:
         self.requests = [
             {
                 'reqId': 1,
-                'reqQuantity': 4,
+                'reqQuantity': 4, #eliminate
                 'reqPostDate': 408109458,
                 'reqDispatchDate': 5908230598,
                 'reqLocation': 'Guayama',

@@ -11,18 +11,15 @@ class ResourceHandler:
     #     result['rcid'] = row[2]
     #     return result
 
-    def build_resource_dict(self, row):
-        result = {}
-        result['rid'] = row[0]
-        result['rname'] = row[1]
-        result['rcid'] = row[2]
-        result['rdid'] = row[3]
-        result['rquantity'] = row[4]
-        result['rlocation'] = row[5]
-        result['ravailability'] = row[6]
-        result['supplieruid'] = row[7]
-        result['rprice'] = row[8]
+    def build_resource_dict(self, columns, row):
+        col = columns.copy()
+        for c in range(len(col)):
+            col[c] = col[c][0]
 
+        col += ['rid', 'rname', 'rquantity', 'rlocation', 'ravailability', 'supplieruid', 'rprice']
+        result = {}
+        for i in range(len(col)):
+            result[col[i]] = row[i]
         return result
 
     def build_details_dict(self, row):
@@ -45,12 +42,39 @@ class ResourceHandler:
 
     def get_all_resources(self):
         dao = ResourcesDAO()
-        resources_list = dao.getAllResources() #this too, is a 'table', list of lists (rows)
+        resources_list = dao.getAllResources()  # this too, is a 'table', list of lists (rows)
         if not (resources_list):
             return jsonify(Error="No resources found :("), 404
         result_list = []
         for row in resources_list:
             result = self.build_resource_dict(row)
+            result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    ####################### THE HOLLY GRAIL #########################################
+    def get_all_babyfoods(self):
+        dao = ResourcesDAO()
+        columns = dao.getResourceColumns('baby_foods')
+        resources_list = dao.getAllBabyFoods()  # this too, is a 'table', list of lists (rows)
+        if not (resources_list):
+            return jsonify(Error="No resources found :("), 404
+        result_list = []
+        for row in resources_list:
+            result = self.build_resource_dict(columns, row)
+            result_list.append(result)
+
+        return jsonify(Resources=result_list)
+    ####################### END OF HOLLY GRAIL #########################################
+
+    def get_all_resources_by_resource(self, resource):
+        dao = ResourcesDAO()
+        titles = dao.getResourcesByResource(resource)  # this too, is a 'table', list of lists (rows)
+        resources_list = dao.getResourcesByResource(resource)  # this too, is a 'table', list of lists (rows)
+        if not (resources_list):
+            return jsonify(Error="No resources found :("), 404
+        result_list = []
+        for row in resources_list:
+            result = self.build_resource_dict(titles, row)
             result_list.append(result)
         return jsonify(Resources=result_list)
 
@@ -80,18 +104,18 @@ class ResourceHandler:
 
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
-        resources_list = dao.getResourcesByCategory(category) #list of tuples, a 'table'
+        resources_list = dao.getResourcesByCategory(category)  # list of tuples, a 'table'
         if not (resources_list):
             return jsonify(Error="No resources found for that category"), 404
         result_list = []
         for row in resources_list:
-            result = self.build_resource_dict(row) #el dict asocia cada valor del tuplo con su column name
+            result = self.build_resource_dict(row)  # el dict asocia cada valor del tuplo con su column name
             result_list.append(result)
         return jsonify(Resources=result_list)
 
     def get_resources_by_availability(self, avail):
         if not (self.findEnumMatch(avail)):
-            return jsonify(Error = "Incorrect availability."), 400
+            return jsonify(Error="Incorrect availability."), 400
         dao = ResourcesDAO()
         resources_list = dao.getResourcesByAvailability(avail)
         result_list = []
@@ -102,7 +126,7 @@ class ResourceHandler:
 
     def findEnumMatch(self, enum):
         daoRD = ResourceDetailsDAO()
-        values = daoRD.getAvailabilityValues() #this is a list of tuples with the enum values
+        values = daoRD.getAvailabilityValues()  # this is a list of tuples with the enum values
         for val in values:
             if (val[0] == enum):
                 return True
@@ -111,17 +135,18 @@ class ResourceHandler:
     def get_supplier_by_resource_id(self, rid):
         dao = ResourcesDAO()
         if not (dao.getResourceById(rid)):
-            return jsonify(Error = "Resource not found"), 404
+            return jsonify(Error="Resource not found"), 404
         row = dao.getSupplierByResourceId(rid)
         if not (row):
-            return jsonify(Error = "No supplier found."), 404
+            return jsonify(Error="No supplier found."), 404
         result = self.build_supplier_dict(row)
         return jsonify(Supplier=result)
 
     def add_resource(self, form):
         rName = form['rName']
-        rcid = form['rcid'] #this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
-        #the attributes below are for the insertion into the resoruce details table
+        rcid = form[
+            'rcid']  # this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
+        # the attributes below are for the insertion into the resoruce details table
         rdQuantity = form['rdQuantity']
         rdLocation = form['rdLocation']
         rdAvailability = form['rdAvailability']
@@ -143,7 +168,8 @@ class ResourceHandler:
     def update_resource(self, form):
         rid = form['rid']
         rName = form['rName']
-        rcid = form['rcid']  # this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
+        rcid = form[
+            'rcid']  # this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
         # the attributes below are for the insertion into the resoruce details table
         rdQuantity = form['rdQuantity']
         rdLocation = form['rdLocation']
@@ -207,4 +233,3 @@ class ResourceHandler:
         dao = ResourceDetailsDAO()
         result = dao.updateAvailability(rid, status)
         return jsonify(Reserved=result)
-
