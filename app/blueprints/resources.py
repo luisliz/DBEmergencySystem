@@ -24,11 +24,11 @@ def get_resource_details(rid):
 #         return ResourceHandler().get_all_babyfoods()
 ####################### END OF HOLLY GRAIL #########################################
 
-@resources_bp.route('/<string:resource>/', methods=['GET']) #Done
-def get_resource_by_resource(resource):
-    if request.method == 'GET':
-        #return ResourceHandler().get_all_resources_by_resource(resource)
-        return ResourceHandler().get_all_resource(resource)
+# @resources_bp.route('/<string:resource>/', methods=['GET']) #Done
+# def get_resource_by_resource(resource):
+#     if request.method == 'GET':
+#         #return ResourceHandler().get_all_resources_by_resource(resource)
+#         return ResourceHandler().get_all_resource(resource) #get all resources from the given category?
 
 @resources_bp.route('/<int:rid>/', methods=['GET']) #Done
 def get_resource_by_id(rid):

@@ -89,20 +89,6 @@ class ResourcesDAO:
         for row in cursor:
             result.append(row)
         return result
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     ####################### END OF HOLLY GRAIL #########################################
 
     def getAllResources(self):
@@ -125,7 +111,7 @@ class ResourcesDAO:
 
     def getResourcesByResource(self, resource):
         cursor = self.conn.cursor()
-        query = "SELECT * FROM resource;"
+        query = "SELECT * FROM resources;"
         cursor.execute(query, (resource,))
         result = []
         for row in cursor:

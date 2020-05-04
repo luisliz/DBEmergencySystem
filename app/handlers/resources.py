@@ -52,7 +52,7 @@ class ResourceHandler:
         return jsonify(Resources=result_list)
 
     ####################### THE HOLLY GRAIL #########################################
-    def get_all_resource(self, resource):
+    def get_resources_by_category(self, category):
         dao = ResourcesDAO()
 
         getcol = {
@@ -62,7 +62,7 @@ class ResourceHandler:
          'heavy_equipments': dao.getResourceColumns('heavy_equipments'),
          'tools': dao.getResourceColumns('tools'),
         }
-        columns = getcol.get(resource, [])
+        columns = getcol.get(category, [])
         if not columns:
             return jsonify(Error="Category not found"), 404
         else:
@@ -73,7 +73,7 @@ class ResourceHandler:
                 'heavy_equipments': dao.getAllHeavyEquipments(),
                 'tools': dao.getAllTools()
             }
-            resources_list = resources.get(resource, [])
+            resources_list = resources.get(category, [])
             if not (resources_list):
                 return jsonify(Error="No resources found :("), 404
             result_list = []
@@ -82,19 +82,6 @@ class ResourceHandler:
                 result_list.append(result)
 
             return jsonify(Resources=result_list)
-
-
-    def get_all_resources_by_resource(self, resource):
-        dao = ResourcesDAO()
-        titles = dao.getResourcesByResource(resource)  # this too, is a 'table', list of lists (rows)
-        resources_list = dao.getResourcesByResource(resource)  # this too, is a 'table', list of lists (rows)
-        if not (resources_list):
-            return jsonify(Error="No resources found :("), 404
-        result_list = []
-        for row in resources_list:
-            result = self.build_resource_dict(titles, row)
-            result_list.append(result)
-        return jsonify(Resources=result_list)
 
     def get_resource_details_by_rid(self, rid):
         dao = ResourceDetailsDAO()
@@ -119,26 +106,6 @@ class ResourceHandler:
             return jsonify(Error="No resources found with that name"), 404
         result = self.build_resource_dict(row)
         return jsonify(Resources=result)
-
-    def category_switch(self, category):
-        dao = ResourcesDAO()
-        category_dict = {
-            "baby_food": dao.getAllBabyFoods()
-        }
-        return category_dict.get(category, [])
-
-    def get_resources_by_category(self, category):
-        dao = ResourcesDAO()
-        columns = dao.getResourceColumns(category)
-        # resources_list = dao.getResourcesByCategory(category)  # list of tuples, a 'table'
-        resources_list = self.category_switch(category)
-        if not (resources_list):
-            return jsonify(Error="No resources found :("), 404
-        result_list = []
-        for row in resources_list:
-            result = self.build_resource_dict(columns, row)
-            result_list.append(result)
-        return jsonify(Resources=result_list)
 
     def get_resources_by_availability(self, avail):
         if not (self.findEnumMatch(avail)):
