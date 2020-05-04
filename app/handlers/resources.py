@@ -108,7 +108,6 @@ class ResourceHandler:
                 'canned_foods': dao.getAllCannedFoods(),
                 'dry_foods': dao.getAllDryFoods(),
                 'clothings': dao.getAllClothings()
-
             }
             resources_list = resources.get(category, [])
             if not (resources_list):
@@ -143,14 +142,18 @@ class ResourceHandler:
         #this section is to get the row for the resource
         resources = {
             # 'baby_foods': dao.getBabyFoodByRID(rid),
-            'ices': dao.getIcesByRID(),
-            'fuels': dao.getFuelsByRID(),
-            'heavy_equipments': dao.getHeavyEquipmentsByRID(),
-            'tools': dao.getToolsByRID(),
+            'ices': dao.getIcesByRID(rid),
+            'fuels': dao.getFuelsByRID(rid),
+            'heavy_equipments': dao.getHeavyEquipmentsByRID(rid),
+            'tools': dao.getToolsByRID(rid),
             'medications': dao.getMedicationsByRID(rid),
-            "power_generators": dao.getPowerGeneratorsByRID(),
-            'waters': dao.getWatersByRID(),
-            'medical_devices': dao.getMedicalDevicesByRID()
+            "power_generators": dao.getPowerGeneratorsByRID(rid),
+            'waters': dao.getWatersByRID(rid),
+            'medical_devices': dao.getMedicalDevicesByRID(rid),
+            'batteries': dao.getBatteriesByRID(rid),
+            'canned_foods': dao.getCannedFoodsByRID(rid),
+            'dry_foods': dao.getDryFoodsByRID(rid),
+            'clothings': dao.getClothingsByRID(rid)
         }
         row = resources.get(actualcat, []) # in this case, this is just a tuple
         if not (row):
