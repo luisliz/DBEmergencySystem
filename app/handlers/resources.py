@@ -16,7 +16,11 @@ class ResourceHandler:
             'medications': dao.getResourceColumns('medications'),
             'power_generators': dao.getResourceColumns('power_generators'),
             'waters': dao.getResourceColumns('waters'),
-            'medical_devices': dao.getResourceColumns('medical_devices')
+            'medical_devices': dao.getResourceColumns('medical_devices'),
+            'batteries': dao.getResourceColumns('batteries'),
+            'canned_foods': dao.getResourceColumns('canned_foods'),
+            'dry_foods': dao.getResourceColumns('dry_foods'),
+            'clothings': dao.getResourceColumns('clothings')
         }
 
     # def build_resource_dict(self, row):
@@ -99,7 +103,12 @@ class ResourceHandler:
                 'medications': dao.getAllMedications(),
                 "power_generators": dao.getAllPowerGenerators(),
                 'waters': dao.getAllWaters(),
-                'medical_devices': dao.getAllMedicalDevices()
+                'medical_devices': dao.getAllMedicalDevices(),
+                'batteries': dao.getAllBatteries(),
+                'canned_foods': dao.getAllCannedFoods(),
+                'dry_foods': dao.getAllDryFoods(),
+                'clothings': dao.getAllClothings()
+
             }
             resources_list = resources.get(category, [])
             if not (resources_list):
