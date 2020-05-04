@@ -61,6 +61,10 @@ class ResourceHandler:
          'fuels': dao.getResourceColumns('fuels'),
          'heavy_equipments': dao.getResourceColumns('heavy_equipments'),
          'tools': dao.getResourceColumns('tools'),
+         'medications': dao.getResourceColumns('medications'),
+         'power_generators': dao.getResourceColumns('power_generators'),
+         'waters': dao.getResourceColumns('waters'),
+         'medical_devices': dao.getResourceColumns('medical_devices')
         }
         columns = getcol.get(category, [])
         if not columns:
@@ -71,7 +75,11 @@ class ResourceHandler:
                 'ices': dao.getAllIces(),
                 'fuels': dao.getAllFuels(),
                 'heavy_equipments': dao.getAllHeavyEquipments(),
-                'tools': dao.getAllTools()
+                'tools': dao.getAllTools(),
+                'medications': dao.getAllMedications(),
+                "power_generators": dao.getAllPowerGenerators(),
+                'waters': dao.getAllWaters(),
+                'medical_devices': dao.getAllMedicalDevices()
             }
             resources_list = resources.get(category, [])
             if not (resources_list):
