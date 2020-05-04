@@ -47,12 +47,62 @@ class ResourcesDAO:
     ####################### THE HOLLY GRAIL #########################################
     def getAllBabyFoods(self):
         cursor = self.conn.cursor()
-        query = "select bid, bflavor, bbrand,  rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods;"
+        query = "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods;"
         cursor.execute(query)
         result = []
         for row in cursor:
             result.append(row)
         return result
+
+    def getAllIces(self):
+        cursor = self.conn.cursor()
+        query = "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllFuels(self):
+        cursor = self.conn.cursor()
+        query = "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllHeavyEquipments(self):
+        cursor = self.conn.cursor()
+        query = "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllTools(self):
+        cursor = self.conn.cursor()
+        query = "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ####################### END OF HOLLY GRAIL #########################################
 
     def getAllResources(self):

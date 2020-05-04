@@ -52,19 +52,37 @@ class ResourceHandler:
         return jsonify(Resources=result_list)
 
     ####################### THE HOLLY GRAIL #########################################
-    def get_all_babyfoods(self):
+    def get_all_resource(self, resource):
         dao = ResourcesDAO()
-        columns = dao.getResourceColumns('baby_foods')
-        resources_list = dao.getAllBabyFoods()  # this too, is a 'table', list of lists (rows)
-        if not (resources_list):
-            return jsonify(Error="No resources found :("), 404
-        result_list = []
-        for row in resources_list:
-            result = self.build_resource_dict(columns, row)
-            result_list.append(result)
 
-        return jsonify(Resources=result_list)
-    ####################### END OF HOLLY GRAIL #########################################
+        getcol = {
+         'baby_foods': dao.getResourceColumns('baby_foods'),
+         'ices': dao.getResourceColumns('ices'),
+         'fuels': dao.getResourceColumns('fuels'),
+         'heavy_equipments': dao.getResourceColumns('heavy_equipments'),
+         'tools': dao.getResourceColumns('tools'),
+        }
+        columns = getcol.get(resource, [])
+        if not columns:
+            return jsonify(Error="Category not found"), 404
+        else:
+            resources = {
+                'baby_foods': dao.getAllBabyFoods(),
+                'ices': dao.getAllIces(),
+                'fuels': dao.getAllFuels(),
+                'heavy_equipments': dao.getAllHeavyEquipments(),
+                'tools': dao.getAllTools()
+            }
+            resources_list = resources.get(resource, [])
+            if not (resources_list):
+                return jsonify(Error="No resources found :("), 404
+            result_list = []
+            for row in resources_list:
+                result = self.build_resource_dict(columns, row)
+                result_list.append(result)
+
+            return jsonify(Resources=result_list)
+
 
     def get_all_resources_by_resource(self, resource):
         dao = ResourcesDAO()
