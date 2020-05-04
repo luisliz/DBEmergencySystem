@@ -4,6 +4,21 @@ from app.dao.resource_details import ResourceDetailsDAO
 
 
 class ResourceHandler:
+
+    def __init__(self):
+        dao = ResourcesDAO()
+        self.getcol = {
+            'baby_foods': dao.getResourceColumns('baby_foods'),
+            'ices': dao.getResourceColumns('ices'),
+            'fuels': dao.getResourceColumns('fuels'),
+            'heavy_equipments': dao.getResourceColumns('heavy_equipments'),
+            'tools': dao.getResourceColumns('tools'),
+            'medications': dao.getResourceColumns('medications'),
+            'power_generators': dao.getResourceColumns('power_generators'),
+            'waters': dao.getResourceColumns('waters'),
+            'medical_devices': dao.getResourceColumns('medical_devices')
+        }
+
     # def build_resource_dict(self, row):
     #     result = {}
     #     result['rid'] = row[0]
@@ -33,6 +48,23 @@ class ResourceHandler:
 
         return result
 
+    def build_catcols_dict(self, catcols):
+        result = {}
+        result['medications'] = catcols[0]
+        result['canned_foods'] = catcols[1]
+        result['baby_foods'] = catcols[2]
+        result['dry_foods'] = catcols[3]
+        result['fuels'] = catcols[4]
+        result['heavy_equipments'] = catcols[5]
+        result['clothings'] = catcols[6]
+        result['power_generators'] = catcols[7]
+        result['medical_devices'] = catcols[8]
+        result['batteries'] = catcols[9]
+        result['tools'] = catcols[10]
+        result['ices'] = catcols[11]
+        result['waters'] = catcols[12]
+        return result
+
     def build_supplier_dict(self, row):
         result = {}
         result['supplierID'] = row[0]
@@ -54,19 +86,7 @@ class ResourceHandler:
     ####################### THE HOLLY GRAIL #########################################
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
-
-        getcol = {
-         'baby_foods': dao.getResourceColumns('baby_foods'),
-         'ices': dao.getResourceColumns('ices'),
-         'fuels': dao.getResourceColumns('fuels'),
-         'heavy_equipments': dao.getResourceColumns('heavy_equipments'),
-         'tools': dao.getResourceColumns('tools'),
-         'medications': dao.getResourceColumns('medications'),
-         'power_generators': dao.getResourceColumns('power_generators'),
-         'waters': dao.getResourceColumns('waters'),
-         'medical_devices': dao.getResourceColumns('medical_devices')
-        }
-        columns = getcol.get(category, [])
+        columns = self.getcol.get(category, [])
         if not columns:
             return jsonify(Error="Category not found"), 404
         else:
@@ -101,11 +121,33 @@ class ResourceHandler:
 
     def get_resource_by_id(self, rid):
         dao = ResourcesDAO()
-        row = dao.getResourceById(rid)  # in this case, this is just a tuple
+
+        #this section is to find which category the resource belongs to
+        catcols = dao.getCategoryColumnsByRID(rid) #this is a tuple with all values
+        catcolsdict = self.build_catcols_dict(catcols)
+        actualcat = ""
+        for catcol in catcolsdict:
+            if (catcolsdict[catcol]):
+                actualcat = catcol
+        columns = self.getcol.get(actualcat, [])
+
+        #this section is to get the row for the resource
+        resources = {
+            # 'baby_foods': dao.getBabyFoodByRID(rid),
+            'ices': dao.getIcesByRID(),
+            'fuels': dao.getFuelsByRID(),
+            'heavy_equipments': dao.getHeavyEquipmentsByRID(),
+            'tools': dao.getToolsByRID(),
+            'medications': dao.getMedicationsByRID(rid),
+            "power_generators": dao.getPowerGeneratorsByRID(),
+            'waters': dao.getWatersByRID(),
+            'medical_devices': dao.getMedicalDevicesByRID()
+        }
+        row = resources.get(actualcat, []) # in this case, this is just a tuple
         if not (row):
             return jsonify(Error="No resources found for that id"), 404
-        result = self.build_resource_dict(row)
-        return jsonify(Resources=result)
+        result = self.build_resource_dict(columns, row)
+        return jsonify(Resource=result)
 
     def get_resource_by_name(self, rName):
         dao = ResourcesDAO()

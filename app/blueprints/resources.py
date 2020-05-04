@@ -7,7 +7,7 @@ resources_bp = Blueprint('resources', __name__)
 def index():
     return "Welcome to Resources!!"
 
-@resources_bp.route('/all/', methods=['GET']) #Done
+@resources_bp.route('/all/', methods=['GET']) #falta arreglar
 def get_all_resources():
     if request.method == 'GET':
         return ResourceHandler().get_all_resources()
@@ -30,7 +30,7 @@ def get_resource_details(rid):
 #         #return ResourceHandler().get_all_resources_by_resource(resource)
 #         return ResourceHandler().get_all_resource(resource) #get all resources from the given category?
 
-@resources_bp.route('/<int:rid>/', methods=['GET']) #Done
+@resources_bp.route('/<int:rid>/', methods=['GET']) #falta arreglar
 def get_resource_by_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_resource_by_id(rid)

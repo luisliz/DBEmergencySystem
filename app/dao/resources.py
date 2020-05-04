@@ -44,6 +44,14 @@ class ResourcesDAO:
         #     }
         # ]
 
+    def getCategoryColumnsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid from resources where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    #methods to get all resources + category info from a given category
     ####################### THE HOLLY GRAIL #########################################
     def getAllBabyFoods(self):
         cursor = self.conn.cursor()
@@ -126,6 +134,16 @@ class ResourcesDAO:
             result.append(row)
         return result
     ####################### END OF HOLLY GRAIL #########################################
+
+    #methods to get resources + cat info from a given rid
+    ####################################################################################
+    def getMedicationsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+    ####################################################################################
 
     def getAllResources(self):
         cursor = self.conn.cursor()
