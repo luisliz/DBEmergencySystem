@@ -120,14 +120,23 @@ class ResourceHandler:
         result = self.build_resource_dict(row)
         return jsonify(Resources=result)
 
+    def category_switch(self, category):
+        dao = ResourcesDAO()
+        category_dict = {
+            "baby_food": dao.getAllBabyFoods()
+        }
+        return category_dict.get(category, [])
+
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
-        resources_list = dao.getResourcesByCategory(category)  # list of tuples, a 'table'
+        columns = dao.getResourceColumns(category)
+        # resources_list = dao.getResourcesByCategory(category)  # list of tuples, a 'table'
+        resources_list = self.category_switch(category)
         if not (resources_list):
-            return jsonify(Error="No resources found for that category"), 404
+            return jsonify(Error="No resources found :("), 404
         result_list = []
         for row in resources_list:
-            result = self.build_resource_dict(row)  # el dict asocia cada valor del tuplo con su column name
+            result = self.build_resource_dict(columns, row)
             result_list.append(result)
         return jsonify(Resources=result_list)
 
