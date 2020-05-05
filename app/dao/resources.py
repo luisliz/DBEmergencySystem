@@ -19,7 +19,7 @@ class ResourcesDAO:
         )
 
         # variable to hold select * from resources + resource_details query
-        self.allrplusrd = "select * from resources;"#distinct r.rid, r.rname, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid "
+        self.allrplusrd = "select * from resources;"  # distinct r.rid, r.rname, rd.rdid, rd.rquantity, rd.rlocation, rd.ravailability, rd.supplieruid, rd.rprice from resources as r inner join resource_details as rd on r.rid = rd.rid "
 
         # self.resources = [
         #     {
@@ -51,8 +51,9 @@ class ResourcesDAO:
         result = cursor.fetchone()
         return result
 
-    #methods to get all resources + category info from a given category
-    ####################### THE HOLLY GRAIL #########################################
+    # =============================================================================================================
+    # =========================================== All In Category Field ===========================================
+    # =============================================================================================================
     def getAllBabyFoods(self):
         cursor = self.conn.cursor()
         query = "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods;"
@@ -169,9 +170,99 @@ class ResourcesDAO:
         for row in cursor:
             result.append(row)
         return result
-    ####################### END OF HOLLY GRAIL #########################################
 
-    #methods to get resources + cat info from a given rid
+    # =============================================================================================================
+    # =========================================== Filter Category Field ===========================================
+    # =============================================================================================================
+    def filterCategoryByField(self, category, field, value):
+        cursor = self.conn.cursor()
+        where = {
+            'baby_foods': {
+
+                'bid': "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods where bid = %s;",
+                'bflavor': "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods where bflavor = %s;",
+                'bbrand': "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods where bbrand = %s;",
+            },
+            'power_generators': {
+                'genid': "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where genid = %s;",
+                'genbrand': "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where genbrand = %s;",
+                'gentype': "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where gentype = %s;",
+                'genpower': "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where genpower = %s;",
+            },
+            'ices': {
+                'iid': "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where iid = %s;",
+                'ibrand': "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where ibrand = %s;",
+                'ibagsize': "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where ibagsize = %s;",
+                'iweight': "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where iweight = %s;",
+            },
+            'fuels': {
+                'fid': "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where fid = %s;",
+                'fbrand': "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where fbrand = %s;",
+                'ftype': "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where ftype = %s;",
+                'fvolume': "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where fvolume = %s;",
+            },
+            'heavy_equipments': {
+                'hid': "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments where hid = %s;",
+                'hbrand': "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments where hbrand = %s;",
+                'htype': "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments where htype = %s;",
+            },
+            'tools': {
+                'toolid': "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where toolid = %s;",
+                'toolbrand': "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where toolbrand = %s;",
+                'tooltype': "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where tooltype = %s;",
+                'toolsize': "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where toolsize = %s;",
+            },
+            'medications': {
+                'mid': "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where mid = %s;",
+                'mmanufacturer': "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where mmanufacturer = %s;",
+                'msize': "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where msize = %s;",
+                'mname': "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where mname = %s;",
+            },
+            'batteries': {
+                'batid': "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries where batid = %s;",
+                'battype': "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries where battype = %s;",
+                'batsize': "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries where batsize = %s;",
+            },
+            'waters': {
+                'wid': "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where wid = %s;",
+                'wcontainertype': "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where wcontainertype = %s;",
+                'wcontainersize': "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where wcontainersize = %s;",
+                'wbrand': "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where wbrand = %s;",
+            },
+            'medical_devices': {
+                'meddevid': "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices where meddevid = %s;",
+                'meddevbrand': "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices where meddevbrand = %s;",
+                'meddevtype': "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices where meddevtype = %s;",
+            },
+            'canned_foods': {
+                'canid': "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods where canid = %s;",
+                'canbrand': "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods where canbrand = %s;",
+                'cantype': "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods where cantype = %s;",
+            },
+            'dry_foods': {
+                'dryid': "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods where dryid = %s;",
+                'drybrand': "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods where drybrand = %s;",
+                'drytype': "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods where drytype = %s;",
+            },
+            'clothings': {
+                'clothid': "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where clothid = %s;",
+                'clothbranch': "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where clothbranch = %s;",
+                'clothmaterial': "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where clothmaterial = %s;",
+                'clothtype': "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where clothtype = %s;",
+            },
+        }
+
+        query = where[category][field]
+        cursor.execute(query, (value,))
+        if (cursor.rowcount == 0):
+            return []
+        else:
+            result = []
+            for row in cursor:
+                result.append(row)
+            return result
+
+    # methods to get resources + cat info from a given rid
     ####################################################################################
     def getMedicationsByRID(self, rid):
         cursor = self.conn.cursor()
@@ -179,6 +270,7 @@ class ResourcesDAO:
         cursor.execute(query, (rid,))
         result = cursor.fetchone()
         return result
+
     ####################################################################################
 
     def getAllResources(self):
@@ -270,7 +362,7 @@ class ResourcesDAO:
 
     def getResourcesByAvailability(self, avail):  # Done
         cursor = self.conn.cursor()
-        query = self.allrplusrd + "where rd.ravailability = %s;"
+        query = "SELECT rid from resource_details where ravailability = 'available';"
         cursor.execute(query, (avail,))
         result = []
         for row in cursor:

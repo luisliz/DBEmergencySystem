@@ -3,19 +3,15 @@ from app.handlers.resources import ResourceHandler
 
 resources_bp = Blueprint('resources', __name__)
 
-@resources_bp.route('/')
-def index():
-    return "Welcome to Resources!!"
-
-@resources_bp.route('/all/', methods=['GET']) #falta arreglar
+@resources_bp.route('/', methods=['GET']) #falta arreglar
 def get_all_resources():
     if request.method == 'GET':
         return ResourceHandler().get_all_resources()
 
-@resources_bp.route('/details/<int:rid>/', methods=['GET']) #Done
-def get_resource_details(rid):
-    if request.method == 'GET':
-        return ResourceHandler().get_resource_details_by_rid(rid)
+# @resources_bp.route('/details/<int:rid>/', methods=['GET']) #Done
+# def get_resource_details(rid):
+#     if request.method == 'GET':
+#         return ResourceHandler().get_resource_details_by_rid(rid)
 
 ####################### THE HOLLY GRAIL #########################################
 # @resources_bp.route('/baby_foods', methods=['GET']) #Done
@@ -35,20 +31,27 @@ def get_resource_by_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_resource_by_id(rid)
 
+@resources_bp.route('/<string:category>/', methods=['GET']) #Done
+def browse_by_category(category):
+    if request.method == 'GET':
+        return ResourceHandler().get_resources_by_category(category)
+
+@resources_bp.route('/<string:category>/<string:field>/<value>', methods=['GET']) #Done
+def browse_by_category_field(category, field, value):
+    if request.method == 'GET':
+        return ResourceHandler().get_resources_by_category_field(category, field, value)
+
+@resources_bp.route('/availability/<string:avail>/', methods=['GET']) #Done
+def browse_by_availability(avail):
+    if request.method == 'GET':
+        return ResourceHandler().get_resources_by_availability(avail)
+
 @resources_bp.route('/search/<string:rName>/', methods=['GET']) #Done
 def search_by_name(rName):
     if request.method == 'GET':
         return ResourceHandler().get_resource_by_name(rName)
 
-@resources_bp.route('/browse/category/<string:category>/', methods=['GET']) #Done
-def browse_by_category(category):
-    if request.method == 'GET':
-        return ResourceHandler().get_resources_by_category(category)
 
-@resources_bp.route('/browse/availability/<string:avail>/', methods=['GET']) #Done
-def browse_by_availability(avail):
-    if request.method == 'GET':
-        return ResourceHandler().get_resources_by_availability(avail)
 
 @resources_bp.route('/supplier/r/<int:rid>/', methods=['GET']) #Done
 def get_supplier_by_resource_id(rid):
