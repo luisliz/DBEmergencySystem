@@ -51,7 +51,7 @@ class RequestDAO:
 
     def getRequestsFromSupplier(self, supplierUid): #done
         cursor = self.conn.cursor()
-        query = "select * from requests where supplieruid = {supplierUid};"
+        query = f"select * from requests where supplieruid = {supplierUid};"
         cursor.execute(query)
         result = []
         for row in cursor:
