@@ -44,9 +44,9 @@ class ResourcesDAO:
         #     }
         # ]
 
-    def getCategoryColumnsByRID(self, rid):
+    def getCategoryNameByRID(self, rid):
         cursor = self.conn.cursor()
-        query = "select mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid from resources where rid = %s;"
+        query = "select rname from resources where rid = %s;"
         cursor.execute(query, (rid,))
         result = cursor.fetchone()
         return result
@@ -173,35 +173,110 @@ class ResourcesDAO:
 
     #methods to get resources + cat info from a given rid
     ####################################################################################
+    def getBabyFoodsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getIcesByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getFuelsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getHeavyEquipmentsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getToolsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
     def getMedicationsByRID(self, rid):
         cursor = self.conn.cursor()
         query = "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where rid = %s;"
         cursor.execute(query, (rid,))
         result = cursor.fetchone()
         return result
+
+    def getPowerGeneratorsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getWatersByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getMedicalDevicesByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getBatteriesByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getCannedFoodsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getDryFoodsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
+
+    def getClothingsByRID(self, rid):
+        cursor = self.conn.cursor()
+        query = "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where rid = %s;"
+        cursor.execute(query, (rid,))
+        result = cursor.fetchone()
+        return result
     ####################################################################################
 
-    def getAllResources(self):
-        cursor = self.conn.cursor()
-        query = self.allrplusrd
-        cursor.execute(query)
-        result = []  # this is a 'table', a list of lists: result[0][0] --> first row, value in first col
-        for row in cursor:
-            result.append(row)
-        return result
+    # def getAllResources(self):
+    #     cursor = self.conn.cursor()
+    #     query = self.allrplusrd
+    #     cursor.execute(query)
+    #     result = []  # this is a 'table', a list of lists: result[0][0] --> first row, value in first col
+    #     for row in cursor:
+    #         result.append(row)
+    #     return result
 
     def getResourceColumns(self, resource):
         cursor = self.conn.cursor()
         query = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = %s;"
-        cursor.execute(query, (resource,))
-        result = []
-        for row in cursor:
-            result.append(row)
-        return result
-
-    def getResourcesByResource(self, resource):
-        cursor = self.conn.cursor()
-        query = "SELECT * FROM resources;"
         cursor.execute(query, (resource,))
         result = []
         for row in cursor:

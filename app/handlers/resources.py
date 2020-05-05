@@ -22,13 +22,21 @@ class ResourceHandler:
             'dry_foods': dao.getResourceColumns('dry_foods'),
             'clothings': dao.getResourceColumns('clothings')
         }
-
-    # def build_resource_dict(self, row):
-    #     result = {}
-    #     result['rid'] = row[0]
-    #     result['rName'] = row[1]
-    #     result['rcid'] = row[2]
-    #     return result
+        self.all_tables = {
+            'baby_foods': dao.getAllBabyFoods(),
+            'ices': dao.getAllIces(),
+            'fuels': dao.getAllFuels(),
+            'heavy_equipments': dao.getAllHeavyEquipments(),
+            'tools': dao.getAllTools(),
+            'medications': dao.getAllMedications(),
+            "power_generators": dao.getAllPowerGenerators(),
+            'waters': dao.getAllWaters(),
+            'medical_devices': dao.getAllMedicalDevices(),
+            'batteries': dao.getAllBatteries(),
+            'canned_foods': dao.getAllCannedFoods(),
+            'dry_foods': dao.getAllDryFoods(),
+            'clothings': dao.getAllClothings()
+        }
 
     def build_resource_dict(self, columns, row):
         col = columns.copy()
@@ -52,23 +60,6 @@ class ResourceHandler:
 
         return result
 
-    def build_catcols_dict(self, catcols):
-        result = {}
-        result['medications'] = catcols[0]
-        result['canned_foods'] = catcols[1]
-        result['baby_foods'] = catcols[2]
-        result['dry_foods'] = catcols[3]
-        result['fuels'] = catcols[4]
-        result['heavy_equipments'] = catcols[5]
-        result['clothings'] = catcols[6]
-        result['power_generators'] = catcols[7]
-        result['medical_devices'] = catcols[8]
-        result['batteries'] = catcols[9]
-        result['tools'] = catcols[10]
-        result['ices'] = catcols[11]
-        result['waters'] = catcols[12]
-        return result
-
     def build_supplier_dict(self, row):
         result = {}
         result['supplierID'] = row[0]
@@ -78,45 +69,29 @@ class ResourceHandler:
 
     def get_all_resources(self):
         dao = ResourcesDAO()
-        resources_list = dao.getAllResources()  # this too, is a 'table', list of lists (rows)
-        if not (resources_list):
-            return jsonify(Error="No resources found :("), 404
         result_list = []
-        for row in resources_list:
-            result = self.build_resource_dict(row)
-            result_list.append(result)
+        for table in self.all_tables:
+            columns = self.getcol.get(table, [])
+            resources_list = self.all_tables.get(table, [])
+            for row in resources_list:
+                result = self.build_resource_dict(columns, row)
+                result_list.append(result)
         return jsonify(Resources=result_list)
 
-    ####################### THE HOLLY GRAIL #########################################
+    ####################### THE HOLY GRAIL #########################################
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
         columns = self.getcol.get(category, [])
         if not columns:
             return jsonify(Error="Category not found"), 404
         else:
-            resources = {
-                'baby_foods': dao.getAllBabyFoods(),
-                'ices': dao.getAllIces(),
-                'fuels': dao.getAllFuels(),
-                'heavy_equipments': dao.getAllHeavyEquipments(),
-                'tools': dao.getAllTools(),
-                'medications': dao.getAllMedications(),
-                "power_generators": dao.getAllPowerGenerators(),
-                'waters': dao.getAllWaters(),
-                'medical_devices': dao.getAllMedicalDevices(),
-                'batteries': dao.getAllBatteries(),
-                'canned_foods': dao.getAllCannedFoods(),
-                'dry_foods': dao.getAllDryFoods(),
-                'clothings': dao.getAllClothings()
-            }
-            resources_list = resources.get(category, [])
+            resources_list = self.all_tables.get(category, [])
             if not (resources_list):
                 return jsonify(Error="No resources found :("), 404
             result_list = []
             for row in resources_list:
                 result = self.build_resource_dict(columns, row)
                 result_list.append(result)
-
             return jsonify(Resources=result_list)
 
     def get_resource_details_by_rid(self, rid):
@@ -129,19 +104,16 @@ class ResourceHandler:
 
     def get_resource_by_id(self, rid):
         dao = ResourcesDAO()
-
-        #this section is to find which category the resource belongs to
-        catcols = dao.getCategoryColumnsByRID(rid) #this is a tuple with all values
-        catcolsdict = self.build_catcols_dict(catcols)
-        actualcat = ""
-        for catcol in catcolsdict:
-            if (catcolsdict[catcol]):
-                actualcat = catcol
+        actualcat_tuple = dao.getCategoryNameByRID(rid)
+        if not (actualcat_tuple):
+            return jsonify(Error="No resources found for that id"), 404
+        actualcat = actualcat_tuple[0]
+        print("actualcat = %s" % actualcat)
         columns = self.getcol.get(actualcat, [])
 
         #this section is to get the row for the resource
         resources = {
-            # 'baby_foods': dao.getBabyFoodByRID(rid),
+            'baby_foods': dao.getBabyFoodsByRID(rid),
             'ices': dao.getIcesByRID(rid),
             'fuels': dao.getFuelsByRID(rid),
             'heavy_equipments': dao.getHeavyEquipmentsByRID(rid),
