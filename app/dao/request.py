@@ -69,7 +69,7 @@ class RequestDAO:
 
     def getRequestedResourcesByKeyword(self, rName): #Done
         cursor = self.conn.cursor()
-        query = f"select RPR.rid, rprid, reqid, rname, rquantity, rlocation, ravailability from resources_per_request as RPR natural inner join resources natural inner join resource_details where rname = '{rName}';"
+        query = f"select RPR.rid, rprid, reqid, rname, rquantity, rlocation, ravailability from resources_per_request as RPR natural inner join resources natural inner join resource_details natural inner join requests where reqdispatchdate is null and rname = '{rName}';"
         cursor.execute(query)
         result = []
         for row in cursor:
