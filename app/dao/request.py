@@ -36,13 +36,13 @@ class RequestDAO:
 
     def getRequestById(self, reqId): #Done
         cursor = self.conn.cursor()
-        query = "select * from requests where reqid = {reqId};"
+        query = f"select * from requests where reqid = {reqId};"
         cursor.execute(query)
         return cursor.fetchone()
 
     def getRequestsFromRequester(self, requestUid): #Done
         cursor = self.conn.cursor()
-        query = "select * from requests where requestuid = {requestUid};"
+        query = f"select * from requests where requestuid = {requestUid};"
         cursor.execute(query)
         result = []
         for row in cursor:
@@ -58,6 +58,25 @@ class RequestDAO:
             result.append(row)
         return result
 
+    def getResourcesFromRequest(self, reqID): #Done
+        cursor = self.conn.cursor()
+        query = f"select RPR.rid, rprid, reqid, rname, rquantity, rlocation, ravailability from resources_per_request as RPR natural inner join resources natural inner join resource_details where reqid = {reqID};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getRequestedResourcesByKeyword(self, rName): #Done
+        cursor = self.conn.cursor()
+        query = f"select RPR.rid, rprid, reqid, rname, rquantity, rlocation, ravailability from resources_per_request as RPR natural inner join resources natural inner join resource_details where rname = '{rName}';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    """
     def getRequestByResourceId(self, resourceid): #Done
         cursor = self.conn.cursor()
         query = "select * from requests where rid = {resourceid};"
@@ -135,6 +154,6 @@ class RequestDAO:
             pos += 1
 
         return False
-
+    """
 
 

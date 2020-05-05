@@ -14,7 +14,7 @@ def index():
 #     if request.method == 'POST':
 #         return RequestHandler().addRequest(request.form)
 
-@request_bp.route('/<int:reqid>/', methods=['GET']) #Done
+@request_bp.route('/reqById/<int:reqid>/', methods=['GET']) #Done
 def get_request_by_id(reqid):
     if request.method == 'GET':
         return RequestHandler().getRequestById(reqid)
@@ -29,6 +29,16 @@ def get_requests_from_supplier(supplierid):
     if request.method == 'GET':
         return RequestHandler().getRequestsFromSupplier(supplierid)
 
+@request_bp.route('/resources/<int:reqid>/', methods=['GET'])
+def get_resources_from_requests(reqid):
+    if request.method == 'GET':
+        return RequestHandler().getResourcesFromRequest(reqid)
+
+@request_bp.route('/resources/keyword/<string:rName>', methods=['GET'])
+def get_requested_resources_by_keyword(rName):
+    if request.method == 'GET':
+        return RequestHandler().getRequestedResourcesByKeyword(rName)
+"""
 @request_bp.route('/resource/<int:rid>/', methods=['GET']) #Done
 def get_request_by_resource_id(rid):
     if request.method == 'GET':
@@ -63,7 +73,7 @@ def update_request():
 def delete_request(reqid):
     if request.method == 'DELETE':
         return RequestHandler().removeRequest(reqid)
-
+"""
 @request_bp.route('/count/', methods=['GET']) #Done
 def count_requests():
     if request.method == 'GET':
