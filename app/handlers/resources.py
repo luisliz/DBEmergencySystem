@@ -78,7 +78,90 @@ class ResourceHandler:
                 result_list.append(result)
         return jsonify(Resources=result_list)
 
-    ####################### THE HOLY GRAIL #########################################
+    def get_all_available_resources(self):
+        dao = ResourcesDAO()
+
+        all_tables_avail = {
+            'baby_foods': dao.getAllAvailBabyFoods(),
+            'ices': dao.getAllAvailIces(),
+            'fuels': dao.getAllAvailFuels(),
+            'heavy_equipments': dao.getAllAvailHeavyEquipments(),
+            'tools': dao.getAllAvailTools(),
+            'medications': dao.getAllAvailMedications(),
+            "power_generators": dao.getAllAvailPowerGenerators(),
+            'waters': dao.getAllAvailWaters(),
+            'medical_devices': dao.getAllAvailMedicalDevices(),
+            'batteries': dao.getAllAvailBatteries(),
+            'canned_foods': dao.getAllAvailCannedFoods(),
+            'dry_foods': dao.getAllAvailDryFoods(),
+            'clothings': dao.getAllAvailClothings()
+        }
+
+        result_list = []
+        for table in all_tables_avail:
+            columns = self.getcol.get(table, [])
+            resources_list = all_tables_avail.get(table, [])
+            for row in resources_list:
+                result = self.build_resource_dict(columns, row)
+                result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def get_all_available_resources_by_name(self, rname):
+        dao = ResourcesDAO()
+
+        all_tables_avail_by_name = {
+            'baby_foods': dao.getAllAvailBabyFoodsByName(rname),
+            'ices': dao.getAllAvailIcesByName(rname),
+            'fuels': dao.getAllAvailFuelsByName(rname),
+            'heavy_equipments': dao.getAllAvailHeavyEquipmentsByName(rname),
+            'tools': dao.getAllAvailToolsByName(rname),
+            'medications': dao.getAllAvailMedicationsByName(rname),
+            "power_generators": dao.getAllAvailPowerGeneratorsByName(rname),
+            'waters': dao.getAllAvailWatersByName(rname),
+            'medical_devices': dao.getAllAvailMedicalDevicesByName(rname),
+            'batteries': dao.getAllAvailBatteriesByName(rname),
+            'canned_foods': dao.getAllAvailCannedFoodsByName(rname),
+            'dry_foods': dao.getAllAvailDryFoodsByName(rname),
+            'clothings': dao.getAllAvailClothingsByName(rname)
+        }
+
+        result_list = []
+        for table in all_tables_avail_by_name:
+            columns = self.getcol.get(table, [])
+            resources_list = all_tables_avail_by_name.get(table, [])
+            for row in resources_list:
+                result = self.build_resource_dict(columns, row)
+                result_list.append(result)
+        return jsonify(Resources=result_list)
+
+    def get_requested_resources_by_name(self, rname):
+        dao = ResourcesDAO()
+
+        all_tables_requested_by_rname = {
+            'baby_foods': dao.getReqBabyFoodsByName(rname),
+            'ices': dao.getReqIcesByName(rname),
+            'fuels': dao.getReqFuelsByName(rname),
+            'heavy_equipments': dao.getReqHeavyEquipmentsByName(rname),
+            'tools': dao.getReqToolsByName(rname),
+            'medications': dao.getReqMedicationsByName(rname),
+            "power_generators": dao.getReqPowerGeneratorsByName(rname),
+            'waters': dao.getReqWatersByName(rname),
+            'medical_devices': dao.getReqMedicalDevicesByName(rname),
+            'batteries': dao.getReqBatteriesByName(rname),
+            'canned_foods': dao.getReqCannedFoodsByName(rname),
+            'dry_foods': dao.getReqDryFoodsByName(rname),
+            'clothings': dao.getReqClothingsByName(rname)
+        }
+
+        result_list = []
+        for table in all_tables_requested_by_rname:
+            columns = self.getcol.get(table, [])
+            resources_list = all_tables_requested_by_rname.get(table, [])
+            for row in resources_list:
+                result = self.build_resource_dict(columns, row)
+                result_list.append(result)
+        return jsonify(Resources=result_list)
+
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
         columns = self.getcol.get(category, [])

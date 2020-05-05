@@ -172,6 +172,369 @@ class ResourcesDAO:
         return result
 
     # =============================================================================================================
+    # =========================================== get all resources requested by rname ============================
+    # =============================================================================================================
+
+    def getReqBabyFoodsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqIcesByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqFuelsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqHeavyEquipmentsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqToolsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqMedicationsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqPowerGeneratorsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqWatersByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqMedicalDevicesByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqBatteriesByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqCannedFoodsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqDryFoodsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReqClothingsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings natural inner join resources_per_request where rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    #==============================================================================================================
+    #========================================== get all available resources =======================================
+    #==============================================================================================================
+
+    def getAllAvailBabyFoods(self):
+        cursor = self.conn.cursor()
+        query = "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailIces(self):
+        cursor = self.conn.cursor()
+        query = "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailFuels(self):
+        cursor = self.conn.cursor()
+        query = "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailHeavyEquipments(self):
+        cursor = self.conn.cursor()
+        query = "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailTools(self):
+        cursor = self.conn.cursor()
+        query = "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailMedications(self):
+        cursor = self.conn.cursor()
+        query = "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailPowerGenerators(self):
+        cursor = self.conn.cursor()
+        query = "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailWaters(self):
+        cursor = self.conn.cursor()
+        query = "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailMedicalDevices(self):
+        cursor = self.conn.cursor()
+        query = "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailBatteries(self):
+        cursor = self.conn.cursor()
+        query = "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailCannedFoods(self):
+        cursor = self.conn.cursor()
+        query = "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailDryFoods(self):
+        cursor = self.conn.cursor()
+        query = "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailClothings(self):
+        cursor = self.conn.cursor()
+        query = "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where ravailability = 'available';"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    # ==============================================================================================================
+    # ========================================== get all available resources by name ===============================
+    # ==============================================================================================================
+
+    def getAllAvailBabyFoodsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select bid, bflavor, bbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join baby_foods where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailIcesByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select iid, ibrand, ibagsize, iweight, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join ices where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query,(rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailFuelsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT fid, fbrand, ftype, fvolume, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join fuels where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailHeavyEquipmentsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select hid, hbrand, htype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join heavy_equipments where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailToolsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT toolid, toolbrand, tooltype, toolsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join tools where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailMedicationsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT mid, mmanufacturer, msize, mname, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medications where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailPowerGeneratorsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT genid, genbrand, gentype, genpower, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join power_generators where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailWatersByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT wid, wcontainertype, wcontainersize, wbrand, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join waters where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailMedicalDevicesByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "SELECT meddevid, meddevbrand, meddevtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join medical_devices where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailBatteriesByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select batid, battype, batsize, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join batteries where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailCannedFoodsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select canid, canbrand, cantype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join canned_foods where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailDryFoodsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select dryid, drybrand, drytype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join dry_foods where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllAvailClothingsByName(self, rname):
+        cursor = self.conn.cursor()
+        query = "select clothid, clothbranch, clothmaterial, clothtype, rid, rname, rquantity, rlocation, ravailability, supplieruid, rprice from resources natural inner join resource_details natural inner join clothings where ravailability = 'available' and rname = %s order by rname;"
+        cursor.execute(query, (rname,))
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    # =============================================================================================================
     # =========================================== Filter Category Field ===========================================
     # =============================================================================================================
     def filterCategoryByField(self, category, field, value):

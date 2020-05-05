@@ -3,7 +3,7 @@ from app.handlers.resources import ResourceHandler
 
 resources_bp = Blueprint('resources', __name__)
 
-@resources_bp.route('/', methods=['GET']) #falta arreglar
+@resources_bp.route('/', methods=['GET'])
 def get_all_resources():
     if request.method == 'GET':
         return ResourceHandler().get_all_resources()
@@ -46,6 +46,16 @@ def browse_by_availability(avail):
     if request.method == 'GET':
         return ResourceHandler().get_resources_by_availability(avail)
 
+@resources_bp.route('/available/', methods=['GET'])
+def get_all_available_resources():
+    if request.method == 'GET':
+        return ResourceHandler().get_all_available_resources()
+
+@resources_bp.route('/available/search/<string:rname>/', methods=['GET'])
+def get_all_available_resources_by_name(rname):
+    if request.method == 'GET':
+        return ResourceHandler().get_all_available_resources_by_name(rname)
+
 @resources_bp.route('/search/<string:rName>/', methods=['GET']) #Done
 def search_by_name(rName):
     if request.method == 'GET':
@@ -73,10 +83,15 @@ def update_resource():
     if request.method == 'PUT':
         return ResourceHandler().update_resource(request.form)
 
-@resources_bp.route('/browse/requested/', methods=['GET']) #Done
-def browse_requested():
+@resources_bp.route('/requested/search/<string:rname>/', methods=['GET']) #Done
+def get_requested_resources_by_name(rname):
     if request.method == 'GET':
-        return ResourceHandler().get_requested_resources()
+        return ResourceHandler().get_requested_resources_by_name(rname)
+
+# @resources_bp.route('/browse/requested/', methods=['GET']) #Done
+# def browse_requested():
+#     if request.method == 'GET':
+#         return ResourceHandler().get_requested_resources()
 
 @resources_bp.route('/browse/requested/dispatched/', methods=['GET'])
 def browse_dispatched_requested():
