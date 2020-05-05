@@ -49,16 +49,16 @@ class ResourceHandler:
             result[col[i]] = row[i]
         return result
 
-    def build_details_dict(self, row):
-        result = {}
-        result['rdid'] = row[0]
-        result['rquantity'] = row[1]
-        result['rlocation'] = row[2]
-        result['ravailability'] = row[3]
-        result['supplieruid'] = row[4]
-        result['rprice'] = row[5]
-
-        return result
+    # def build_details_dict(self, row):
+    #     result = {}
+    #     result['rdid'] = row[0]
+    #     result['rquantity'] = row[1]
+    #     result['rlocation'] = row[2]
+    #     result['ravailability'] = row[3]
+    #     result['supplieruid'] = row[4]
+    #     result['rprice'] = row[5]
+    #
+    #     return result
 
     def build_supplier_dict(self, row):
         result = {}
@@ -93,6 +93,29 @@ class ResourceHandler:
                 result = self.build_resource_dict(columns, row)
                 result_list.append(result)
             return jsonify(Resources=result_list)
+
+    def get_resources_by_category_field(self, category, afield, value):
+        dao = ResourcesDAO()
+        columns = self.getcol.get(category, [])
+        if not columns:
+            return jsonify(Error="Category not found"), 404
+        else:
+            field = ''
+            for i in columns:
+                if afield == i[0]:
+                    field = afield
+
+            if field == '':
+                return jsonify(Error="Fields not found", Categories=columns), 404
+            else:
+                resources_list = dao.filterCategoryByField(category, field, value)
+                if resources_list == []:
+                    return jsonify(Error="No resources found :("), 404
+                result_list = []
+                for row in resources_list:
+                    result = self.build_resource_dict(columns, row)
+                    result_list.append(result)
+                return jsonify(Resources=result_list)
 
     def get_resource_details_by_rid(self, rid):
         dao = ResourceDetailsDAO()
