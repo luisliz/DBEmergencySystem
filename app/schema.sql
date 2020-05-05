@@ -14,7 +14,7 @@ DROP TABLE IF EXISTS dry_foods;
 DROP TABLE IF EXISTS fuels;
 DROP TABLE IF EXISTS heavy_equipments;
 DROP TABLE IF EXISTS power_generators;
-DROP TABLE IF EXISTS NCES medical_devices;
+DROP TABLE IF EXISTS medical_devices;
 DROP TABLE IF EXISTS batteries;
 DROP TABLE IF EXISTS tools;
 DROP TABLE IF EXISTS ices;
