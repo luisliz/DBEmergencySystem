@@ -66,6 +66,42 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Transactions=result_list)
 
+    def getAllReservations(self):
+        dao = TransactionDAO()
+        transaction_list = dao.getAllReservations()
+        result_list = []
+        for row in transaction_list:
+            result = self.build_transaction_dict(row)
+            result_list.append(result)
+        return jsonify(Reservations=result_list)
+
+    def getReservationById(self, tid):
+        dao = TransactionDAO()
+        transaction_list = dao.getReservationById(tid)
+        result_list = []
+        for row in transaction_list:
+            result = self.build_transaction_dict(row)
+            result_list.append(result)
+        return jsonify(Reservation=result_list)
+
+    def getAllPurchases(self):
+        dao = TransactionDAO()
+        transaction_list = dao.getAllPurchases()
+        result_list = []
+        for row in transaction_list:
+            result = self.build_transaction_dict(row)
+            result_list.append(result)
+        return jsonify(Purchases=result_list)
+
+    def getPurchaseById(self, tid):
+        dao = TransactionDAO()
+        transaction_list = dao.getPurchaseById(tid)
+        result_list = []
+        for row in transaction_list:
+            result = self.build_transaction_dict(row)
+            result_list.append(result)
+        return jsonify(Purchase=result_list)
+
     def getTransactionByDate(self, date):
         dao = TransactionDAO()
         transaction_list = dao.getTransactionByDate(date)

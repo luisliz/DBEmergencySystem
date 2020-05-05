@@ -29,6 +29,42 @@ class TransactionDAO:
             result.append(row)
         return result
 
+    def getAllReservations(self):
+        cursor = self.conn.cursor()
+        query = "select * from transactions where tamount = 0;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getReservationById(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tamount = 0 and tid = {tid};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getAllPurchases(self):
+        cursor = self.conn.cursor()
+        query = "select * from transactions where tamount > 0;"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
+    def getPurchaseById(self, tid):
+        cursor = self.conn.cursor()
+        query = f"select * from transactions where tamount > 0 and tid = {tid};"
+        cursor.execute(query)
+        result = []
+        for row in cursor:
+            result.append(row)
+        return result
+
     def getTransactionByDate(self, tdate):
         cursor = self.conn.cursor()
         query = f"select * from transactions where tdate = '{tdate}';"

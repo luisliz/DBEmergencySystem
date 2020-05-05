@@ -10,8 +10,10 @@ def transaction_info():
     else:
         if not request.args:
             return TransactionHandler().getAllTransactions()
+        """
         else:
             return TransactionHandler().searchTransaction(request.args)
+        """
 
 @transaction_bp.route('/getById/<int:tid>', methods =['GET', 'DELETE'])
 def get_Transaction_by_id(tid):
@@ -19,6 +21,28 @@ def get_Transaction_by_id(tid):
         return TransactionHandler().getTransactionById(tid)
     elif request.method == 'DELETE':
         return TransactionHandler().deleteTransaction(tid)
+
+@transaction_bp.route('/reservations', methods =['GET'])
+def get_all_reservations():
+    if request.method == 'GET':
+        return TransactionHandler().getAllReservations()
+
+@transaction_bp.route('/reservations/<int:tid>', methods =['GET'])
+def get_reservation_by_id(tid):
+    if request.method == 'GET':
+        return TransactionHandler().getReservationById(tid)
+
+@transaction_bp.route('/purchases/<int:tid>', methods =['GET'])
+def get_purchase_by_id(tid):
+    if request.method == 'GET':
+        return TransactionHandler().getPurchaseById(tid)
+
+@transaction_bp.route('/purchases', methods =['GET'])
+def get_all_purchases():
+    if request.method == 'GET':
+        return TransactionHandler().getAllPurchases()
+
+
 
 @transaction_bp.route('/getByDate/<string:date>', methods =['GET'])
 def get_Transaction_by_date(date):
