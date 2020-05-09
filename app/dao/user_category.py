@@ -21,6 +21,12 @@ class UserCategoryDAO:
             result.append(row)
         return result
 
+    def getCategoryByName(self, ucname):
+        cursor = self.conn.cursor()
+        query = "select ucid from user_category where ucname = %s;"
+        cursor.execute(query, (ucname,))
+        return cursor.fetchone()
+
     def getCategoryById(self, ucid):
         cursor = self.conn.cursor()
         query = "select ucid, ucname from user_category where ucid = %s;"

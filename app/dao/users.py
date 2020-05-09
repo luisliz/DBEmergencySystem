@@ -36,6 +36,15 @@ class UsersDAO:
             result.append(row)
         return result
 
+    def checkEmailExists(self, email):
+       cursor = self.conn.cursor()
+       query = "select uemail from users where uemail= %s;"
+       cursor.execute(query, (email,))
+       if cursor.fetchone() is None:
+           return False
+       else:
+           return True
+
     def getUserByFirst(self, ufirstName):
        cursor = self.conn.cursor()
        query = "select uid, ucid, ufirstName, ulastName, udob, uemail  from users where ufirstName = %s;"
@@ -68,34 +77,12 @@ class UsersDAO:
         query = "SELECT COUNT(*) FROM users;"
         cursor.execute(query)
         return cursor.fetchone()
-        return len(self.users)
 
 
-    def insert(self, ufirstname, ulastname, uudob, uuemail, uupassword):
-        newUID = len(self.users)+1
-        new_user = {
-            'uid': len(self.users)+1,
-            'ucid': 4,
-            'ufirstName': ufirstname,
-            'ulastName': ulastname,
-            'udob': uudob,
-            'uemail': uuemail,
-            'upassword': uupassword
-        }
-        self.users.append(new_user)
+    def insert(self, catid, firstname, lastname, udob, uemail, upassword):
+        cursor = self.conn.cursor()
+        query = "INSERT INTO users (ucid, ufirstname, ulastname, udob, uemail, upassword) VALUES (%s, %s, %s, %s, %s, %s) returning uid;"
+        cursor.execute(query, (catid, firstname, lastname, udob, uemail, upassword))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
-        return newUID
-
-    def delete(self, uid): #Done
-        pos = 0
-        for user in self.users:
-            if int(user['uid']) == int(uid):
-                del self.users[pos]
-                return True
-            pos += 1
-
-        return False
-
-    def update(self, uid, ufirstname, ulastname, uudob, uuemail, uupassword, rid):
-
-        return uid

@@ -10,19 +10,22 @@ user_bp = Blueprint('user', __name__)
 def user():
     if request.method == 'POST':
         return UserHandler().add_user(request.form) #Done
-    else:
+    elif request.method == 'GET':
         if not request.args:
             return UserHandler().get_all_users() #DONE
         else:
             return UserHandler().search_users(request.args)
 
-@user_bp.route('/<int:user_id>', methods=['GET', 'DELETE'])
+@user_bp.route('/<int:user_id>', methods=['GET'])
 def get_user(user_id):
     if request.method == 'GET':
         return UserHandler().getUserById(user_id) #Done
+    elif request.method == 'PUT':
+        return UserHandler().update_user(user_id, request.form)
+    elif request.method == 'DELETE':
+        return UserHandler().delete_user(user_id)
     elif request.method == 'DELETE':
         return UserHandler().delete_user_byid(user_id)
-
 
 @user_bp.route('/categories', methods=['GET']) #Done
 def get_ranks():
@@ -52,16 +55,6 @@ def count_ranks():
 #                 return redirect(url_for('login'))
 #             login_user(user, remember=form.remember_me.data)
 #             return redirect(url_for('index'))
-
-@user_bp.route('/logout', methods=['GET', 'POST'])
-def logout():
-    if request.method == 'POST':
-        return UserHandler().logout_user(request.form)
-
-@user_bp.route('/delete', methods=['DELETE'])
-def deleteuser():
-    if request.method == 'DELETE':
-        return UserHandler().delete_user(request.form)
 
 @user_bp.route('/update/{uid}', methods=['PUT'])
 def settings(uid):

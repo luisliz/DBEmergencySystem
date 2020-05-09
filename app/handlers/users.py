@@ -1,5 +1,7 @@
 from flask import jsonify
 from app.dao.users import UsersDAO
+from app.dao.user_category import UserCategoryDAO
+
 
 class UserHandler:
     def build_user_dict(self, row): #DONE
@@ -35,31 +37,28 @@ class UserHandler:
         result = self.build_user_dict(user)
         return jsonify(User=result)
 
-    def add_user(self, form): #Done
-        first_name = form['firstname']
-        last_name = form['lastname']
-        dob = form['dob']
-        email = form['email']
-        password = form['password'] #Have to hash this
+    def add_user(self, form):
+        udao = UsersDAO()
+        catDao = UserCategoryDAO()
 
-        dao = UsersDAO()
-        uid = dao.insert(first_name, last_name, dob, email, password)
+        ucid = form['ucid']
+        ufirstname = form['ufirstname']
+        ulastname = form['ulastname']
+        udob = form['udob']
+        uemail = form['uemail']
+        upassword = form['upassword']
+
+        if 'ucid' in form:
+            categoryid = ucid
+            catid = catDao.getCategoryById(ucid)
+            if not catid:
+                return jsonify(error='category id: ' + ucid + ' does not exist')
+
+        if udao.checkEmailExists(uemail):
+            return jsonify(error=uemail + ' already exists')
+
+        uid = udao.insert(categoryid, ufirstname, ulastname, udob, uemail, upassword)
         return jsonify(uid=uid)
-
-    def delete_user(self, form):
-        dao = UsersDAO()
-        uid = form['uid']
-        user = dao.delete(uid)
-        return jsonify(deleted=user)
-
-    def logout_user(self, uid):
-        #LogoutUser
-        print("Logout User")
-        return uid
-
-    def update_user(self, uid, form):
-        dao = UsersDAO()
-        dao.update
 
     def count_users(self): #Done
         dao = UsersDAO()
