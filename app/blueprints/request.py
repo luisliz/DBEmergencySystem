@@ -3,10 +3,12 @@ from app.handlers.request import RequestHandler
 
 request_bp = Blueprint('request', __name__)
 
-@request_bp.route('/')
+@request_bp.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
         return RequestHandler().getAllRequests()
+    elif request.method == 'POST':
+        return RequestHandler().addRequest(request.form)
 
 
 # @request_bp.route('/add/', methods=['POST']) #Done

@@ -1,5 +1,8 @@
+import json
 from flask import jsonify
 from app.dao.request import RequestDAO
+from app.dao.users import UsersDAO
+
 
 class RequestHandler:
     def build_request_dict(self, row):
@@ -74,6 +77,41 @@ class RequestHandler:
             result = self.build_requested_resource_dict(row)
             result_list.append(result)
         return jsonify(Requests=result_list)
+
+    def addRequest(self, form):
+        required = []
+        reqpostdate = form['reqpostdate']
+        reqlocation = form['reqlocation']
+        requesterID = form['requesteruid']
+        supplierID = form['supplieruid']
+
+        if 'resources' in form:
+            try:
+                resources = json.loads(form['resources'])
+            except ValueError as e:
+                return jsonify(error='Resource array is malformed')
+            if len(resources) < 1:
+                return jsonify(error='Resource array requires at least 1')
+        else:
+            return jsonify(error='Resource array is required')
+
+        userDao = UsersDAO()
+
+        if 'requesteruid' in form:
+            if userDao.getUserById(requesterID) is None:
+                return jsonify(error='requesteruid ' + requesterID + ' does not exist')
+        if 'supplieruid' in form:
+            try:
+                supplierID = int(supplierID)
+                if userDao.checkUserIsSupplier(supplierID) == False:
+                    return jsonify(error='supplierid ' + supplierID + ' does not exist or is not a supplier')
+            except ValueError:
+                return jsonify(error='supplierid must be an int')
+
+        dao = RequestDAO()
+        result = dao.addRequest(reqpostdate, reqlocation, requesterID, supplierID, resources)
+        return jsonify(Reqid=result)
+
     """
     def getRequestByResourceId(self, resourceid):
         dao = RequestDAO()
@@ -135,6 +173,7 @@ class RequestHandler:
         return jsonify(Removed=result)
 
     """
+
     def countRequests(self):
         dao = RequestDAO()
         result = dao.countRequests()
