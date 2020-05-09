@@ -36,6 +36,14 @@ class UsersDAO:
             result.append(row)
         return result
 
+    def checkUserIsSupplier(self, uid):
+        cursor = self.conn.cursor()
+        query = "select 1 from users where ucid=2 and uid = %s;"
+        cursor.execute(query, (uid,))
+        if cursor.fetchone():
+            return True;
+        return False
+
     def checkEmailExists(self, email):
        cursor = self.conn.cursor()
        query = "select uemail from users where uemail= %s;"
