@@ -116,6 +116,15 @@ class PaymentDAO:
             result.append(row)
         return result
 
+    #Dont know if this works yet
+    def checkPaymentIsFromSupplier(self, pid):
+        cursor = self.conn.cursor()
+        query = "select 1 from payments natural inner join users where ucid=2 and pid = %s;"
+        cursor.execute(query, (pid,))
+        if cursor.fetchone():
+            return True;
+        return False
+
     """//////////////////////////////////////FOR FUTURE PHASE///////////////////////////////////////////////////////"""
     def insert(self, cid, cNumber, cType, cProvider, cExpDate, cUser):
         newCID = len(self.cards) + 1

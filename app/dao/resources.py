@@ -774,7 +774,8 @@ class ResourcesDAO:
 
     def getResourceById(self, rid):
         cursor = self.conn.cursor()
-        query = self.allrplusrd + "where r.rid = %s;"
+        #query = self.allrplusrd + "where r.rid = %s;"OLD
+        query = self.allrplusrd[:-1] + " where rid = %s;" #NEW
         cursor.execute(query, (rid,))
         result = cursor.fetchone()
         return result

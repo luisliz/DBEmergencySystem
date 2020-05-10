@@ -10,10 +10,6 @@ def transaction_info():
     else:
         if not request.args:
             return TransactionHandler().getAllTransactions()
-        """
-        else:
-            return TransactionHandler().searchTransaction(request.args)
-        """
 
 @transaction_bp.route('/getById/<int:tid>', methods =['GET', 'DELETE'])
 def get_Transaction_by_id(tid):

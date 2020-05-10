@@ -1,4 +1,7 @@
 from flask import jsonify
+
+from app.dao.payment import PaymentDAO
+from app.dao.resources import ResourcesDAO
 from app.dao.transaction import TransactionDAO
 
 
@@ -232,9 +235,42 @@ class TransactionHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
-    """////////////////////////////////////////PAST PHASE 2//////////////////////////////////////////////////////////"""
+    """////////////////////////////////////////PHASE 3//////////////////////////////////////////////////////////"""
     def insertTransaction(self, form):
-        return "Added new transaction"
+        tdate = form['tdate']
+        tquantity = form['tquantity']
+        tpayerpid = form['tpayerpid']
+        tsupplierpid = form['tsupplierpid']
+        rid = form['rid']
+        tamount = form['tamount']
+
+        resourceDao = ResourcesDAO()
+        if 'rid' in form:
+            try:
+                if resourceDao.getResourceById(int(rid)) is None:
+                    return jsonify(error='rid does not exist')
+            except ValueError:
+                return jsonify(error='rid must be an int')
+
+        paymentDao = PaymentDAO()
+
+        if 'tpayerpid' in form:
+            try:
+                if paymentDao.getCardById(tpayerpid) is None:
+                    return jsonify(error='tpayerpid ' + tpayerpid + ' does not exist')
+            except:
+                return jsonify(error='tpayerid must be an int')
+        if 'tsupplierpid' in form:
+            try:
+
+                if not paymentDao.checkPaymentIsFromSupplier(int(tsupplierpid)):
+                    return jsonify(error='tsupplierpid ' + tsupplierpid + ' does not exist or is not a supplier')
+            except ValueError:
+                return jsonify(error='supplierid must be an int')
+
+        dao = TransactionDAO()
+        result = dao.insertTransaction(tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount)
+        return jsonify(Reqid=result)
         # print("form: ", form)
         # if len(form) != 6:
         #     return jsonify(Error="Malformed post request"), 400

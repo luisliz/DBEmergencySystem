@@ -93,7 +93,6 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    #Needs testing
     def getTransactionBySupplierPaymentInfo(self, spid):
         cursor = self.conn.cursor()
         query = f"select * from transactions where tsupplierpid = {spid};"
@@ -103,7 +102,6 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    #Need testing
     def getTransactionByPayer(self, uidp):
         cursor = self.conn.cursor()
         query = f"select tid, tdate, tquantity, tpayerpid, tsupplierpid, trid, tamount from transactions as T inner join payments as P inner join users as U on T.tpayerpid = P.pid where U.uid = {uidp};"
@@ -113,7 +111,6 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    #Need testing
     def getTransactionBySupplier(self, uids):
         cursor = self.conn.cursor()
         query = f"select tid, tdate, tquantity, tpayerpid, tsupplierpid, trid, tamount from transactions as T inner join payments as P inner join users as U on T.tsupplierpid = P.pid where U.uid = {uids};"
@@ -141,7 +138,6 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    # Need testing
     def getPayerPaymentInfoByTransactionId(self, tid):
         cursor = self.conn.cursor()
         query = f"select pid, pType, pProvider, pExpDate from transactions as T inner join payments as P on T.tpayerpid = P.pid where tid = '{tid}';"
@@ -151,7 +147,6 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    #Need testing
     def getSupplierPaymentInfoByTransactionId(self, tid):
         cursor = self.conn.cursor()
         query = f"select pid, pType, pProvider, pExpDate from transactions as T inner join payments as P on T.tsupplierpid = P.pid where tid = '{tid}';"
@@ -161,7 +156,6 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    #Need testing
     def getPayerByTransactionId(self, tid):
         cursor = self.conn.cursor()
         query = f"select U.uid, ucid, ufirstname, ulastname, udob, uemail from transactions as T inner join payments as P inner join users as U on T.tpayerpid = P.pid where tid = '{tid}';"
@@ -171,7 +165,7 @@ class TransactionDAO:
             result.append(row)
         return result
 
-    #Need tsting
+
     def getSupplierByTransactionId(self, tid):
         cursor = self.conn.cursor()
         query = f"select U.uid, ucid, ufirstname, ulastname, udob, uemail from transactions as T inner join payments as P inner join users as U on T.tsupplierpid = P.pid where tid = '{tid}';"
@@ -200,21 +194,16 @@ class TransactionDAO:
         return result
 
 
-    """///////////////////////////////////////PAST PHASE 2///////////////////////////////////////////////////////////"""
-
-    def insert(self, tDate, tquantity, uid, supplierUid, rid, tAmmount):
-        newTId = len(self.transactions) + 1
-        newTransaction = {
-            'tid': len(self.transactions) + 1,
-            'tdate': tDate,
-            'tquantity': tquantity,
-            'uid': uid,
-            'supplierUid': supplierUid,
-            'rid': rid,
-            'tpayAmmount': tAmmount
-        }
-        self.transactions.append(newTransaction)
-        return newTId
+    """///////////////////////////////////////PHASE 3///////////////////////////////////////////////////////////"""
+    #WORKED I THINK. I SHOULD TRY ALL USE CASES
+    def insertTransaction(self, tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount):
+        cursor = self.conn.cursor()
+        query = f"insert into transactions(tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount) VALUES ('{tdate}', {tquantity}, {tpayerpid}, {tsupplierpid}, {rid}, {tamount}) returning tid"
+        cursor.execute(query)
+        #cursor.execute(query, (tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount))
+        tid = cursor.fetchone()[0]
+        self.conn.commit()
+        return tid
 
     def delete(self, tid):
         pos = 0
