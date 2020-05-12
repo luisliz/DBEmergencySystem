@@ -116,5 +116,5 @@ def reserve_resource(rid):
 @resources_bp.route('/purchase/<int:rid>/', methods=['PUT']) #Done
 def purchase_resource(rid):
     if request.method == 'PUT':
-        return ResourceHandler().purchase_resource(rid, 'purchased')
+        return ResourceHandler().purchase_resource(rid, 'purchased', request.form)
 

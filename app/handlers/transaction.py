@@ -236,14 +236,15 @@ class TransactionHandler:
         return jsonify(Resources=result_list)
 
     """////////////////////////////////////////PHASE 3//////////////////////////////////////////////////////////"""
-    def insertTransaction(self, form):
+    def insertTransaction(self, form, rid):
         tdate = form['tdate']
         tquantity = form['tquantity']
         tpayerpid = form['tpayerpid']
         tsupplierpid = form['tsupplierpid']
-        rid = form['rid']
+        #rid = form['rid'] MADE A CHANGE SO THAT WE TAKE RID FROM THE PURCHASE RESOURCE ROUTE
         tamount = form['tamount']
 
+        """
         resourceDao = ResourcesDAO()
         if 'rid' in form:
             try:
@@ -251,6 +252,15 @@ class TransactionHandler:
                     return jsonify(error='rid does not exist')
             except ValueError:
                 return jsonify(error='rid must be an int')
+        """
+
+        dao = TransactionDAO()
+        #THIS IS MY ATTEMPT TO MAKE RESERVATIONS NOT NEED ANY PAYMENT INFO
+        #BUT WE WOULD NEED TO CHANGE THE SCHEMA
+        """
+        if tamount == 0:
+            result = dao.insertReservation(tdate, tquantity, rid, tamount)
+        """
 
         paymentDao = PaymentDAO()
 
@@ -268,8 +278,7 @@ class TransactionHandler:
             except ValueError:
                 return jsonify(error='supplierid must be an int')
 
-        dao = TransactionDAO()
-        result = dao.insertTransaction(tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount)
+        result = dao.insertPurchase(tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount)
         return jsonify(Reqid=result)
         # print("form: ", form)
         # if len(form) != 6:

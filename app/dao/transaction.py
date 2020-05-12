@@ -196,7 +196,7 @@ class TransactionDAO:
 
     """///////////////////////////////////////PHASE 3///////////////////////////////////////////////////////////"""
     #WORKED I THINK. I SHOULD TRY ALL USE CASES
-    def insertTransaction(self, tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount):
+    def insertPurchase(self, tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount):
         cursor = self.conn.cursor()
         query = f"insert into transactions(tdate, tquantity, tpayerpid, tsupplierpid, rid, tamount) VALUES ('{tdate}', {tquantity}, {tpayerpid}, {tsupplierpid}, {rid}, {tamount}) returning tid"
         cursor.execute(query)

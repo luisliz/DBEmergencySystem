@@ -1,6 +1,7 @@
 from flask import jsonify
 from app.dao.resources import ResourcesDAO
 from app.dao.resource_details import ResourceDetailsDAO
+from app.handlers.transaction import TransactionHandler
 
 
 class ResourceHandler:
@@ -363,7 +364,12 @@ class ResourceHandler:
         result = dao.updateAvailability(rid, status)
         return jsonify(Reserved=result)
 
-    def purchase_resource(self, rid, status):
+    def purchase_resource(self, rid, status, form):
         dao = ResourceDetailsDAO()
+
+        # Adding compatibility with transaction
+        transactionHandler = TransactionHandler()
+        transactionHandler.insertTransaction(form, rid)
+
         result = dao.updateAvailability(rid, status)
         return jsonify(Reserved=result)

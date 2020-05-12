@@ -96,16 +96,17 @@ class ResourceDetailsDAO:
             pos += 1
         return False
 
+    #Needs testing
     def updateAvailability(self, rid, status):
-        pos = 0
-        for res in self.rdetails:
-            if int(res['rid']) == int(rid):
-                newRes = self.rdetails[pos]
-                newRes['ravailability'] = status
-                return True
-            pos += 1
-        # there will be queries that update the resource details table
-        return False
+        try:
+            cursor = self.conn.cursor()
+            query = f"update resource_details set ravailability = '{status}' where rid = {rid}"
+            cursor.execute(query)
+            return True
+
+        #Might be bad to use bare except
+        except:
+            return False
 
     def update(self, rid, rquantity, rlocation, ravailability, supplierUid, rPrice):
         pos = 0
