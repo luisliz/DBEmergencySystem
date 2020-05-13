@@ -3,7 +3,7 @@ from app.handlers.resources import ResourceHandler
 
 resources_bp = Blueprint('resources', __name__)
 
-@resources_bp.route('/', methods=['GET'])
+@resources_bp.route('/', methods=['GET']) #Done
 def get_all_resources():
     if request.method == 'GET':
         return ResourceHandler().get_all_resources()
@@ -26,7 +26,7 @@ def get_all_resources():
 #         #return ResourceHandler().get_all_resources_by_resource(resource)
 #         return ResourceHandler().get_all_resource(resource) #get all resources from the given category?
 
-@resources_bp.route('/<int:rid>/', methods=['GET']) #falta arreglar
+@resources_bp.route('/<int:rid>/', methods=['GET']) #Done
 def get_resource_by_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_resource_by_id(rid)
@@ -41,7 +41,7 @@ def browse_by_category_field(category, field, value):
     if request.method == 'GET':
         return ResourceHandler().get_resources_by_category_field(category, field, value)
 
-@resources_bp.route('/availability/<string:avail>/', methods=['GET']) #Done
+@resources_bp.route('/availability/<string:avail>/', methods=['GET']) #Done -- no se usa?
 def browse_by_availability(avail):
     if request.method == 'GET':
         return ResourceHandler().get_resources_by_availability(avail)
@@ -68,21 +68,6 @@ def get_supplier_by_resource_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_supplier_by_resource_id(rid)
 
-@resources_bp.route('/add/', methods=['POST']) #Done
-def add_resource():
-    if request.method == 'POST':
-        return ResourceHandler().add_resource(request.form)
-
-@resources_bp.route('/delete/', methods=['DELETE']) #Done
-def delete_resource():
-    if request.method == 'DELETE':
-        return ResourceHandler().delete_resource(request.form)
-
-@resources_bp.route('/update/', methods=['PUT']) #Done
-def update_resource():
-    if request.method == 'PUT':
-        return ResourceHandler().update_resource(request.form)
-
 @resources_bp.route('/requested/search/<string:rname>/', methods=['GET']) #Done
 def get_requested_resources_by_name(rname):
     if request.method == 'GET':
@@ -108,12 +93,27 @@ def browse_requested_by_resource_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_requested_resource_by_id(rid)
 
-@resources_bp.route('/reserve/<int:rid>/', methods=['PUT']) #Done
+@resources_bp.route('/add/', methods=['POST']) 
+def add_resource():
+    if request.method == 'POST':
+        return ResourceHandler().add_resource(request.form)
+
+@resources_bp.route('/delete/', methods=['DELETE'])  
+def delete_resource():
+    if request.method == 'DELETE':
+        return ResourceHandler().delete_resource(request.form)
+
+@resources_bp.route('/update/', methods=['PUT'])  
+def update_resource():
+    if request.method == 'PUT':
+        return ResourceHandler().update_resource(request.form)
+
+@resources_bp.route('/reserve/<int:rid>/', methods=['PUT'])  
 def reserve_resource(rid):
     if request.method == 'PUT':
         return ResourceHandler().reserve_resource(rid, 'reserved')
 
-@resources_bp.route('/purchase/<int:rid>/', methods=['PUT']) #Done
+@resources_bp.route('/purchase/<int:rid>/', methods=['PUT'])  
 def purchase_resource(rid):
     if request.method == 'PUT':
         return ResourceHandler().purchase_resource(rid, 'purchased', request.form)
