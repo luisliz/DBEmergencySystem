@@ -56,12 +56,15 @@ def get_all_available_resources_by_name(rname):
     if request.method == 'GET':
         return ResourceHandler().get_all_available_resources_by_name(rname)
 
+@resources_bp.route('/statistics', methods=['GET'])
+def get_statistics():
+    if request.method == 'GET':
+        return ResourceHandler().getDayStatistics()
+
 @resources_bp.route('/search/<string:rName>/', methods=['GET']) #Done
 def search_by_name(rName):
     if request.method == 'GET':
         return ResourceHandler().get_resource_by_name(rName)
-
-
 
 @resources_bp.route('/supplier/r/<int:rid>/', methods=['GET']) #Done
 def get_supplier_by_resource_id(rid):

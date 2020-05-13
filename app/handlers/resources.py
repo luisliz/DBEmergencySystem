@@ -1,3 +1,5 @@
+import datetime
+import simplejson
 from flask import jsonify
 from app.dao.resources import ResourcesDAO
 from app.dao.resource_details import ResourceDetailsDAO
@@ -135,6 +137,87 @@ class ResourceHandler:
                 result_list.append(result)
         return jsonify(Resources=result_list)
 
+    def getDayStatistics(self):
+        dao = ResourcesDAO()
+        countR = dao.countRequestsPerDay()
+        resDayP = dao.countResourcesPerDay('purchased')
+        resDayR = dao.countResourcesPerDay('reserved')
+        dispatchedP = dao.countResourcesDispatchedPerDay('purchased')
+        dispatchedR = dao.countResourcesDispatchedPerDay('reserved')
+        averageP = dao.countAverageResourcesPerOrderPerDay('purchased')
+        averageR = dao.countAverageResourcesPerOrderPerDay('reserved')
+        # averageResourcesPerOrder
+
+        res = {}
+        data = {
+            'requestsCount': 0,
+            'resourcesPurchased': 0,
+            'resourcesReserved': 0,
+            'purchasesDispatched': 0,
+            'reservedDispatched': 0,
+            'averageResourcesPurchasedPerOrder': 0.0,
+            'averageResourcesReservedPerOrder': 0.0,
+        }
+
+        for row in countR:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['requestsCount'] += row[1]
+            else:
+                res[post]['requestsCount'] += row[1]
+
+        for row in resDayP:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['resourcesPurchased'] += row[1]
+            else:
+                res[post]['resourcesPurchased'] += row[1]
+
+        for row in resDayR:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['resourcesReserved'] += row[1]
+            else:
+                res[post]['resourcesReserved'] += row[1]
+
+        for row in dispatchedP:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['purchasesDispatched'] += row[1]
+            else:
+                res[post]['purchasesDispatched'] += row[1]
+
+        for row in dispatchedR:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['reservedDispatched'] += row[1]
+            else:
+                res[post]['reservedDispatched'] += row[1]
+
+        for row in averageP:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['averageResourcesPurchasedPerOrder'] = float(row[1])
+            else:
+                res[post]['averageResourcesPurchasedPerOrder'] = float(row[1])
+
+        for row in averageR:
+            post = row[0].strftime('%Y-%m-%d')
+            if post not in res:
+                res[post] = data.copy()
+                res[post]['averageResourcesReservedPerOrder'] = float(row[1])
+            else:
+                res[post]['averageResourcesReservedPerOrder'] = float(row[1])
+
+        return jsonify(Request=res)
+
+
     def get_requested_resources_by_name(self, rname):
         dao = ResourcesDAO()
 
@@ -163,6 +246,7 @@ class ResourceHandler:
                 result_list.append(result)
         return jsonify(Resources=result_list)
 
+
     def get_resources_by_category(self, category):
         dao = ResourcesDAO()
         columns = self.getcol.get(category, [])
@@ -177,6 +261,7 @@ class ResourceHandler:
                 result = self.build_resource_dict(columns, row)
                 result_list.append(result)
             return jsonify(Resources=result_list)
+
 
     def get_resources_by_category_field(self, category, afield, value):
         dao = ResourcesDAO()
@@ -201,6 +286,7 @@ class ResourceHandler:
                     result_list.append(result)
                 return jsonify(Resources=result_list)
 
+
     def get_resource_details_by_rid(self, rid):
         dao = ResourceDetailsDAO()
         details = dao.getDetailsByResourceId(rid)
@@ -209,16 +295,17 @@ class ResourceHandler:
         result = self.build_details_dict(details)
         return jsonify(Resource_Details=result)
 
+
     def get_resource_by_id(self, rid):
         dao = ResourcesDAO()
         actualcat_tuple = dao.getCategoryNameByRID(rid)
         if not (actualcat_tuple):
             return jsonify(Error="No resources found for that id"), 404
         actualcat = actualcat_tuple[0]
-        print("actualcat = %s" % actualcat)
+        # print("actualcat = %s" % actualcat)
         columns = self.getcol.get(actualcat, [])
 
-        #this section is to get the row for the resource
+        # this section is to get the row for the resource
         resources = {
             'baby_foods': dao.getBabyFoodsByRID(rid),
             'ices': dao.getIcesByRID(rid),
@@ -234,11 +321,12 @@ class ResourceHandler:
             'dry_foods': dao.getDryFoodsByRID(rid),
             'clothings': dao.getClothingsByRID(rid)
         }
-        row = resources.get(actualcat, []) # in this case, this is just a tuple
+        row = resources.get(actualcat, [])  # in this case, this is just a tuple
         if not (row):
             return jsonify(Error="No resources found for that id"), 404
         result = self.build_resource_dict(columns, row)
         return jsonify(Resource=result)
+
 
     def get_resource_by_name(self, rName):
         dao = ResourcesDAO()
@@ -247,6 +335,7 @@ class ResourceHandler:
             return jsonify(Error="No resources found with that name"), 404
         result = self.build_resource_dict(row)
         return jsonify(Resources=result)
+
 
     def get_resources_by_availability(self, avail):
         if not (self.findEnumMatch(avail)):
@@ -259,6 +348,7 @@ class ResourceHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
+
     def findEnumMatch(self, enum):
         daoRD = ResourceDetailsDAO()
         values = daoRD.getAvailabilityValues()  # this is a list of tuples with the enum values
@@ -266,6 +356,7 @@ class ResourceHandler:
             if (val[0] == enum):
                 return True
         return False
+
 
     def get_supplier_by_resource_id(self, rid):
         dao = ResourcesDAO()
@@ -276,6 +367,7 @@ class ResourceHandler:
             return jsonify(Error="No supplier found."), 404
         result = self.build_supplier_dict(row)
         return jsonify(Supplier=result)
+
 
     def add_resource(self, form):
         rName = form['rName']
@@ -294,11 +386,13 @@ class ResourceHandler:
         daoRD.insert(rid, rdQuantity, rdLocation, rdAvailability, supplierID, price_per_unit)
         return jsonify(rid=rid)
 
+
     def delete_resource(self, form):
         dao = ResourcesDAO()
         rid = form['rid']
         resource = dao.delete(rid)
         return jsonify(deleted=resource)
+
 
     def update_resource(self, form):
         rid = form['rid']
@@ -318,6 +412,7 @@ class ResourceHandler:
         daoRD.update(rid, rdQuantity, rdLocation, rdAvailability, supplierID, price_per_unit)
         return jsonify(rid=rid)
 
+
     def get_requested_resources(self):
         dao = ResourcesDAO()
         resources_list = dao.getRequestedResources()
@@ -328,6 +423,7 @@ class ResourceHandler:
             result = self.build_resource_dict(row)
             result_list.append(result)
         return jsonify(Resources=result_list)
+
 
     def get_dispatched_requested_resources(self):
         dao = ResourcesDAO()
@@ -340,6 +436,7 @@ class ResourceHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
+
     def get_undispatched_requested_resources(self):
         dao = ResourcesDAO()
         resources_list = dao.getRequestedResourcesUndispatched()
@@ -351,6 +448,7 @@ class ResourceHandler:
             result_list.append(result)
         return jsonify(Resources=result_list)
 
+
     def get_requested_resource_by_id(self, rid):
         dao = ResourcesDAO()
         resource = dao.getRequestedResourceById(rid)
@@ -359,10 +457,12 @@ class ResourceHandler:
         result = self.build_resource_dict(resource)
         return jsonify(Resource=result)
 
+
     def reserve_resource(self, rid, status):
         dao = ResourceDetailsDAO()
         result = dao.updateAvailability(rid, status)
         return jsonify(Reserved=result)
+
 
     def purchase_resource(self, rid, status, form):
         dao = ResourceDetailsDAO()

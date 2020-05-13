@@ -814,6 +814,51 @@ class ResourcesDAO:
         result = cursor.fetchone()
         return result
 
+    #def getDayStatistics(self):
+    #    cursor = self.conn.cursor()
+    #    query = "SELECT reqid, reqpostdate, reqdispatchdate, rlocation, reqlocation, requestuid, rd.supplieruid, r.r#id, reqquantity, rname FROM requests NATURAL JOIN resources_per_request JOIN resources r on res#ources_per_request.rid = r.rid JOIN resource_details rd on r.rid = rd.rid WHERE rd.ravailability = 'available';;"
+    #    cursor.execute(query)
+    #     result = cursor.fetchall()
+        # return result
+
+    # -------------------------------------------------------------------------------------------------------------
+    # ------------------------------------------------- Statistics ------------------------------------------------
+    # -------------------------------------------------------------------------------------------------------------
+    def countRequestsPerDay(self):
+        cursor = self.conn.cursor()
+        query = "SELECT reqpostdate, COUNT(rq.reqid) FROM requests AS rq GROUP BY rq.reqpostdate;"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+
+    def countResourcesPerDay(self, orderType):
+        cursor = self.conn.cursor()
+        query = "SELECT reqpostdate, COUNT(rpq.rid) FROM requests AS rq JOIN resources_per_request rpq ON rpq.reqid = rq.reqid JOIN resource_details rd on rpq.rid = rd.rid WHERE rd.ravailability = %s GROUP BY rq.reqpostdate;"
+        cursor.execute(query, (orderType,))
+        result = cursor.fetchall()
+        return result
+
+    def countResourcesDispatchedPerDay(self, orderType):
+        cursor = self.conn.cursor()
+        query = "SELECT reqdispatchdate, COUNT(rpq.rid) FROM requests AS rq JOIN resources_per_request rpq ON rpq.reqid = rq.reqid JOIN resource_details rd on rpq.rid = rd.rid WHERE rd.ravailability = %s AND rq.reqdispatchdate IS NOT NULL GROUP BY rq.reqdispatchdate;"
+        cursor.execute(query, (orderType,))
+        result = cursor.fetchall()
+        return result
+
+    def countAverageResourcesPerOrderPerDay(self, orderType):
+        cursor = self.conn.cursor()
+        query = "SELECT reqpostdate, avg(ridCount) FROM (SELECT rq.reqpostdate, COUNT(rpq.rid) AS ridCount FROM requests AS rq JOIN resources_per_request rpq ON rpq.reqid = rq.reqid JOIN resource_details rd on rpq.rid = rd.rid WHERE rd.ravailability = %s GROUP BY rq.reqpostdate) as counter GROUP BY reqpostdate;"
+        cursor.execute(query, (orderType,))
+        result = cursor.fetchall()
+        return result
+
+    def averageResourcesPerOrder(self,orderType):
+        cursor = self.conn.cursor()
+        query = "SELECT avg(ridCount) FROM (SELECT COUNT(rpq.rid) AS ridCount FROM requests AS rq JOIN resources_per_request rpq ON rpq.reqid = rq.reqid JOIN resource_details rd on rpq.rid = rd.rid WHERE rd.ravailability = %s GROUP BY rq.reqid) as counter;"
+        cursor.execute(query, (orderType,))
+        result = cursor.fetchall()
+        return result
+
     def insert(self, rName, rcId):
         newRID = len(self.resources) + 1
         new_resource = {
