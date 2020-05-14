@@ -859,16 +859,110 @@ class ResourcesDAO:
         result = cursor.fetchall()
         return result
 
-    def insert(self, rName, rcId):
-        newRID = len(self.resources) + 1
-        new_resource = {
-            'rid': newRID,
-            'rName': rName,
-            'rcId': rcId
-        }
-        self.resources.append(new_resource)
-        # here would come a query to insert the new resource into the table
-        return newRID
+    def insert(self, rName, mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid):
+        cursor = self.conn.cursor()
+        query = "insert into resources (rname, mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) returning rid;"
+        cursor.execute(query, (rName, mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid))
+        self.conn.commit()
+        return cursor.fetchone()[0] #returns rid 
+
+    def insertBabyFoods(self, bflavor, bbrand):
+        cursor = self.conn.cursor()
+        query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+        cursor.execute(query, (bflavor, bbrand))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+
+    def insertIces(self, ibrand, ibagsize, iweight):
+        cursor = self.conn.cursor()
+        query = "insert into ices (ibrand, ibagsize, iweight) VALUES (%s, %s, %s) returning iid;"
+        cursor.execute(query, (ibrand, ibagsize, iweight))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+    
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
+
+    # def insertBabyFoods(self, bflavor, bbrand):
+    #     cursor = self.conn.cursor()
+    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
+    #     cursor.execute(query, (bflavor, bbrand))
+    #     self.conn.commit()
+    #     return cursor.fetchone()[0]
 
     def delete(self, rid):
         pos = 0

@@ -412,22 +412,113 @@ class ResourceHandler:
         result = self.build_resource_dict(resource)
         return jsonify(Resource=result)
 
-        def add_resource(self, form):
-            rName = form['rName']
-            rcid = form[
-                'rcid']  # this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
-            # the attributes below are for the insertion into the resoruce details table
-            rdQuantity = form['rdQuantity']
-            rdLocation = form['rdLocation']
-            rdAvailability = form['rdAvailability']
-            supplierID = form['supplierID']
-            price_per_unit = form['price_per_unit']
+    def add_baby_foods(self, form):
+        bflavor = form['bflavor']
+        bbrand = form['bbrand']
 
+        if bflavor and bbrand:
             daoR = ResourcesDAO()
-            daoRD = ResourceDetailsDAO()
-            rid = daoR.insert(rName, rcid)
-            daoRD.insert(rid, rdQuantity, rdLocation, rdAvailability, supplierID, price_per_unit)
-            return jsonify(rid=rid)
+            bid = daoR.insertBabyFoods(bflavor, bbrand)
+            return bid
+        else:
+            return None 
+
+    def add_ices(self, form):
+        ibrand = form['ibrand']
+        ibagsize = form['ibagsize']
+        iweight = form['iweight']
+
+        if ibrand and ibagsize and iweight:
+            daoR = ResourcesDAO()
+            iid = daoR.insertIces(ibrand, ibagsize, iweight)
+            return iid
+        else:
+            return None 
+
+
+    def add_resource(self, form):
+        print(form)
+        category_insert_dict = {
+            # 'baby_foods': self.add_baby_foods(form),
+            'ices': self.add_ices(form)
+            # 'fuels': dao.getAllAvailFuels(),
+            # 'heavy_equipments': dao.getAllAvailHeavyEquipments(),
+            # 'tools': dao.getAllAvailTools(),
+            # 'medications': dao.getAllAvailMedications(),
+            # "power_generators": dao.getAllAvailPowerGenerators(),
+            # 'waters': dao.getAllAvailWaters(),
+            # 'medical_devices': dao.getAllAvailMedicalDevices(),
+            # 'batteries': dao.getAllAvailBatteries(),
+            # 'canned_foods': dao.getAllAvailCannedFoods(),
+            # 'dry_foods': dao.getAllAvailDryFoods(),
+            # 'clothings': dao.getAllAvailClothings()
+        }
+
+        if len(form) < 6:
+            return jsonify(Error = "Malformed post request"), 400
+        else:
+            print(form['rname'])
+            cat_id = category_insert_dict.get(form['rname'], [])
+            if not (cat_id):
+                return jsonify(Error="Unexpected category attributes in resource post request"), 400
+
+            rName = form['rname']
+            if (form['rname'] == 'medications'):
+                mid = cat_id
+            else: mid = None
+            if (form['rname'] == 'canned_foods'):
+                canid = cat_id
+            else: canid = None
+            if (form['rname'] == 'baby_foods'):
+                bid = cat_id
+            else: bid = None
+            if (form['rname'] == 'dry_foods'):
+                dryid = cat_id
+            else: dryid = None
+            if (form['rname'] == 'fuels'):
+                fid = cat_id
+            else: fid = None
+            if (form['rname'] == 'heavy_equipments'):
+                hid = cat_id
+            else: hid = None
+            if (form['rname'] == 'clothings'):
+                clothid = cat_id
+            else: clothid = None
+            if (form['rname'] == 'power_generators'):
+                genid = cat_id
+            else: genid = None
+            if (form['rname'] == 'medical_devices'):
+                meddevid = cat_id
+            else: meddevid = None
+            if (form['rname'] == 'batteries'):
+                batid = cat_id
+            else: batid = None
+            if (form['rname'] == 'tools'):
+                toolid = cat_id
+            else: toolid = None
+            if (form['rname'] == 'ices'):
+                iid = cat_id
+            else: iid = None
+            if (form['rname'] == 'waters'):
+                wid = cat_id
+            else: wid = None
+
+            rdQuantity = form['rquantity']
+            rdLocation = form['rlocation']
+            rdAvailability = form['ravailability']
+            supplierID = form['supplieruid']
+            price_per_unit = form['rprice'] 
+
+            if (rName):
+                daoR = ResourcesDAO()
+                daoRD = ResourceDetailsDAO()
+                rid = daoR.insert(rName, mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid)
+                daoRD.insert(rid, rdQuantity, rdLocation, rdAvailability, supplierID, price_per_unit)
+                return jsonify(Resource_Id=rid), 201
+            else:
+                return jsonify(Error="Unexpected resource attributes in resource post request"), 400
+
+            
 
     def delete_resource(self, form):
         dao = ResourcesDAO()

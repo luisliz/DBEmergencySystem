@@ -96,7 +96,7 @@ def browse_requested_by_resource_id(rid):
     if request.method == 'GET':
         return ResourceHandler().get_requested_resource_by_id(rid)
 
-@resources_bp.route('/add/', methods=['POST']) 
+@resources_bp.route('/add', methods=['POST']) 
 def add_resource():
     if request.method == 'POST':
         return ResourceHandler().add_resource(request.form)

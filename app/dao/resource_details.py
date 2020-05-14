@@ -64,19 +64,11 @@ class ResourceDetailsDAO:
         return result
 
     def insert(self, rid, rquantity, rlocation, ravailability, supplierUid, rPrice):
-        newID = len(self.rdetails) + 1
-        new_resource_detail = {
-            'rdid': newID,
-            'rquantity': rquantity,
-            'rlocation': rlocation,
-            'ravailability': ravailability,
-            'rid': rid,
-            'supplierUid': supplierUid,
-            'rPrice': rPrice
-        }
-        self.rdetails.append(new_resource_detail)
-        # here would come a querie to insert the new resource detail into the table
-        return newID
+        cursor = self.conn.cursor()
+        query = "insert into resource_details (rid, rquantity, rlocation, ravailability, supplierUid, rPrice) values (%s, %s, %s, %s, %s, %s) returning rid;"
+        cursor.execute(query, (rid, rquantity, rlocation, ravailability, supplierUid, rPrice))
+        self.conn.commit()
+        return cursor.fetchone()[0] 
 
     def deleteByDetailId(self, rdid):
         pos = 0
