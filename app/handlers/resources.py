@@ -4,6 +4,7 @@ from flask import jsonify
 from app.dao.resources import ResourcesDAO
 from app.dao.resource_details import ResourceDetailsDAO
 from app.handlers.transaction import TransactionHandler
+from app.handlers.categories import CategoryHandler
 
 
 class ResourceHandler:
@@ -412,36 +413,48 @@ class ResourceHandler:
         result = self.build_resource_dict(resource)
         return jsonify(Resource=result)
 
-    def add_baby_foods(self, form):
-        bflavor = form['bflavor']
-        bbrand = form['bbrand']
+    # def add_ices(self, form):
+    #     ibrand = form['ibrand']
+    #     ibagsize = form['ibagsize']
+    #     iweight = form['iweight']
 
-        if bflavor and bbrand:
-            daoR = ResourcesDAO()
-            bid = daoR.insertBabyFoods(bflavor, bbrand)
-            return bid
-        else:
-            return None 
+    #     if ibrand and ibagsize and iweight:
+    #         daoR = ResourcesDAO()
+    #         iid = daoR.insertIces(ibrand, ibagsize, iweight)
+    #         return iid
+    #     else:
+    #         return None 
 
-    def add_ices(self, form):
-        ibrand = form['ibrand']
-        ibagsize = form['ibagsize']
-        iweight = form['iweight']
+    # def add_baby_foods(self, form):
+    #     bflavor = form['bflavor']
+    #     bbrand = form['bbrand']
 
-        if ibrand and ibagsize and iweight:
-            daoR = ResourcesDAO()
-            iid = daoR.insertIces(ibrand, ibagsize, iweight)
-            return iid
-        else:
-            return None 
+    #     if bflavor and bbrand:
+    #         daoR = ResourcesDAO()
+    #         bid = daoR.insertBabyFoods(bflavor, bbrand)
+    #         return bid
+    #     else:
+    #         return None 
 
+    # def add_fuels(self, form):
+    #     bflavor = form['bflavor']
+    #     bbrand = form['bbrand']
+
+    #     if bflavor and bbrand:
+    #         daoR = ResourcesDAO()
+    #         bid = daoR.insertBabyFoods(bflavor, bbrand)
+    #         return bid
+    #     else:
+    #         return None 
 
     def add_resource(self, form):
         print(form)
+        catHandler = CategoryHandler()
         category_insert_dict = {
-            # 'baby_foods': self.add_baby_foods(form),
-            'ices': self.add_ices(form)
-            # 'fuels': dao.getAllAvailFuels(),
+            # 'baby_foods': catHandler.add_baby_foods(form),
+            # 'baby_foods': print("Fuck you"),
+            'ices': catHandler.add_ices(form),
+            'fuels': catHandler.add_fuels(form)
             # 'heavy_equipments': dao.getAllAvailHeavyEquipments(),
             # 'tools': dao.getAllAvailTools(),
             # 'medications': dao.getAllAvailMedications(),
@@ -458,7 +471,9 @@ class ResourceHandler:
             return jsonify(Error = "Malformed post request"), 400
         else:
             print(form['rname'])
-            cat_id = category_insert_dict.get(form['rname'], [])
+            cat_name = form['rname']
+            # cat_id = category_insert_dict.get('ices', [])
+            cat_id = category_insert_dict['ices']
             if not (cat_id):
                 return jsonify(Error="Unexpected category attributes in resource post request"), 400
 
@@ -529,8 +544,7 @@ class ResourceHandler:
     def update_resource(self, form):
         rid = form['rid']
         rName = form['rName']
-        rcid = form[
-            'rcid']  # this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
+        rcid = form['rcid']  # this will probably be replaced by category name, followed by a lookup of rcid with respect to its name
         # the attributes below are for the insertion into the resoruce details table
         rdQuantity = form['rdQuantity']
         rdLocation = form['rdLocation']
