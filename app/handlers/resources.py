@@ -423,28 +423,28 @@ class ResourceHandler:
             cat_id = 1 #remove this once all categories are dealt with 
             rName = form['rname']
             if (form['rname'] == 'medications'):
-                mid = cat_id
+                mid = catHandler.add_medications(form)
             else: mid = None
             if (form['rname'] == 'canned_foods'):
-                canid = cat_id
+                canid = catHandler.add_canned_foods(form)
             else: canid = None
             if (form['rname'] == 'baby_foods'):
-                bid = cat_id
+                bid = catHandler.add_baby_foods(form)
             else: bid = None
             if (form['rname'] == 'dry_foods'):
-                dryid = cat_id
+                dryid = catHandler.add_dry_foods(form)
             else: dryid = None
             if (form['rname'] == 'fuels'):
                 fid = catHandler.add_fuels(form)
             else: fid = None
             if (form['rname'] == 'heavy_equipments'):
-                hid = cat_id
+                hid = catHandler.add_heavy_equipments(form)
             else: hid = None
             if (form['rname'] == 'clothings'):
-                clothid = cat_id
+                clothid = catHandler.add_clothings(form)
             else: clothid = None
             if (form['rname'] == 'power_generators'):
-                genid = cat_id
+                genid = catHandler.add_power_generators(form)
             else: genid = None
             if (form['rname'] == 'medical_devices'):
                 meddevid = cat_id

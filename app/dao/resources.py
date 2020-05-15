@@ -866,13 +866,37 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0] #returns rid 
 
+    # NEEDS TESTING ********
+    def insertMedications(self, mmanufacturer, mname, msize):
+        cursor = self.conn.cursor()
+        query = "insert into medications (mmanufacturer, mname, msize) VALUES (%s, %s, %s) returning mid;"
+        cursor.execute(query, (mmanufacturer, mname, msize))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+
+    # NEEDS TESTING ********
+    def insertCannedFoods(self, canbrand, cantype):
+        cursor = self.conn.cursor()
+        query = "insert into canned_foods (canbrand, cantype) VALUES (%s, %s) returning canid;"
+        cursor.execute(query, (canbrand, cantype))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+
+    # NEEDS TESTING ********
     def insertBabyFoods(self, bflavor, bbrand):
         cursor = self.conn.cursor()
         query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-        # cursor.execute(query, (bflavor, bbrand))
-        # self.conn.commit()
-        # return cursor.fetchone()[0]
-        return 0
+        cursor.execute(query, (bflavor, bbrand))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+
+    # NEEDS TESTING ********
+    def insertDryFoods(self, drybrand, drytype):
+        cursor = self.conn.cursor()
+        query = "insert into dry_foods (drybrand, drytype) VALUES (%s, %s) returning dryid;"
+        cursor.execute(query, (drybrand, drytype))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
     def insertIces(self, ibrand, ibagsize, iweight):
         cursor = self.conn.cursor()
@@ -880,7 +904,7 @@ class ResourcesDAO:
         cursor.execute(query, (ibrand, ibagsize, iweight))
         self.conn.commit()
         return cursor.fetchone()[0]
-        # return 1
+
     
     def insertFuels(self, ftype, fbrand, fvolume):
         cursor = self.conn.cursor()
@@ -889,19 +913,29 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
+    # NEEDS TESTING ********
+    def insertHeavyEquipments(self, hbrand, htype):
+        cursor = self.conn.cursor()
+        query = "insert into heavy_equipments (hbrand, htype) VALUES (%s, %s) returning hid;"
+        cursor.execute(query, (hbrand, htype))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
+    # NEEDS TESTING ********
+    def insertClothings(self, clothbrand, clothmaterial, clothtype):
+        cursor = self.conn.cursor()
+        query = "insert into clothings (clothbrand, clothmaterial, clothtype) VALUES (%s, %s, %s) returning clothid;"
+        cursor.execute(query, (clothbrand, clothmaterial, clothtype))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+
+    # NEEDS TESTING ********
+    def insertPowerGenerators(self, genbrand, genpower, gentype):
+        cursor = self.conn.cursor()
+        query = "insert into power_generators (genbrand, genpower, gentype) VALUES (%s, %s, %s) returning genid;"
+        cursor.execute(query, (genbrand, genpower, gentype))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
     # def insertBabyFoods(self, bflavor, bbrand):
     #     cursor = self.conn.cursor()
