@@ -28,13 +28,14 @@ class CategoryHandler:
             return None 
 
     def add_fuels(self, form):
-        bflavor = form['bflavor']
-        bbrand = form['bbrand']
+        ftype = form['ftype']
+        fbrand = form['fbrand']
+        fvolume = form['fvolume']
 
-        if bflavor and bbrand:
+        if ftype and fbrand and fvolume:
             daoR = ResourcesDAO()
-            bid = daoR.insertBabyFoods(bflavor, bbrand)
-            return bid
+            fid = daoR.insertFuels(ftype, fbrand, fvolume)
+            return fid
         else:
             return None
 

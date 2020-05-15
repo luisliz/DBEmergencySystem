@@ -413,70 +413,14 @@ class ResourceHandler:
         result = self.build_resource_dict(resource)
         return jsonify(Resource=result)
 
-    # def add_ices(self, form):
-    #     ibrand = form['ibrand']
-    #     ibagsize = form['ibagsize']
-    #     iweight = form['iweight']
-
-    #     if ibrand and ibagsize and iweight:
-    #         daoR = ResourcesDAO()
-    #         iid = daoR.insertIces(ibrand, ibagsize, iweight)
-    #         return iid
-    #     else:
-    #         return None 
-
-    # def add_baby_foods(self, form):
-    #     bflavor = form['bflavor']
-    #     bbrand = form['bbrand']
-
-    #     if bflavor and bbrand:
-    #         daoR = ResourcesDAO()
-    #         bid = daoR.insertBabyFoods(bflavor, bbrand)
-    #         return bid
-    #     else:
-    #         return None 
-
-    # def add_fuels(self, form):
-    #     bflavor = form['bflavor']
-    #     bbrand = form['bbrand']
-
-    #     if bflavor and bbrand:
-    #         daoR = ResourcesDAO()
-    #         bid = daoR.insertBabyFoods(bflavor, bbrand)
-    #         return bid
-    #     else:
-    #         return None 
-
     def add_resource(self, form):
         print(form)
         catHandler = CategoryHandler()
-        category_insert_dict = {
-            # 'baby_foods': catHandler.add_baby_foods(form),
-            # 'baby_foods': print("Fuck you"),
-            'ices': catHandler.add_ices(form),
-            'fuels': catHandler.add_fuels(form)
-            # 'heavy_equipments': dao.getAllAvailHeavyEquipments(),
-            # 'tools': dao.getAllAvailTools(),
-            # 'medications': dao.getAllAvailMedications(),
-            # "power_generators": dao.getAllAvailPowerGenerators(),
-            # 'waters': dao.getAllAvailWaters(),
-            # 'medical_devices': dao.getAllAvailMedicalDevices(),
-            # 'batteries': dao.getAllAvailBatteries(),
-            # 'canned_foods': dao.getAllAvailCannedFoods(),
-            # 'dry_foods': dao.getAllAvailDryFoods(),
-            # 'clothings': dao.getAllAvailClothings()
-        }
 
         if len(form) < 6:
-            return jsonify(Error = "Malformed post request"), 400
-        else:
-            print(form['rname'])
-            cat_name = form['rname']
-            # cat_id = category_insert_dict.get('ices', [])
-            cat_id = category_insert_dict['ices']
-            if not (cat_id):
-                return jsonify(Error="Unexpected category attributes in resource post request"), 400
-
+            return jsonify(Error = "Malformed post request, not enough parameters"), 400
+        else:           
+            cat_id = 1 #remove this once all categories are dealt with 
             rName = form['rname']
             if (form['rname'] == 'medications'):
                 mid = cat_id
@@ -491,7 +435,7 @@ class ResourceHandler:
                 dryid = cat_id
             else: dryid = None
             if (form['rname'] == 'fuels'):
-                fid = cat_id
+                fid = catHandler.add_fuels(form)
             else: fid = None
             if (form['rname'] == 'heavy_equipments'):
                 hid = cat_id
@@ -512,7 +456,7 @@ class ResourceHandler:
                 toolid = cat_id
             else: toolid = None
             if (form['rname'] == 'ices'):
-                iid = cat_id
+                iid = catHandler.add_ices(form)
             else: iid = None
             if (form['rname'] == 'waters'):
                 wid = cat_id

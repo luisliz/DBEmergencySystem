@@ -877,18 +877,17 @@ class ResourcesDAO:
     def insertIces(self, ibrand, ibagsize, iweight):
         cursor = self.conn.cursor()
         query = "insert into ices (ibrand, ibagsize, iweight) VALUES (%s, %s, %s) returning iid;"
-        # cursor.execute(query, (ibrand, ibagsize, iweight))
-        # self.conn.commit()
-        # return cursor.fetchone()[0]
-        return 0
+        cursor.execute(query, (ibrand, ibagsize, iweight))
+        self.conn.commit()
+        return cursor.fetchone()[0]
+        # return 1
     
-    def insertFuels(self, bflavor, bbrand):
-        # cursor = self.conn.cursor()
-        # query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-        # cursor.execute(query, (bflavor, bbrand))
-        # self.conn.commit()
-        # return cursor.fetchone()[0]
-        return 0
+    def insertFuels(self, ftype, fbrand, fvolume):
+        cursor = self.conn.cursor()
+        query = "insert into fuels (ftype, fbrand, fvolume) VALUES (%s, %s, %s) returning fid;"
+        cursor.execute(query, (ftype, fbrand, fvolume))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
     # def insertBabyFoods(self, bflavor, bbrand):
     #     cursor = self.conn.cursor()
