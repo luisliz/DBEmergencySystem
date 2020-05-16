@@ -98,13 +98,13 @@ class CategoryHandler:
             return None
 
     def add_clothings(self, form):
-        clothbrand = form['clothbrand']
+        clothbranch = form['clothbranch']
         clothmaterial = form['clothmaterial']
         clothtype = form['clothtype']
 
-        if clothbrand and clothmaterial and clothtype:
+        if clothbranch and clothmaterial and clothtype:
             daoR = ResourcesDAO()
-            clothid = daoR.insertClothings(clothbrand, clothmaterial, clothtype)
+            clothid = daoR.insertClothings(clothbranch, clothmaterial, clothtype)
             return clothid
         else:
             return None

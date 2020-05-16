@@ -864,9 +864,8 @@ class ResourcesDAO:
         query = "insert into resources (rname, mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) returning rid;"
         cursor.execute(query, (rName, mid, canid, bid, dryid, fid, hid, clothid, genid, meddevid, batid, toolid, iid, wid))
         self.conn.commit()
-        return cursor.fetchone()[0] #returns rid 
+        return cursor.fetchone()[0] 
 
-    # NEEDS TESTING ********
     def insertMedications(self, mmanufacturer, mname, msize):
         cursor = self.conn.cursor()
         query = "insert into medications (mmanufacturer, mname, msize) VALUES (%s, %s, %s) returning mid;"
@@ -874,7 +873,6 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # NEEDS TESTING ********
     def insertCannedFoods(self, canbrand, cantype):
         cursor = self.conn.cursor()
         query = "insert into canned_foods (canbrand, cantype) VALUES (%s, %s) returning canid;"
@@ -882,7 +880,6 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # NEEDS TESTING ********
     def insertBabyFoods(self, bflavor, bbrand):
         cursor = self.conn.cursor()
         query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
@@ -890,7 +887,6 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # NEEDS TESTING ********
     def insertDryFoods(self, drybrand, drytype):
         cursor = self.conn.cursor()
         query = "insert into dry_foods (drybrand, drytype) VALUES (%s, %s) returning dryid;"
@@ -904,7 +900,6 @@ class ResourcesDAO:
         cursor.execute(query, (ibrand, ibagsize, iweight))
         self.conn.commit()
         return cursor.fetchone()[0]
-
     
     def insertFuels(self, ftype, fbrand, fvolume):
         cursor = self.conn.cursor()
@@ -913,7 +908,6 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # NEEDS TESTING ********
     def insertHeavyEquipments(self, hbrand, htype):
         cursor = self.conn.cursor()
         query = "insert into heavy_equipments (hbrand, htype) VALUES (%s, %s) returning hid;"
@@ -921,15 +915,13 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # NEEDS TESTING ********
-    def insertClothings(self, clothbrand, clothmaterial, clothtype):
+    def insertClothings(self, clothbranch, clothmaterial, clothtype):
         cursor = self.conn.cursor()
-        query = "insert into clothings (clothbrand, clothmaterial, clothtype) VALUES (%s, %s, %s) returning clothid;"
-        cursor.execute(query, (clothbrand, clothmaterial, clothtype))
+        query = "insert into clothings (clothbranch, clothmaterial, clothtype) VALUES (%s, %s, %s) returning clothid;"
+        cursor.execute(query, (clothbranch, clothmaterial, clothtype))
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # NEEDS TESTING ********
     def insertPowerGenerators(self, genbrand, genpower, gentype):
         cursor = self.conn.cursor()
         query = "insert into power_generators (genbrand, genpower, gentype) VALUES (%s, %s, %s) returning genid;"
