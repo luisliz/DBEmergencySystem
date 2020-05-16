@@ -447,19 +447,19 @@ class ResourceHandler:
                 genid = catHandler.add_power_generators(form)
             else: genid = None
             if (form['rname'] == 'medical_devices'):
-                meddevid = cat_id
+                meddevid = catHandler.add_medical_devices(form)
             else: meddevid = None
             if (form['rname'] == 'batteries'):
-                batid = cat_id
+                batid = catHandler.add_batteries(form)
             else: batid = None
             if (form['rname'] == 'tools'):
-                toolid = cat_id
+                toolid = catHandler.add_tools(form)
             else: toolid = None
             if (form['rname'] == 'ices'):
                 iid = catHandler.add_ices(form)
             else: iid = None
             if (form['rname'] == 'waters'):
-                wid = cat_id
+                wid = catHandler.add_waters(form)
             else: wid = None
 
             rdQuantity = form['rquantity']

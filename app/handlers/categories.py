@@ -38,6 +38,18 @@ class CategoryHandler:
         else:
             return None
 
+    def add_tools(self, form):
+        toolbrand = form['toolbrand']
+        tooltype = form['tooltype']
+        toolsize = form['toolsize']
+
+        if toolbrand and tooltype and toolsize:
+            daoR = ResourcesDAO()
+            toolid = daoR.insertTools(toolbrand, tooltype, toolsize)
+            return toolid
+        else:
+            return None
+
     def add_dry_foods(self, form):
         drybrand = form['drybrand']
         drytype = form['drytype']
@@ -106,5 +118,39 @@ class CategoryHandler:
             daoR = ResourcesDAO()
             genid = daoR.insertPowerGenerators(genbrand, genpower, gentype)
             return genid
+        else:
+            return None
+
+    def add_medical_devices(self, form):
+        meddevbrand = form['meddevbrand']
+        meddevtype = form['meddevtype']
+
+        if meddevbrand and meddevtype:
+            daoR = ResourcesDAO()
+            meddevid = daoR.insertMedicalDevices(meddevbrand, meddevtype)
+            return meddevid
+        else:
+            return None
+
+    def add_batteries(self, form):
+        battype = form['battype']
+        batsize = form['batsize']
+
+        if battype and batsize:
+            daoR = ResourcesDAO()
+            batid = daoR.insertBatteries(battype, batsize)
+            return batid
+        else:
+            return None
+
+    def add_waters(self, form):
+        wcontainertype = form['wcontainertype']
+        wcontainersize = form['wcontainersize']
+        wbrand = form['wbrand']
+
+        if wcontainertype and wcontainersize and wbrand:
+            daoR = ResourcesDAO()
+            wid = daoR.insertWaters(wcontainertype, wcontainersize, wbrand)
+            return wid
         else:
             return None

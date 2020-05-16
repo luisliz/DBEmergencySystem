@@ -937,69 +937,35 @@ class ResourcesDAO:
         self.conn.commit()
         return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
+    def insertMedicalDevices(self, meddevbrand, meddevtype):
+        cursor = self.conn.cursor()
+        query = "insert into medical_devices (meddevbrand, meddevtype) VALUES (%s, %s) returning meddevid;"
+        cursor.execute(query, (meddevbrand, meddevtype))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
+    def insertBatteries(self, battype, batsize):
+        cursor = self.conn.cursor()
+        query = "insert into batteries (battype, batsize) VALUES (%s, %s) returning batid;"
+        cursor.execute(query, (battype, batsize))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
+    def insertWaters(self, wcontainertype, wcontainersize, wbrand):
+        cursor = self.conn.cursor()
+        query = "insert into waters (wcontainertype, wcontainersize, wbrand) VALUES (%s, %s, %s) returning wid;"
+        cursor.execute(query, (wcontainertype, wcontainersize, wbrand))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
+    def insertTools(self, toolbrand, tooltype, toolsize):
+        cursor = self.conn.cursor()
+        query = "insert into tools (toolbrand, tooltype, toolsize) VALUES (%s, %s, %s) returning toolid;"
+        cursor.execute(query, (toolbrand, tooltype, toolsize))
+        self.conn.commit()
+        return cursor.fetchone()[0]
 
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
-
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
-
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
-
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
-
-    # def insertBabyFoods(self, bflavor, bbrand):
-    #     cursor = self.conn.cursor()
-    #     query = "insert into baby_foods (bflavor, bbrand) VALUES (%s, %s) returning bid;"
-    #     cursor.execute(query, (bflavor, bbrand))
-    #     self.conn.commit()
-    #     return cursor.fetchone()[0]
-
+    
     def delete(self, rid):
         pos = 0
         for res in self.resources:
