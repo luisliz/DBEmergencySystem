@@ -1,8 +1,9 @@
 # DBEmergencySystem
 The Database project made by Luis Liz, Yeniel and Jorge
 
-# UI 
+# Important notes  
 UI Can be found in https://github.com/luisliz/DBEmergencyUI
+The database is remotely hosted. 
 
 ## Automatically run
 
