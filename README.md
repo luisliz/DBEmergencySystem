@@ -1,5 +1,5 @@
 # DBEmergencySystem
-The Database project made by Luis Liz, Yeniel and Jorge
+The Database project made by Luis Liz, Yeniel Diaz and Jorge Vega
 
 # Important notes  
 UI Can be found in https://github.com/luisliz/DBEmergencyUI
